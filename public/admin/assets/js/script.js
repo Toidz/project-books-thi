@@ -88,7 +88,6 @@ if(scheduleSection8) {
     }
   });
 }
-// End Schedule Section 8
 
 // Filepond Image
 const listFilepondImage = document.querySelectorAll("[filepond-image]");
@@ -240,6 +239,11 @@ if(categoryEditForm) {
       let avatar = null;
       if(avatars.length > 0) {
         avatar = avatars[0].file;
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        const imageDefault = elementImageDefault.getAttribute("image-default");
+        if(imageDefault.includes(avatar.name)) {
+          avatar=null
+        }
       }
       const description = tinymce.get("description").getContent();
       
@@ -362,7 +366,7 @@ if(tourCreateForm) {
           alert(data.message)
         }
         else{
-          window.location.href(`/${pathAdmin}/tour/list`)
+          window.location.href=`/${pathAdmin}/tour/list`
         }
       })
     })
@@ -370,6 +374,114 @@ if(tourCreateForm) {
 }
 // End Tour Create Form
 
+// Tour edit Form
+const toureditForm = document.querySelector("#tour-edit-form");
+if(toureditForm) {
+  const validation = new JustValidate('#tour-edit-form');
+
+  validation
+    .addField('#name', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên tour!'
+      }
+    ])
+    .onSuccess((event) => {
+      const id = event.target.id.value
+      const name = event.target.name.value;
+      const category = event.target.category.value;
+      const position = event.target.position.value;
+      const status = event.target.status.value;
+      const avatars = filePond.avatar.getFiles();
+      let avatar = null;
+      if(avatars.length > 0) {
+        avatar = avatars[0].file;
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        if(elementImageDefault){
+          const imageDefault = elementImageDefault.getAttribute("image-default");
+          if(imageDefault.includes(avatar.name)) {
+            avatar=null
+          }
+        }
+      }
+      const priceAdult = event.target.priceAdult.value;
+      const priceChildren = event.target.priceChildren.value;
+      const priceBaby = event.target.priceBaby.value;
+      const priceNewAdult = event.target.priceNewAdult.value;
+      const priceNewChildren = event.target.priceNewChildren.value;
+      const priceNewBaby = event.target.priceNewBaby.value;
+      const stockAdult = event.target.stockAdult.value;
+      const stockChildren = event.target.stockChildren.value;
+      const stockBaby = event.target.stockBaby.value;
+      const locations = [];
+      const time = event.target.time.value;
+      const vehicle = event.target.vehicle.value;
+      const departureDate = event.target.departureDate.value;
+      const information = tinymce.get("information").getContent();
+      const schedules = [];
+
+      // locations
+      const listElementLocation = toureditForm.querySelectorAll('input[name="locations"]:checked');
+      listElementLocation.forEach(input => {
+        locations.push(input.value);
+      });
+      // End locations
+
+      // schedules
+      const listElementScheduleItem = toureditForm.querySelectorAll('.inner-schedule-item');
+      listElementScheduleItem.forEach(scheduleItem => {
+        const input = scheduleItem.querySelector("input");
+        const title = input.value;
+
+        const textarea = scheduleItem.querySelector("textarea");
+        const idTextarea = textarea.id;
+        const description = tinymce.get(idTextarea).getContent();
+
+        schedules.push({
+          title: title,
+          description: description
+        });
+      });
+      // End schedules
+    
+      const formData = new FormData()
+      formData.append("name",name)
+      formData.append("category",category)
+      formData.append("position",position)
+      formData.append("status",status)
+      formData.append("avatar",avatar);
+      formData.append("priceAdult",priceAdult)
+      formData.append("priceChildren",priceChildren)
+      formData.append("priceBaby",priceBaby)
+      formData.append("priceNewAdult",priceNewAdult)
+      formData.append("priceNewChildren",priceNewChildren)
+      formData.append("priceNewBaby",priceNewBaby)
+      formData.append("stockAdult",stockAdult)
+      formData.append("stockChildren",stockChildren)
+      formData.append("stockBaby",stockBaby)
+      formData.append("locations",JSON.stringify(locations))
+      formData.append("time",time)
+      formData.append("vehicle",vehicle)
+      formData.append("departureDate",departureDate)
+      formData.append("information",information)
+      formData.append("schedules",JSON.stringify(schedules))
+      fetch(`/${pathAdmin}/tour/edit/${id}`,{
+        method:"PATCH",
+        body: formData
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
+    })
+  ;
+}
+// End Tour edit Form
 // Order Edit Form
 const orderEditForm = document.querySelector("#order-edit-form");
 if(orderEditForm) {
@@ -743,7 +855,7 @@ if(alertTime) {
 }
 // End Alert
 
-//button Delete
+//button Delete category
 const buttonDelete = document.querySelectorAll("[button-delete]")
 if(buttonDelete.length >0)
 {
@@ -763,8 +875,9 @@ if(buttonDelete.length >0)
     })
   });
 }
-//End button Delete
+//End button Delete category
 
+//----------Filter category
 //Filter status
 const filterStatus = document.querySelector("[filter-status]");
 if(filterStatus){
@@ -946,3 +1059,343 @@ if(innerPagination){
   if(currentPage) innerPagination.value = currentPage
 }
 //End pagination
+
+//End----------Filter category
+
+//----------Filter tour
+//filter-status tour
+const tourStatus = document.querySelector("[tour-status]")
+if(tourStatus){
+  const url = new URL(window.location.href)
+  tourStatus.addEventListener("change",()=>{
+    const value = tourStatus.value
+    if(value){
+      url.searchParams.set("status",value)
+    }
+    else{
+      url.searchParams.delete("status")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("status")
+  if(currentValue) tourStatus.value = currentValue 
+}
+//End filter-status tour
+
+//filter-creater tour
+const tourCreater = document.querySelector("[tour-creater]")
+if(tourCreater){
+  const url = new URL(window.location.href)
+  tourCreater.addEventListener("change",()=>{
+    const value = tourCreater.value
+    if(value){
+      url.searchParams.set("id",value)
+    }
+    else{
+      url.searchParams.delete("id")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("id")
+  if(currentValue) tourCreater.value = currentValue
+}
+//filter-creater tour
+
+//filter-date tour
+//start date
+const startDate = document.querySelector("[start-date]")
+if(startDate){
+  const url = new URL(window.location.href)
+  startDate.addEventListener("change",()=>{
+    const value = startDate.value
+    if(value){
+      url.searchParams.set("startDate",value)
+    }
+    else{
+      url.searchParams.delete("startDate")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("startDate")
+  if(currentValue) startDate.value = currentValue
+}
+//end start date
+
+//end date
+const endDate = document.querySelector("[end-date]")
+if(endDate){
+  const url = new URL(window.location.href)
+  endDate.addEventListener("change",()=>{
+    const value = endDate.value
+    if(value){
+      url.searchParams.set("endDate",value)
+    }
+    else{
+      url.searchParams.delete("endDate")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("endDate")
+  if(currentValue) endDate.value = currentValue
+}
+//end end date
+//End filter-date tour
+
+//filter-category tour
+const tourCategory = document.querySelector("[tour-category]")
+if(tourCategory){
+  const url = new URL(window.location.href)
+  tourCategory.addEventListener("change",()=>{
+    const value = tourCategory.value
+    if(value){
+      url.searchParams.set("category",value)
+    }
+    else{
+      url.searchParams.delete("category")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("category")
+  if(currentValue) tourCategory.value = currentValue
+}
+//End filter-category tour
+
+//button reset tour
+const buttonResetTour = document.querySelector("[button-reset]")
+if(buttonResetTour){
+  const url = new URL(window.location.href)
+  buttonResetTour.addEventListener("click",()=>{
+    url.search=""
+    window.location.href = url.href
+  })
+}
+//End button reset tour
+
+//all button tour
+const buttonAllTour = document.querySelector("[button-all]")
+if(buttonAllTour){
+  buttonAllTour.addEventListener("click",()=>{
+    const buttonItem = document.querySelectorAll("[button-item]")
+    buttonItem.forEach(item => {
+      item.checked = buttonAllTour.checked
+    });
+  })
+}
+//end all button tour
+
+//change status tour
+const tourChangeStatus = document.querySelector("[change-status]")
+if(tourChangeStatus){
+  const select = tourChangeStatus.querySelector("select")
+  const button = tourChangeStatus.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const value = select.value
+      const ids=[]
+      const buttonItem = document.querySelectorAll("[button-item]:checked")
+      buttonItem.forEach(item => {
+          const id = item.getAttribute("button-item")
+          ids.push(id)
+      });
+      if(value && ids.length>0){
+        const dataFinal ={
+          ids:ids,
+          status:value
+        }
+        fetch(`/${pathAdmin}/tour/changePatch`,{
+          method:"PATCH",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error")
+            alert(data.message)
+          else
+            window.location.reload()
+        })
+      }
+   
+    })
+  }
+}
+//end change status tour
+//tour search
+const url = new URL(window.location.href)
+const tourSearch = document.querySelector("[tour-search]")
+if(tourSearch){
+  tourSearch.addEventListener("keyup",(event)=>{
+    const value = tourSearch.value
+    if(event.code=="Enter"){
+      if(value)
+        url.searchParams.set("keyword",value.trim())
+      else  
+        url.searchParams.delete("keyword")
+      window.location.href = url.href
+    }
+  })
+  const currentValue = url.searchParams.get("keyword")
+  if(currentValue) tourSearch.value = currentValue
+}
+//End tour search
+
+//pagination tour
+const tourPage = document.querySelector("[tour-page]")
+if(tourPage){
+  const url = new URL(window.location.href)
+  tourPage.addEventListener("change",()=>{
+    const value = tourPage.value
+    if(value){
+      url.searchParams.set("page",value)
+    }
+    else{
+      url.searchParams.delete("page")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("page")
+  if(currentValue) tourPage.value = currentValue
+}
+//End pagination tour
+//End----------Filter tour
+
+//button delete tour
+const buttonDeleteTour = document.querySelector("[button-delete-tour]")
+if(buttonDeleteTour){
+  buttonDeleteTour.addEventListener("click",()=>{
+   const api= buttonDeleteTour.getAttribute("button-delete-tour")
+   fetch(api,{
+    method:"PATCH"
+   })
+   .then(res=>res.json())
+   .then(data=>{
+    if(data.code=="error"){
+      alert(data.message)
+    }
+    else{
+      window.location.reload()
+    }
+   })
+  })
+}
+//End button delete tour
+
+//Tour trash
+
+//check-all-trash
+const checkAllTrash = document.querySelector("[checkAllTrash]")
+if(checkAllTrash){
+  checkAllTrash.addEventListener("click",()=>{
+    const checkItemTrash = document.querySelectorAll("[checkItemTrash]")
+    checkItemTrash.forEach(item=>{
+      item.checked = checkAllTrash.checked
+    })
+  })
+}
+//End check-all-trash
+
+//change-status-trash
+const changeStatusTrash = document.querySelector("[change-status-trash]")
+if(changeStatusTrash){
+  const select = changeStatusTrash.querySelector("select")
+  const button = changeStatusTrash.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const ids=[]
+      const checkItem = document.querySelectorAll("[checkItemTrash]:checked")
+      checkItem.forEach(item => {
+        const id = item.getAttribute("checkItemTrash")
+        ids.push(id)
+      });
+      const value= select.value
+      const dataFinal ={
+        status:value,
+        ids:ids
+      }
+      if(value&&ids.length>0){
+        fetch(`/${pathAdmin}/tour/trash?status=${value}`,{
+        method:"PATCH",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error"){
+            alert(data.message)
+          }
+          else{
+            window.location.reload()
+          }
+        })
+      }
+    })
+  }
+}
+//End change-status-trash
+
+//trash search
+const trashSearch = document.querySelector("[trashSearch]")
+if(trashSearch){
+  const url = new URL(window.location.href)
+  trashSearch.addEventListener("keyup",(event)=>{
+    if(event.code=="Enter"){
+      if(trashSearch.value){
+      url.searchParams.set("keyword",trashSearch.value)
+      }
+      else{
+        url.searchParams.delete("keyword")
+      }
+      window.location.href = url.href
+    }
+  })
+  const currentValue = url.searchParams.get("keyword")
+  if(currentValue) trashSearch.value = currentValue
+}
+//End trash search
+
+//button-restore-trash
+const buttonRestoreTrash = document.querySelector("[button-restore-trash]")
+if(buttonRestoreTrash){
+  buttonRestoreTrash.addEventListener("click",()=>{
+    const api = buttonRestoreTrash.getAttribute("api-restore")
+    fetch(api,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        alert(data.message)
+      }
+      else{
+        window.location.reload()
+      }
+    })
+  })
+}
+//End button-restore-trash
+
+//button-destroy-trash
+const buttondestroyTrash = document.querySelector("[button-destroy-trash]")
+if(buttondestroyTrash){
+  buttondestroyTrash.addEventListener("click",()=>{
+    const api = buttondestroyTrash.getAttribute("api-destroy")
+    fetch(api,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        alert(data.message)
+      }
+      else{
+        window.location.reload()
+      }
+    })
+  })
+}
+//End button-destroy-trash
+//End Tour trash

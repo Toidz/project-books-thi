@@ -14,6 +14,7 @@ router.post("/create",
 );
 
 router.get("/edit/:id",categoryController.edit);
+
 router.patch(
     "/edit/:id",
     upload.single('avatar'),

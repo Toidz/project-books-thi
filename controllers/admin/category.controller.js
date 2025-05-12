@@ -139,6 +139,7 @@ module.exports.edit = async (req,res) =>{
 
 module.exports.editPatch = async (req,res) =>{
    try{
+    console.log(req.body)
     const id = req.params.id
     if(req.body.position){
         req.body.position = parseInt(req.body.position)
@@ -220,7 +221,8 @@ module.exports.changePatch = async (req,res) =>{
     }catch(error){
         res.json({
             code:"error",
-            message:"Xóa danh mục thất bại!"
+            message:"Cập nhật trạng thái danh mục thất bại!"
         })
     }
 }
+
