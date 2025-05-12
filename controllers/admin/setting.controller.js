@@ -1,3 +1,5 @@
+const SettingWebsiteInfo = require("../../models/setting-website-info.model")
+
 module.exports.accountAdminCreate = (req,res) =>{
     res.render("admin/pages/setting-account-admin-create",{
         pageTitle:"Tạo tài khoản quản trị"
@@ -23,8 +25,42 @@ module.exports.roleList = (req,res) =>{
         pageTitle:"Nhóm quyền"
     })
 }
-module.exports.websiteInfo = (req,res) =>{
+
+module.exports.websiteInfo = async (req,res) =>{
+     const websiteInfo = await SettingWebsiteInfo.findOne({})
     res.render("admin/pages/setting-website-info",{
-        pageTitle:"Thông tin website"
+        pageTitle:"Thông tin website",
+        websiteInfo:websiteInfo
+    })
+}
+module.exports.websiteInfoPatch = async (req,res) =>{
+    if(req.files&&req.files.logo){
+        req.body.logo = req.files.logo[0].path
+    }
+    else{
+        delete req.body.logo
+    }
+
+    if(req.files&&req.files.favicon){
+        req.body.favicon = req.files.favicon[0].path
+    }
+    else{
+        delete req.body.favicon
+    }
+    const websiteInfo = await SettingWebsiteInfo.findOne({})
+    if(websiteInfo){
+        await SettingWebsiteInfo.updateOne({
+            _id:websiteInfo.id
+        },
+            req.body
+        )
+    }
+    else{
+        const dataFinal = new SettingWebsiteInfo(req.body)
+        await dataFinal.save()
+    }
+    req.flash("success","Cập nhật thành công!")
+    res.json({
+        code:"success"
     })
 }
