@@ -221,7 +221,7 @@ if(categoryEditForm) {
 }
 // End Category edit Form
 
-// Tour Create Form
+// Book Create Form
 const tourCreateForm = document.querySelector("#tour-create-form");
 if(tourCreateForm) {
   const validation = new JustValidate('#tour-create-form');
@@ -1015,6 +1015,24 @@ if(buttonDelete.length >0)
 //End button Delete category
 
 //----------Filter category
+//Filter status
+const filterStatus = document.querySelector("[filter-status]");
+if(filterStatus){
+  const url = new URL(window.location.href)
+  filterStatus.addEventListener("change",()=>{
+    const value = filterStatus.value;
+    if(value){
+      url.searchParams.set("status",value);
+    }
+    else{
+      url.searchParams.delete("status")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("status")
+  if(currentValue) filterStatus.value = currentValue
+}
+//end Filter status
 
 //Filter creater
 const filtercreater = document.querySelector("[filter-creater]");
@@ -1141,24 +1159,6 @@ if(innerPagination){
 //End----------Filter category
 
 //----------Filter tour
-//filter-status tour
-const tourStatus = document.querySelector("[tour-status]")
-if(tourStatus){
-  const url = new URL(window.location.href)
-  tourStatus.addEventListener("change",()=>{
-    const value = tourStatus.value
-    if(value){
-      url.searchParams.set("status",value)
-    }
-    else{
-      url.searchParams.delete("status")
-    }
-    window.location.href = url.href
-  })
-  const currentValue = url.searchParams.get("status")
-  if(currentValue) tourStatus.value = currentValue 
-}
-//End filter-status tour
 
 //filter-creater tour
 const tourCreater = document.querySelector("[tour-creater]")
@@ -1261,45 +1261,6 @@ if(buttonAllTour){
 }
 //end all button tour
 
-//change status tour
-const tourChangeStatus = document.querySelector("[change-status]")
-if(tourChangeStatus){
-  const select = tourChangeStatus.querySelector("select")
-  const button = tourChangeStatus.querySelector("button")
-  if(button){
-    button.addEventListener("click",()=>{
-      const value = select.value
-      const ids=[]
-      const buttonItem = document.querySelectorAll("[button-item]:checked")
-      buttonItem.forEach(item => {
-          const id = item.getAttribute("button-item")
-          ids.push(id)
-      });
-      if(value && ids.length>0){
-        const dataFinal ={
-          ids:ids,
-          status:value
-        }
-        fetch(`/${pathAdmin}/tour/changePatch`,{
-          method:"PATCH",
-          headers:{
-            "Content-type":"application/json"
-          },
-          body: JSON.stringify(dataFinal)
-        })
-        .then(res=>res.json())
-        .then(data=>{
-          if(data.code=="error")
-            alert(data.message)
-          else
-            window.location.reload()
-        })
-      }
-   
-    })
-  }
-}
-//end change status tour
 //tour search
 const url = new URL(window.location.href)
 const tourSearch = document.querySelector("[tour-search]")
@@ -1373,47 +1334,6 @@ if(checkAllTrash){
   })
 }
 //End check-all-trash
-
-//change-status-trash
-const changeStatusTrash = document.querySelector("[change-status-trash]")
-if(changeStatusTrash){
-  const select = changeStatusTrash.querySelector("select")
-  const button = changeStatusTrash.querySelector("button")
-  if(button){
-    button.addEventListener("click",()=>{
-      const ids=[]
-      const checkItem = document.querySelectorAll("[checkItemTrash]:checked")
-      checkItem.forEach(item => {
-        const id = item.getAttribute("checkItemTrash")
-        ids.push(id)
-      });
-      const value= select.value
-      const dataFinal ={
-        status:value,
-        ids:ids
-      }
-      if(value&&ids.length>0){
-        fetch(`/${pathAdmin}/tour/trash?status=${value}`,{
-        method:"PATCH",
-        headers:{
-          "Content-type":"application/json"
-        },
-        body: JSON.stringify(dataFinal)
-        })
-        .then(res=>res.json())
-        .then(data=>{
-          if(data.code=="error"){
-            alert(data.message)
-          }
-          else{
-            window.location.reload()
-          }
-        })
-      }
-    })
-  }
-}
-//End change-status-trash
 
 //trash search
 const trashSearch = document.querySelector("[trashSearch]")

@@ -9,11 +9,6 @@ block main
       .inner-item.inner-label
         <i class="fa-solid fa-filter"></i> Bộ lọc
       .inner-item
-        select(tour-status)
-          option(value="") Trạng thái
-          option(value="active") Hoạt động
-          option(value="inactive") Tạm dừng
-      .inner-item
         select(tour-creater)
           option(value="") Người tạo
           each item in accountList
@@ -40,22 +35,13 @@ block main
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status(change-status)
-        .inner-item
-          select
-            option(value="") -- Hành động --
-            option(value="active") Hoạt động
-            option(value="inactive") Tạm dừng
-            option(value="delete") Xóa
-        .inner-item
-          button Áp dụng
       .inner-search
         <i class="fa-solid fa-magnifying-glass"></i>
         input(type="text" placeholder="Tìm kiếm" tour-search)
       .inner-button-create
-        a(href=`/${pathAdmin}/tour/create`) + Tạo mới
+        a(href=`/${pathAdmin}/book/create`) + Tạo mới
       .inner-button-trash
-        a(href=`/${pathAdmin}/tour/trash`) Thùng rác
+        a(href=`/${pathAdmin}/book/trash`) Thùng rác
   //- End Section 5
 
   //- Section 6
@@ -76,7 +62,7 @@ block main
             th Cập nhật bởi
             th Hành động
         tbody
-          each item in tourList
+          each item in bookList
             tr
               td(class="inner-center")
                 input(type="checkbox" class="inner-check" button-item=item.id)

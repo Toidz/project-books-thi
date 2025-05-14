@@ -1,11 +1,11 @@
 extends ../layouts/default.pug
 include ../mixins/options.pug
 block main
-  h1.box-title Tạo tour
+  h1.box-title Thêm sách
   .section-8
     form#tour-create-form
       .inner-group
-        label(class="inner-label" for="name") Tên tour
+        label(class="inner-label" for="name") Tên sách
         input(type="text" id="name" name="name")
       .inner-group
         label(class="inner-label" for="category") Danh mục
@@ -15,51 +15,16 @@ block main
       .inner-group
         label(class="inner-label" for="position") Vị trí
         input(type="number" id="position" name="position")
-      .inner-group
-        label(class="inner-label" for="status") Trạng thái
-        select(id="status" name="status")
-          option(value="active") Hoạt động
-          option(value="inactive") Tạm dừng
       .inner-group.inner-two-col
         label(class="inner-label" for="avatar") Ảnh đại diện
         div(class="inner-upload-image")
           input(type="file" id="avatar" accept="image/*" filepond-image name="avatar")
       .inner-group
-        label(class="inner-label") Giá cũ
-        .inner-input-list
-          .inner-input-item
-            label Người lớn
-            input(type="number" name="priceAdult")
-          .inner-input-item
-            label Trẻ em
-            input(type="number" name="priceChildren")
-          .inner-input-item
-            label Em bé
-            input(type="number" name="priceBaby")
+        label Giá bán
+        input(type="number" name="priceBook")
       .inner-group
-        label(class="inner-label") Giá mới
-        .inner-input-list
-          .inner-input-item
-            label Người lớn
-            input(type="number" name="priceNewAdult")
-          .inner-input-item
-            label Trẻ em
-            input(type="number" name="priceNewChildren")
-          .inner-input-item
-            label Em bé
-            input(type="number" name="priceNewBaby")
-      .inner-group
-        label(class="inner-label") Còn lại
-        .inner-input-list
-          .inner-input-item
-            label Người lớn
-            input(type="number" name="stockAdult")
-          .inner-input-item
-            label Trẻ em
-            input(type="number" name="stockChildren")
-          .inner-input-item
-            label Em bé
-            input(type="number" name="stockBaby")
+        label Số lư
+        input(type="number" name="numberBook")
       .inner-group
         label(class="inner-label") Những địa điểm có tour
         .inner-checkbox-list
