@@ -728,14 +728,179 @@ if(settingRoleCreateForm) {
         permissions.push(input.value);
       });
       // End permissions
+      const dataFinal ={
+        name:name,
+        description:description,
+        permissions:permissions
+      }
 
-      console.log(name);
-      console.log(description);
-      console.log(permissions);
+      fetch(`/${pathAdmin}/setting/role/create`,{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href = `/${pathAdmin}/setting/role/list`
+        }
+      })
     })
   ;
 }
 // End Setting Role Create Form
+
+// Setting Role Edit Form
+const settingRoleeditForm = document.querySelector("#setting-role-edit-form");
+if(settingRoleeditForm) {
+  const validation = new JustValidate('#setting-role-edit-form');
+
+  validation
+    .addField('#name', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên nhóm quyền!'
+      },
+    ])
+    .onSuccess((event) => {
+      const id = event.target.id.value;
+      const name = event.target.name.value;
+      const description = event.target.description.value;
+      const permissions = [];
+
+      // permissions
+      const listElementPermission = settingRoleeditForm.querySelectorAll('input[name="permissions"]:checked');
+      listElementPermission.forEach(input => {
+        permissions.push(input.value);
+      });
+      // End permissions
+
+      const dataFinal ={
+        name:name,
+        description:description,
+        permissions:permissions
+      }
+
+      fetch(`/${pathAdmin}/setting/role/edit/${id}`,{
+        method:"PATCH",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href = `/${pathAdmin}/setting/role/edit/${id}`
+        }
+      })
+    })
+  ;
+}
+// End Setting Role Edit Form
+
+//setting role delete
+const buttonDeleteRole = document.querySelector("[apiroledelete]")
+if(buttonDeleteRole){
+  buttonDeleteRole.addEventListener("click",()=>{
+    const api = buttonDeleteRole.getAttribute("apiroledelete")
+    fetch(api,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        alert(data.message)
+      }
+      else{
+        window.location.reload()
+      }
+    })
+  })
+}
+//END setting role delete
+
+//check all role
+const checkAllRole = document.querySelector("[checkAllRole]")
+if(checkAllRole){
+  const checkItemRole = document.querySelectorAll("[checkItemRole]")
+  checkAllRole.addEventListener("click",()=>{
+    checkItemRole.forEach(item => {
+      item.checked = checkAllRole.checked
+    })
+  })
+}
+//End check all role
+
+//Setting role filter 
+const filterRole = document.querySelector("[filter-role]")
+if(filterRole){
+  const select = filterRole.querySelector("select")
+  const button = filterRole.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+    const listChecked = document.querySelectorAll("[checkItemRole]:checked")
+    const ids = []
+    listChecked.forEach(item => {
+      const id = item.getAttribute("checkItemRole")
+      ids.push(id)
+    });
+    if(ids.length>0 && select.value){
+      const dataFinal ={
+        status:select.value,
+        ids:ids
+      }
+      fetch(`/${pathAdmin}/setting/role/list`,{
+        method:"PATCH",
+        headers:{
+          "Content-type":"application/json",
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
+    }
+    // fetch(`/${pathAdmin}/setting/role/list`)
+    })
+  }
+}
+//End setting role filter
+
+//search role
+const searchRole = document.querySelector("[search-role]")
+if(searchRole){
+  const url = new URL(window.location.href)
+  searchRole.addEventListener("keyup",(event)=>{
+    const value = searchRole.value
+    if(event.code == "Enter"){
+      if(value){
+        url.searchParams.set("keyword",value)
+      }
+      else{
+        url.searchParams.delete("keyword")
+      }
+      window.location.href = url.href
+    }
+  })
+  const currentValue = url.searchParams.get("keyword")
+  if(currentValue) searchRole.value = currentValue
+}
+//End search role
 
 // Profile Edit Form
 const profileEditForm = document.querySelector("#profile-edit-form");
