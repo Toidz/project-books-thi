@@ -222,15 +222,15 @@ if(categoryEditForm) {
 // End Category edit Form
 
 // Book Create Form
-const tourCreateForm = document.querySelector("#tour-create-form");
-if(tourCreateForm) {
-  const validation = new JustValidate('#tour-create-form');
+const bookCreateForm = document.querySelector("#book-create-form");
+if(bookCreateForm) {
+  const validation = new JustValidate('#book-create-form');
 
   validation
     .addField('#name', [
       {
         rule: 'required',
-        errorMessage: 'Vui lòng nhập tên tour!'
+        errorMessage: 'Vui lòng nhập tên book!'
       }
     ])
     .onSuccess((event) => {
@@ -260,14 +260,14 @@ if(tourCreateForm) {
       const schedules = [];
 
       // locations
-      const listElementLocation = tourCreateForm.querySelectorAll('input[name="locations"]:checked');
+      const listElementLocation = bookCreateForm.querySelectorAll('input[name="locations"]:checked');
       listElementLocation.forEach(input => {
         locations.push(input.value);
       });
       // End locations
 
       // schedules
-      const listElementScheduleItem = tourCreateForm.querySelectorAll('.inner-schedule-item');
+      const listElementScheduleItem = bookCreateForm.querySelectorAll('.inner-schedule-item');
       listElementScheduleItem.forEach(scheduleItem => {
         const input = scheduleItem.querySelector("input");
         const title = input.value;
@@ -304,7 +304,7 @@ if(tourCreateForm) {
       formData.append("departureDate",departureDate)
       formData.append("information",information)
       formData.append("schedules",JSON.stringify(schedules))
-      fetch(`/${pathAdmin}/tour/create`,{
+      fetch(`/${pathAdmin}/book/create`,{
         method:"POST",
         body: formData
       }).
@@ -314,24 +314,24 @@ if(tourCreateForm) {
           alert(data.message)
         }
         else{
-          window.location.href=`/${pathAdmin}/tour/list`
+          window.location.href=`/${pathAdmin}/book/list`
         }
       })
     })
   ;
 }
-// End Tour Create Form
+// End book Create Form
 
-// Tour edit Form
-const toureditForm = document.querySelector("#tour-edit-form");
-if(toureditForm) {
-  const validation = new JustValidate('#tour-edit-form');
+// book edit Form
+const bookeditForm = document.querySelector("#book-edit-form");
+if(bookeditForm) {
+  const validation = new JustValidate('#book-edit-form');
 
   validation
     .addField('#name', [
       {
         rule: 'required',
-        errorMessage: 'Vui lòng nhập tên tour!'
+        errorMessage: 'Vui lòng nhập tên book!'
       }
     ])
     .onSuccess((event) => {
@@ -369,14 +369,14 @@ if(toureditForm) {
       const schedules = [];
 
       // locations
-      const listElementLocation = toureditForm.querySelectorAll('input[name="locations"]:checked');
+      const listElementLocation = bookeditForm.querySelectorAll('input[name="locations"]:checked');
       listElementLocation.forEach(input => {
         locations.push(input.value);
       });
       // End locations
 
       // schedules
-      const listElementScheduleItem = toureditForm.querySelectorAll('.inner-schedule-item');
+      const listElementScheduleItem = bookeditForm.querySelectorAll('.inner-schedule-item');
       listElementScheduleItem.forEach(scheduleItem => {
         const input = scheduleItem.querySelector("input");
         const title = input.value;
@@ -413,7 +413,7 @@ if(toureditForm) {
       formData.append("departureDate",departureDate)
       formData.append("information",information)
       formData.append("schedules",JSON.stringify(schedules))
-      fetch(`/${pathAdmin}/tour/edit/${id}`,{
+      fetch(`/${pathAdmin}/book/edit/${id}`,{
         method:"PATCH",
         body: formData
       })
@@ -429,7 +429,7 @@ if(toureditForm) {
     })
   ;
 }
-// End Tour edit Form
+// End book edit Form
 // Order Edit Form
 const orderEditForm = document.querySelector("#order-edit-form");
 if(orderEditForm) {
@@ -1114,7 +1114,7 @@ if(checkAll){
 }
 //End Check All
 
-//search tour
+//search book
 const search = document.querySelector("[search]")
 if(search){
   const url = new URL(window.location.href)
@@ -1135,7 +1135,7 @@ if(search){
     search.value = currentSearch
   }
 }
-//End search tour
+//End search book
 
 //pagination
 const innerPagination = document.querySelector(".inner-pagination")
@@ -1158,14 +1158,14 @@ if(innerPagination){
 
 //End----------Filter category
 
-//----------Filter tour
+//----------Filter book
 
-//filter-creater tour
-const tourCreater = document.querySelector("[tour-creater]")
-if(tourCreater){
+//filter-creater book
+const bookCreater = document.querySelector("[book-creater]")
+if(bookCreater){
   const url = new URL(window.location.href)
-  tourCreater.addEventListener("change",()=>{
-    const value = tourCreater.value
+  bookCreater.addEventListener("change",()=>{
+    const value = bookCreater.value
     if(value){
       url.searchParams.set("id",value)
     }
@@ -1175,11 +1175,11 @@ if(tourCreater){
     window.location.href = url.href
   })
   const currentValue = url.searchParams.get("id")
-  if(currentValue) tourCreater.value = currentValue
+  if(currentValue) bookCreater.value = currentValue
 }
-//filter-creater tour
+//filter-creater book
 
-//filter-date tour
+//filter-date book
 //start date
 const startDate = document.querySelector("[start-date]")
 if(startDate){
@@ -1217,14 +1217,14 @@ if(endDate){
   if(currentValue) endDate.value = currentValue
 }
 //end end date
-//End filter-date tour
+//End filter-date book
 
-//filter-category tour
-const tourCategory = document.querySelector("[tour-category]")
-if(tourCategory){
+//filter-category book
+const bookCategory = document.querySelector("[book-category]")
+if(bookCategory){
   const url = new URL(window.location.href)
-  tourCategory.addEventListener("change",()=>{
-    const value = tourCategory.value
+  bookCategory.addEventListener("change",()=>{
+    const value = bookCategory.value
     if(value){
       url.searchParams.set("category",value)
     }
@@ -1234,39 +1234,39 @@ if(tourCategory){
     window.location.href = url.href
   })
   const currentValue = url.searchParams.get("category")
-  if(currentValue) tourCategory.value = currentValue
+  if(currentValue) bookCategory.value = currentValue
 }
-//End filter-category tour
+//End filter-category book
 
-//button reset tour
-const buttonResetTour = document.querySelector("[button-reset]")
-if(buttonResetTour){
+//button reset book
+const buttonResetbook = document.querySelector("[button-reset]")
+if(buttonResetbook){
   const url = new URL(window.location.href)
-  buttonResetTour.addEventListener("click",()=>{
+  buttonResetbook.addEventListener("click",()=>{
     url.search=""
     window.location.href = url.href
   })
 }
-//End button reset tour
+//End button reset book
 
-//all button tour
-const buttonAllTour = document.querySelector("[button-all]")
-if(buttonAllTour){
-  buttonAllTour.addEventListener("click",()=>{
+//all button book
+const buttonAllbook = document.querySelector("[button-all]")
+if(buttonAllbook){
+  buttonAllbook.addEventListener("click",()=>{
     const buttonItem = document.querySelectorAll("[button-item]")
     buttonItem.forEach(item => {
-      item.checked = buttonAllTour.checked
+      item.checked = buttonAllbook.checked
     });
   })
 }
-//end all button tour
+//end all button book
 
-//tour search
+//book search
 const url = new URL(window.location.href)
-const tourSearch = document.querySelector("[tour-search]")
-if(tourSearch){
-  tourSearch.addEventListener("keyup",(event)=>{
-    const value = tourSearch.value
+const bookSearch = document.querySelector("[book-search]")
+if(bookSearch){
+  bookSearch.addEventListener("keyup",(event)=>{
+    const value = bookSearch.value
     if(event.code=="Enter"){
       if(value)
         url.searchParams.set("keyword",value.trim())
@@ -1276,16 +1276,16 @@ if(tourSearch){
     }
   })
   const currentValue = url.searchParams.get("keyword")
-  if(currentValue) tourSearch.value = currentValue
+  if(currentValue) bookSearch.value = currentValue
 }
-//End tour search
+//End book search
 
-//pagination tour
-const tourPage = document.querySelector("[tour-page]")
-if(tourPage){
+//pagination book
+const bookPage = document.querySelector("[book-page]")
+if(bookPage){
   const url = new URL(window.location.href)
-  tourPage.addEventListener("change",()=>{
-    const value = tourPage.value
+  bookPage.addEventListener("change",()=>{
+    const value = bookPage.value
     if(value){
       url.searchParams.set("page",value)
     }
@@ -1295,16 +1295,16 @@ if(tourPage){
     window.location.href = url.href
   })
   const currentValue = url.searchParams.get("page")
-  if(currentValue) tourPage.value = currentValue
+  if(currentValue) bookPage.value = currentValue
 }
-//End pagination tour
-//End----------Filter tour
+//End pagination book
+//End----------Filter book
 
-//button delete tour
-const buttonDeleteTour = document.querySelector("[button-delete-tour]")
-if(buttonDeleteTour){
-  buttonDeleteTour.addEventListener("click",()=>{
-   const api= buttonDeleteTour.getAttribute("button-delete-tour")
+//button delete book
+const buttonDeletebook = document.querySelector("[button-delete-book]")
+if(buttonDeletebook){
+  buttonDeletebook.addEventListener("click",()=>{
+   const api= buttonDeletebook.getAttribute("button-delete-book")
    fetch(api,{
     method:"PATCH"
    })
@@ -1319,9 +1319,9 @@ if(buttonDeleteTour){
    })
   })
 }
-//End button delete tour
+//End button delete book
 
-//Tour trash
+//book trash
 
 //check-all-trash
 const checkAllTrash = document.querySelector("[checkAllTrash]")
@@ -1396,4 +1396,4 @@ if(buttondestroyTrash){
   })
 }
 //End button-destroy-trash
-//End Tour trash
+//End book trash

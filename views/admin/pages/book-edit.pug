@@ -1,14 +1,14 @@
 extends ../layouts/default.pug
 include ../mixins/options.pug
 block main
-  h1.box-title Chỉnh sửa tour
+  h1.box-title Chỉnh sửa sách
   .section-8
     form#tour-edit-form
       .inner-group(style="display:none")
           label(class="inner-label" for="id") id
           input(type="text" id="id" name="id" value=currentTour.id)
       .inner-group
-        label(class="inner-label" for="name") Tên tour
+        label(class="inner-label" for="name") Tên sách
         input(type="text" id="name" name="name" value=currentTour.name)
       .inner-group
         label(class="inner-label" for="category") Danh mục
