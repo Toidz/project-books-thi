@@ -6,7 +6,6 @@ const schema = new mongoose.Schema(
         name: String,
         parent: String,
         position: Number,
-        status: String,
         avatar: String,
         description: String,
         createdBy: String,

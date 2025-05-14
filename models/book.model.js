@@ -41,5 +41,5 @@ const schema = new mongoose.Schema(
         timestamps : true
     }
 )
-const Tour = mongoose.model("Tour",schema,"tours")
-module.exports = Tour;
+const Book = mongoose.model("Book",schema,"books")
+module.exports = Book;

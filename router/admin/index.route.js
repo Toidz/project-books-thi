@@ -6,7 +6,7 @@ const contactRouter = require("./contact.route");
 const orderRouter = require("./order.route");
 const profileRouter = require("./profile.route");
 const settingRouter = require("./setting.route");
-const tourRouter = require("./tour.route");
+const bookRouter = require("./book.route");
 const userRouter = require("./user.route");
 const errorController = require("../../controllers/admin/error.controller");
 
@@ -19,7 +19,7 @@ router.use("/contact",authMidderWare.verifyToken,contactRouter);
 router.use("/order",authMidderWare.verifyToken,orderRouter);
 router.use("/profile",authMidderWare.verifyToken,profileRouter);
 router.use("/setting",authMidderWare.verifyToken,settingRouter);
-router.use("/tour",authMidderWare.verifyToken,tourRouter);
+router.use("/book",authMidderWare.verifyToken,bookRouter);
 router.use("/user",authMidderWare.verifyToken,userRouter);
 router.get("*",authMidderWare.verifyToken,errorController.error);
 

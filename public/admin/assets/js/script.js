@@ -119,54 +119,6 @@ if(listFilepondImage.length > 0) {
 }
 // End Filepond Image
 
-// Biểu đồ doanh thu
-const revenueChart = document.querySelector("#revenue-chart");
-if(revenueChart) {
-  new Chart(revenueChart, {
-    type: 'line',
-    data: {
-      labels: ['01', '02', '03', '04', '05'],
-      datasets: [
-        {
-          label: 'Tháng 04/2025', // Nhãn của dataset
-          data: [1200000, 1800000, 3200000, 900000, 1600000], // Dữ liệu
-          borderColor: '#4379EE', // Màu viền
-          borderWidth: 1.5, // Độ dày của đường
-        },
-        {
-          label: 'Tháng 03/2025', // Nhãn của dataset
-          data: [1000000, 900000, 1200000, 1200000, 1400000], // Dữ liệu
-          borderColor: '#EF3826', // Màu viền
-          borderWidth: 1.5, // Độ dày của đường
-        }
-      ]
-    },
-    options: {
-      plugins: {
-        legend: {
-          position: 'bottom'
-        }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Ngày'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Doanh thu (VND)'
-          }
-        }
-      },
-      maintainAspectRatio: false, // Không giữ tỷ lệ khung hình mặc định
-    }
-  });
-}
-// Hết Biểu đồ doanh thu
-
 // Category Create Form
 const categoryCreateForm = document.querySelector("#category-create-form");
 if(categoryCreateForm) {
@@ -183,7 +135,6 @@ if(categoryCreateForm) {
       const name = event.target.name.value;
       const parent = event.target.parent.value;
       const position = event.target.position.value;
-      const status = event.target.status.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
       if(avatars.length > 0) {
@@ -195,7 +146,6 @@ if(categoryCreateForm) {
       formData.append("name",name);
       formData.append("parent",parent);
       formData.append("position",position);
-      formData.append("status",status);
       formData.append("avatar",avatar);
       formData.append("description",description);
 
@@ -234,7 +184,6 @@ if(categoryEditForm) {
       const name = event.target.name.value;
       const parent = event.target.parent.value;
       const position = event.target.position.value;
-      const status = event.target.status.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
       if(avatars.length > 0) {
@@ -251,7 +200,6 @@ if(categoryEditForm) {
       formData.append("name",name);
       formData.append("parent",parent);
       formData.append("position",position);
-      formData.append("status",status);
       formData.append("avatar",avatar);
       formData.append("description",description);
 
@@ -1067,24 +1015,6 @@ if(buttonDelete.length >0)
 //End button Delete category
 
 //----------Filter category
-//Filter status
-const filterStatus = document.querySelector("[filter-status]");
-if(filterStatus){
-  const url = new URL(window.location.href)
-  filterStatus.addEventListener("change",()=>{
-    const value = filterStatus.value;
-    if(value){
-      url.searchParams.set("status",value);
-    }
-    else{
-      url.searchParams.delete("status")
-    }
-    window.location.href = url
-  })
-  const currentValue = url.searchParams.get("status")
-  if(currentValue) filterStatus.value = currentValue
-}
-//end Filter status
 
 //Filter creater
 const filtercreater = document.querySelector("[filter-creater]");
@@ -1165,47 +1095,6 @@ if(checkAll){
   })
 }
 //End Check All
-
-//Change status
-const changeStatus = document.querySelector("[change-status]")
-if(changeStatus){
-  const select = changeStatus.querySelector("select")
-  const button = changeStatus.querySelector("button")
-  if(button){
-    button.addEventListener("click",()=>{
-      const ids= []
-      const itemChecked = document.querySelectorAll("[checkItem]:checked")
-      itemChecked.forEach(item=> {
-        const id = item.getAttribute("checkItem")
-        ids.push(id)
-      })
-      const status = select.value
-      if(status && ids.length>0){
-        const dataFinal = {
-          status:status,
-          ids: ids
-        }
-        
-        fetch(`/${pathAdmin}/category/changePatch`,{
-          method:"PATCH",
-          headers:{
-            "Content-type":"application/json"
-          },
-          body: JSON.stringify(dataFinal)
-        })
-        .then(res=>res.json())
-        .then(data=>{
-          if(data.code=="error")
-            alert(data.message)
-          else
-            window.location.reload()
-        })
-      }
-
-    })
-  }
-}
-//End change status
 
 //search tour
 const search = document.querySelector("[search]")

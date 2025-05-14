@@ -1,9 +1,7 @@
-const Tour = require("../../models/tour.model");
-module.exports.tour = async (req, res) => {
-  const tourList = await Tour.find({});
+const Book = require("../../models/book.model");
+module.exports.book = async (req, res) => {
   res.render("client/pages/tours",{
     pageTitle:"Danh sach Tour",
-    tourList: tourList
   });
 }
 

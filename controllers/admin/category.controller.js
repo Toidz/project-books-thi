@@ -191,38 +191,3 @@ module.exports.deletePatch = async (req,res) =>{
         })
     }
 }
-
-module.exports.changePatch = async (req,res) =>{
-    try{
-        const {status,ids} = req.body
-        console.log(req.body)
-        console.log(ids)
-        switch(status){
-            case "active": case "inactive":
-                await Category.updateMany({
-                    _id : {$in:ids}
-                },{status:status})
-                req.flash("success","Đổi trạng thái thành công!")
-                break
-            case "delete":
-                await Category.updateMany({
-                    _id : {$in : ids}
-                },{
-                    deleted:true,
-                    deletedBy:req.account.id,
-                    deletedAt:Date.now()
-                })
-                req.flash("success","Xóa danh mục thành công!")
-                break    
-        }
-        res.json({
-            code:"success"
-        })
-    }catch(error){
-        res.json({
-            code:"error",
-            message:"Cập nhật trạng thái danh mục thất bại!"
-        })
-    }
-}
-

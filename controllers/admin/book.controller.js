@@ -1,6 +1,6 @@
 const Category = require("../../models/category.model")
 const categoryHelper = require("../../helpers/category.helper")
-const Tour = require("../../models/tour.model") 
+const Book = require("../../models/book.model") 
 const City = require("../../models/city.model")
 const AccountAdmin = require("../../models/account-admin.model")
 const moment = require("moment")
@@ -39,16 +39,16 @@ module.exports.list = async (req,res) =>{
         find.slug= regex
     }
     const limit =3
-    const totalTour = await Tour.countDocuments({
+    const totalbook = await Book.countDocuments({
         deleted:false
     })
     let page =1
     if(req.query.page>0){
         page = req.query.page
     }  
-    const totalPage = Math.ceil(totalTour/limit)
+    const totalPage = Math.ceil(totalbook/limit)
     const skip = limit*(page-1)
-    const tourList = await Tour.find(find
+    const bookList = await Book.find(find
     ).sort({
         position:"desc"
     })
@@ -63,7 +63,7 @@ module.exports.list = async (req,res) =>{
         deleted:false
     })
     const categoryTree = categoryHelper.categoryTree(categoryList)
-    for (const item of tourList) {
+    for (const item of bookList) {
         if(item.createdBy){
             const createdByName = await AccountAdmin.findOne({
                 _id: item.createdBy
@@ -79,14 +79,14 @@ module.exports.list = async (req,res) =>{
         item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY")
         item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY")
     };
-    res.render("admin/pages/tour-list",{
-        pageTitle:"Quản lý tour",
-        tourList:tourList,
+    res.render("admin/pages/book-list",{
+        pageTitle:"Quản lý book",
+        bookList:bookList,
         accountList:accountList,
         categoryList:categoryTree,
-        totalTour:totalTour,
+        totalbook:totalbook,
         totalPage:totalPage,
-        totalTour:totalTour,
+        totalbook:totalbook,
         skip:skip
     })
 }
@@ -97,8 +97,8 @@ module.exports.create = async (req,res) =>{
     })
     const cityList = await City.find({})
     const categoryTree = categoryHelper.categoryTree(categoryList)
-    res.render("admin/pages/tour-create",{
-        pageTitle:"Tạo tour",
+    res.render("admin/pages/book-create",{
+        pageTitle:"Tạo book",
         categoryList: categoryTree,
         cityList : cityList
     })
@@ -109,7 +109,7 @@ module.exports.createPost = async (req,res) =>{
         req.body.position = parseInt(req.body.position)
     }
     else{
-        const position = await Tour.countDocuments({})
+        const position = await Book.countDocuments({})
         req.body.position = position +1
     }
     req.body.avatar =  req.file? req.file.path : " "
@@ -127,12 +127,12 @@ module.exports.createPost = async (req,res) =>{
     req.body.createdBy = req.account.id
     req.body.updatedBy = req.account.id
     req.body.schedules =  req.body.schedules ? JSON.parse(req.body.schedules) : []
-    const dataFinal = new Tour(req.body)
+    const dataFinal = new book(req.body)
     await dataFinal.save()
-    req.flash("success", "Tạo tour thành công!");
+    req.flash("success", "Tạo book thành công!");
     res.json({
         code:"success",
-        message:"Tạo tour thành công!"
+        message:"Tạo book thành công!"
     })
 }
 
@@ -141,7 +141,7 @@ module.exports.changePatch = async (req,res) =>{
         const {ids,status} = req.body
         switch(status){
             case "active": case "inactive":
-                await Tour.updateMany({
+                await Book.updateMany({
                     _id: {$in:ids}
                 },{
                     status:status
@@ -149,14 +149,14 @@ module.exports.changePatch = async (req,res) =>{
                 req.flash("success", "Đổi trạng thái thành công!");
                 break
             case "delete":
-                await Tour.updateMany({
+                await Book.updateMany({
                     _id:{$in:ids}
                 },{
                     deleted:true,
                     deletedBy:req.account.id,
                     deletedAt:Date.now()
                 })
-                req.flash("success", "Xóa tour thành công!");
+                req.flash("success", "Xóa book thành công!");
                 break
         }
         res.json({
@@ -165,7 +165,7 @@ module.exports.changePatch = async (req,res) =>{
     } catch (error) {
         res.json({
             code:"error",
-            message:"Cập nhật trạng thái tour thất bại!"
+            message:"Cập nhật trạng thái book thất bại!"
         })
     }
 }
@@ -177,20 +177,20 @@ module.exports.edit = async (req,res) =>{
         })
         const cityList = await City.find({})
         const id= req.params.id
-        const currentTour = await Tour.findOne({
+        const currentbook = await Book.findOne({
             _id:id,
             deleted:false
         })
-        currentTour.departureDateFormat = moment(currentTour.departureDate).format("YYYY-MM-DD")
+        currentBook.departureDateFormat = moment(currentBook.departureDate).format("YYYY-MM-DD")
         const categoryTree = categoryHelper.categoryTree(categoryList)
-        res.render("admin/pages/tour-edit",{
-            pageTitle:"Chỉnh sửa tour",
+        res.render("admin/pages/book-edit",{
+            pageTitle:"Chỉnh sửa book",
             categoryList:categoryTree,
             cityList:cityList,
-            currentTour:currentTour
+            currentbook:currentbook
         })
     } catch (error) {
-        res.redirect(`/${pathAdmin}/tour/list`)     
+        res.redirect(`/${pathAdmin}/book/list`)     
     }
 }
 
@@ -201,7 +201,7 @@ module.exports.editPatch = async (req,res) =>{
             req.body.position= parseInt(req.body.position)
         }
         else{
-            const totalCount= await Tour.countDocuments({})
+            const totalCount= await Book.countDocuments({})
             req.body.position = totalCount +1
         }
         if(req.file){
@@ -224,7 +224,7 @@ module.exports.editPatch = async (req,res) =>{
         req.body.updatedBy = req.account.id
         req.body.schedules =  req.body.schedules ? JSON.parse(req.body.schedules) : []
         console.log(req.body)
-        await Tour.updateOne({
+        await Book.updateOne({
         _id:id,
         deleted:false
         },req.body)
@@ -244,14 +244,14 @@ module.exports.editPatch = async (req,res) =>{
 module.exports.deletePatch= async(req,res)=>{
     try {
         const id=req.params.id
-        await Tour.updateOne({
+        await Book.updateOne({
             _id:id
         },{
             deleted:true,
             deletedAt:Date.now(),
             deletedBy:req.account.id
         })
-        req.flash("success","Xóa tour thành công!")
+        req.flash("success","Xóa book thành công!")
         res.json({
             code:"success"
         })
@@ -276,15 +276,15 @@ module.exports.trash = async (req,res) =>{
     }
     const limit=3
     let page =1
-    const totalTour = await Tour.countDocuments({
+    const totalbook = await Book.countDocuments({
         deleted:true
     })
-    const totalPage = Math.ceil(totalTour/limit)
+    const totalPage = Math.ceil(totalbook/limit)
     if(req.query.page){
         page = req.query.page
     }
     const skip =limit*(page-1)
-    const tourList = await Tour.find(find
+    const bookList = await Book.find(find
     ).sort({
         position: "desc"  
     }).limit(
@@ -292,8 +292,8 @@ module.exports.trash = async (req,res) =>{
     ).skip(
         skip
     )
-    if(tourList.length>0){
-        for(const item of tourList){
+    if(bookList.length>0){
+        for(const item of bookList){
             if(item.createdBy){
                 const creater = await AccountAdmin.findOne({
                 _id:item.createdBy
@@ -311,11 +311,11 @@ module.exports.trash = async (req,res) =>{
         };
        
     }
-    res.render("admin/pages/tour-trash",{
-        pageTitle:"Thùng rác tour",
-        tourList:tourList,
+    res.render("admin/pages/book-trash",{
+        pageTitle:"Thùng rác book",
+        bookList:bookList,
         totalPage:totalPage,
-        totalTour:totalTour,
+        totalbook:totalbook,
         skip:skip
     })
 }
@@ -324,7 +324,7 @@ module.exports.trashMulti = async (req,res) =>{
     try {
         switch(req.body.status){
             case "restore":
-                await Tour.updateMany({
+                await Book.updateMany({
                     _id:{$in:req.body.ids}
                     },{
                     deleted:false
@@ -332,7 +332,7 @@ module.exports.trashMulti = async (req,res) =>{
                 req.flash("success","Khôi phục thành công!")
                 break
             case "delete":
-                await Tour.deleteMany({
+                await Book.deleteMany({
                     _id:{$in:req.body.ids}
                     })
                 req.flash("success","Xóa vĩnh viễn thành công!")
@@ -352,7 +352,7 @@ module.exports.trashMulti = async (req,res) =>{
 module.exports.restore = async(req,res)=>{
    try {
     const id = req.params.id
-    await Tour.updateOne({
+    await Book.updateOne({
         _id:id
     },{
         deleted:false
@@ -373,7 +373,7 @@ module.exports.restore = async(req,res)=>{
 module.exports.destroy = async(req,res)=>{
    try {
     const id = req.params.id
-    await Tour.deleteOne({
+    await Book.deleteOne({
         _id:id
     })
     req.flash("success","Xóa vĩnh viễn thành công!")

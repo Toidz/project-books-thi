@@ -1,5 +1,5 @@
 const Joi = require("joi");
-module.exports.tourPost =(req,res,next)=>{
+module.exports.bookPost =(req,res,next)=>{
     const schema = Joi.object({
         name: Joi.string()
             .required()
@@ -8,7 +8,6 @@ module.exports.tourPost =(req,res,next)=>{
             }),
         category:  Joi.string().allow(""),
         position:  Joi.string().allow(""),
-        status:  Joi.string().allow(""),
         avatar:  Joi.string().allow(""),
         priceAdult: Joi.string().allow(""),
         priceChildren: Joi.string().allow(""),

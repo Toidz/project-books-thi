@@ -27,10 +27,5 @@ router.patch(
     categoryController.deletePatch
 );
 
-router.patch(
-    "/changePatch",
-    categoryController.changePatch
-);
-
 
 module.exports = router;

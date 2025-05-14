@@ -19,17 +19,6 @@ block main
       .inner-group
         label(class="inner-label" for="position") Vị trí
         input(type="number" id="position" name="position" value=categoryCurrent.position)
-      .inner-group
-        label(class="inner-label" for="status") Trạng thái
-        select(id="status" name="status")
-            option(
-                value="active" 
-                selected= (categoryCurrent.status == "active"? true : false)
-            ) Hoạt động
-            option(
-                value="inactive"
-                selected= (categoryCurrent.status == "inactive"? true : false)
-            ) Tạm dừng
       .inner-group.inner-two-col
         label(class="inner-label" for="avatar") Ảnh đại diện
         div(class="inner-upload-image" image-default=categoryCurrent.avatar)
