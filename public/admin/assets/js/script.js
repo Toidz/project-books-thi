@@ -221,6 +221,56 @@ if(categoryEditForm) {
 }
 // End Category edit Form
 
+
+//all button category
+const buttonAllcategory = document.querySelector("[button-all]")
+if(buttonAllcategory){
+  buttonAllcategory.addEventListener("click",()=>{
+    const buttonItem = document.querySelectorAll("[button-item]")
+    buttonItem.forEach(item => {
+      item.checked = buttonAllcategory.checked
+    });
+  })
+}
+//end all button category
+
+//change-status-category
+const changeStatusCategory = document.querySelector("[ change-status-category]")
+if(changeStatusCategory){
+  const select = changeStatusCategory.querySelector("select")
+  const button = changeStatusCategory.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const listCheck = document.querySelectorAll("[button-item]")
+      const ids = []
+      listCheck.forEach(item => {
+        const id = item.getAttribute("button-item")
+        ids.push(id)
+      });
+      if(ids.length>0&&select.value){
+        const dataFinal = {
+          status:select.value,
+          ids:ids
+        }
+        fetch(`/${pathAdmin}/category/list`,{
+          method:"PATCH",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error"){
+            
+          }
+        })
+      }
+    })
+  }
+}
+//End change-status-category
+
 // Book Create Form
 const bookCreateForm = document.querySelector("#book-create-form");
 if(bookCreateForm) {
@@ -230,80 +280,30 @@ if(bookCreateForm) {
     .addField('#name', [
       {
         rule: 'required',
-        errorMessage: 'Vui lòng nhập tên book!'
+        errorMessage: 'Vui lòng nhập tên sách!'
       }
     ])
     .onSuccess((event) => {
       const name = event.target.name.value;
       const category = event.target.category.value;
       const position = event.target.position.value;
-      const status = event.target.status.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
       if(avatars.length > 0) {
         avatar = avatars[0].file;
       }
-      const priceAdult = event.target.priceAdult.value;
-      const priceChildren = event.target.priceChildren.value;
-      const priceBaby = event.target.priceBaby.value;
-      const priceNewAdult = event.target.priceNewAdult.value;
-      const priceNewChildren = event.target.priceNewChildren.value;
-      const priceNewBaby = event.target.priceNewBaby.value;
-      const stockAdult = event.target.stockAdult.value;
-      const stockChildren = event.target.stockChildren.value;
-      const stockBaby = event.target.stockBaby.value;
-      const locations = [];
-      const time = event.target.time.value;
-      const vehicle = event.target.vehicle.value;
-      const departureDate = event.target.departureDate.value;
+      const priceBook = event.target.priceBook.value;
+      const numberBook = event.target.numberBook.value;
       const information = tinymce.get("information").getContent();
-      const schedules = [];
 
-      // locations
-      const listElementLocation = bookCreateForm.querySelectorAll('input[name="locations"]:checked');
-      listElementLocation.forEach(input => {
-        locations.push(input.value);
-      });
-      // End locations
-
-      // schedules
-      const listElementScheduleItem = bookCreateForm.querySelectorAll('.inner-schedule-item');
-      listElementScheduleItem.forEach(scheduleItem => {
-        const input = scheduleItem.querySelector("input");
-        const title = input.value;
-
-        const textarea = scheduleItem.querySelector("textarea");
-        const idTextarea = textarea.id;
-        const description = tinymce.get(idTextarea).getContent();
-
-        schedules.push({
-          title: title,
-          description: description
-        });
-      });
-      // End schedules
-    
       const formData = new FormData()
       formData.append("name",name)
       formData.append("category",category)
       formData.append("position",position)
-      formData.append("status",status)
       formData.append("avatar",avatar)
-      formData.append("priceAdult",priceAdult)
-      formData.append("priceChildren",priceChildren)
-      formData.append("priceBaby",priceBaby)
-      formData.append("priceNewAdult",priceNewAdult)
-      formData.append("priceNewChildren",priceNewChildren)
-      formData.append("priceNewBaby",priceNewBaby)
-      formData.append("stockAdult",stockAdult)
-      formData.append("stockChildren",stockChildren)
-      formData.append("stockBaby",stockBaby)
-      formData.append("locations",JSON.stringify(locations))
-      formData.append("time",time)
-      formData.append("vehicle",vehicle)
-      formData.append("departureDate",departureDate)
+      formData.append("priceBook",priceBook)
+      formData.append("numberBook",numberBook)
       formData.append("information",information)
-      formData.append("schedules",JSON.stringify(schedules))
       fetch(`/${pathAdmin}/book/create`,{
         method:"POST",
         body: formData

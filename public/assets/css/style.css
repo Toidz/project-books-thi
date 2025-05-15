@@ -1304,6 +1304,10 @@ input, button, textarea {
   color: #fff;
   font-size: 19px;
 }
+
+.box-contact ul li i:hover{
+  color: yellow
+}
 /* End Box Contact */
 
 /* Breadcrumb */
