@@ -5,6 +5,7 @@ const City = require("../../models/city.model")
 const AccountAdmin = require("../../models/account-admin.model")
 const moment = require("moment")
 const slugify = require("slugify")
+
 module.exports.list = async (req,res) =>{
     const find = {
         deleted:false
@@ -39,15 +40,39 @@ module.exports.list = async (req,res) =>{
         find.slug= regex
     }
     const limit =3
-    const totalbook = await Book.countDocuments({
+    const totalBook = await Book.countDocuments({
         deleted:false
     })
     let page =1
     if(req.query.page>0){
         page = req.query.page
     }  
-    const totalPage = Math.ceil(totalbook/limit)
+    const totalPage = Math.ceil(totalBook/limit)
     const skip = limit*(page-1)
+
+    const filterPrice = req.query.price
+    if(filterPrice){
+        const priceCurrent = {}
+        switch(parseInt(filterPrice)){
+        case 0:
+            priceCurrent.$lte = 50000
+            break
+        case 50:
+            priceCurrent.$gte = 50000
+            priceCurrent.$lte = 100000
+            break
+        case 100:
+            priceCurrent.$gte = 100000
+            priceCurrent.$lte = 200000
+            break
+        case 200:
+            priceCurrent.$gte = 200000
+            break
+        }
+        if (Object.keys(priceCurrent).length > 0) {
+            find.priceBook = priceCurrent
+        } 
+    }
     const bookList = await Book.find(find
     ).sort({
         position:"desc"
@@ -80,13 +105,12 @@ module.exports.list = async (req,res) =>{
         item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY")
     };
     res.render("admin/pages/book-list",{
-        pageTitle:"Quản lý book",
+        pageTitle:"Quản lý sách",
         bookList:bookList,
         accountList:accountList,
         categoryList:categoryTree,
-        totalbook:totalbook,
+        totalBook:totalBook,
         totalPage:totalPage,
-        totalbook:totalbook,
         skip:skip
     })
 }
@@ -128,34 +152,22 @@ module.exports.createPost = async (req,res) =>{
 
 module.exports.changePatch = async (req,res) =>{
     try {
-        const {ids,status} = req.body
-        switch(status){
-            case "active": case "inactive":
-                await Book.updateMany({
-                    _id: {$in:ids}
-                },{
-                    status:status
-                })
-                req.flash("success", "Đổi trạng thái thành công!");
-                break
-            case "delete":
-                await Book.updateMany({
-                    _id:{$in:ids}
-                },{
-                    deleted:true,
-                    deletedBy:req.account.id,
-                    deletedAt:Date.now()
-                })
-                req.flash("success", "Xóa book thành công!");
-                break
-        }
+        const {ids} = req.body
+        await Book.updateMany({
+            _id:{$in:ids}
+        },{
+            deleted:true,
+            deletedBy:req.account.id,
+            deletedAt:Date.now()
+        })
+        req.flash("success", "Xóa book thành công!");
         res.json({
             code:"success"
         })
     } catch (error) {
         res.json({
             code:"error",
-            message:"Cập nhật trạng thái book thất bại!"
+            message:"Cập nhật thất bại!"
         })
     }
 }

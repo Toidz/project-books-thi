@@ -1159,7 +1159,6 @@ if(innerPagination){
 //End----------Filter category
 
 //----------Filter book
-
 //filter-creater book
 const bookCreater = document.querySelector("[book-creater]")
 if(bookCreater){
@@ -1238,6 +1237,26 @@ if(bookCategory){
 }
 //End filter-category book
 
+
+//filter-price
+const filterPrice = document.querySelector("[filter-price]")
+if(filterPrice){
+  const url = new URL(window.location.href)
+  filterPrice.addEventListener("change",()=>{
+    const priceValue = filterPrice.value
+    if(priceValue){
+      url.searchParams.set("price",priceValue)
+    }
+    else{
+      url.searchParams.delete("price")
+    }
+    window.location.href = url.href
+  })
+  const currentPrice = url.searchParams.get("price")
+  if(currentPrice) filterPrice.value =currentPrice
+}
+//end filter-price
+
 //button reset book
 const buttonResetbook = document.querySelector("[button-reset]")
 if(buttonResetbook){
@@ -1260,6 +1279,45 @@ if(buttonAllbook){
   })
 }
 //end all button book
+
+//change-status book
+const changeStatus = document.querySelector("[change-status]")
+if(changeStatus){
+  const select = changeStatus.querySelector("select")
+  const button = changeStatus.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const listChecked = document.querySelectorAll("[button-item]:checked")
+      const ids= []
+      listChecked.forEach(item => {
+        const id = item.getAttribute("button-item")
+        ids.push(id)
+      });
+      if(select.value && ids.length>0){
+        const dataFinal = {
+          ids:ids
+        }
+        fetch(`/${pathAdmin}/book/changePatch`,{
+          method:"PATCH",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body:JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error"){
+            alert(data.message)
+          }
+          else{
+            window.location.reload()
+          }
+        })
+      }
+    })
+  }
+}
+//End change-status book
 
 //book search
 const url = new URL(window.location.href)
@@ -1321,8 +1379,7 @@ if(buttonDeletebook){
 }
 //End button delete book
 
-//book trash
-
+//--------book trash
 //check-all-trash
 const checkAllTrash = document.querySelector("[checkAllTrash]")
 if(checkAllTrash){

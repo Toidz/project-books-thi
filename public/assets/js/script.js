@@ -374,3 +374,39 @@ if(orderForm) {
   // End List Input Method
 }
 // End Order Form
+
+///-----------book----------
+//filter-price
+const filterPrice = document.querySelector("[filter-price]")
+if(filterPrice){
+  const url = new URL(window.location.href)
+  const selectCategory  = filterPrice.querySelector("[category]")
+  const selectPrice = filterPrice.querySelector("[price]")
+  const button = filterPrice.querySelector("[excute]")
+  const buttonClear = filterPrice.querySelector("[clear]")
+  if(button){
+    button.addEventListener("click",()=>{
+      if(selectCategory.value && selectPrice.value){
+        url.searchParams.set("category",selectCategory.value)
+        url.searchParams.set("price",selectPrice.value)
+      }
+      else{
+        url.searchParams.delete("category")
+        url.searchParams.delete("price")
+      }
+      window.location.href = url.href
+    })
+    const currentCategory = url.searchParams.get("category")
+    if(currentCategory) selectCategory.value =currentCategory
+    const currentPrice = url.searchParams.get("price")
+    if(currentPrice) selectPrice.value =currentPrice
+  }
+  if(buttonClear){
+    buttonClear.addEventListener("click",()=>{
+      url.search= ""
+      window.location.href = url.href
+    })
+  }
+}
+//end filter-price
+///End -----------book----------
