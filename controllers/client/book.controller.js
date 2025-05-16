@@ -68,8 +68,42 @@ module.exports.detail = async (req,res) =>{
       deleted:false
   })
   const categoryTree = categoryHelper.categoryTree(category)
+
+  const id = req.params.id
+  const bookCurrent = await Book.findOne({
+    _id:id
+  })
+  const parentId = await Category.findOne({
+    _id:bookCurrent.category
+  })
+  const parent={} 
+  parent.id = parentId.id
+  parent.name = parentId.name
+  parent.parent = parentId.parent
+  console.log(parent)
+
+  const parentIds = await Category.findOne({
+    _id:parent.parent
+  })
+  const parents = {}
+  parents.id = parentIds.id
+  parents.name = parentIds.name
+  parents.parent = parentIds.parent
+
+  const parentIdss = await Category.findOne({
+    _id:parents.parent
+  })
+  const parentss = {}
+  parentss.id = parentIdss.id
+  parentss.name = parentIdss.name
+  parentss.parent = parentIdss.parent
+
   res.render("client/pages/book-detail",{
     pageTitle:"Chi tiết sách",
-    categoryList:categoryTree
+    categoryList:categoryTree,
+    bookCurrent:bookCurrent,
+    parent:parent,
+    parents:parents,
+    parentss:parentss,
   });
 }

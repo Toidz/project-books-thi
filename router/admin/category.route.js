@@ -5,6 +5,7 @@ const upload = multer({ storage: cloudinaryHelper.storage});
 const categoryController = require("../../controllers/admin/category.controller");
 const categoryValidate = require("../../validates/admin/category.validate")
 router.get("/list",categoryController.list);
+router.patch("/list",categoryController.listPatch);
 
 router.get("/create",categoryController.create);
 router.post("/create",

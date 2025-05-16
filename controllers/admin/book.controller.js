@@ -1,7 +1,6 @@
 const Category = require("../../models/category.model")
 const categoryHelper = require("../../helpers/category.helper")
 const Book = require("../../models/book.model") 
-const City = require("../../models/city.model")
 const AccountAdmin = require("../../models/account-admin.model")
 const moment = require("moment")
 const slugify = require("slugify")
@@ -18,7 +17,7 @@ module.exports.list = async (req,res) =>{
     }
     const startDate = req.query.startDate
     const endDate = req.query.endDate
-    const filterDate ={}
+    const filterDate = {}
     if(startDate){
         filterDate.$gte = moment(startDate).startOf("date").toDate()
     }
@@ -28,9 +27,63 @@ module.exports.list = async (req,res) =>{
     if(Object.keys(filterDate).length>0){
         find.createdAt = filterDate
     }
-    if(req.query.category){
-        find.category= req.query.category
+    
+    const totalFind = {
+        deleted:false,
     }
+    if(req.query.category){
+        const idss = await Category.find({
+            parent:""
+        })
+        const idssArray = []
+        idss.forEach(item => {
+            idssArray.push(item.id)
+        });
+        console.log(idssArray)
+        const ids = await Category.find({
+            parent: {$in:idssArray} 
+        })
+        const idsArray = []
+        ids.forEach(item => {
+            idsArray.push(item.id)
+        });
+        console.log(idsArray)
+
+        if(idssArray.includes(req.query.category)){
+            const listParent = await Category.find({
+                parent: req.query.category
+            })
+            const listParentArray = []
+            listParent.forEach(item => {
+                listParentArray.push(item.id)
+            });
+
+            const listChild = await Category.find({
+                parent: {$in:listParentArray}
+            })
+
+            const listChildArray = []
+            listChild.forEach(item => {
+                listChildArray.push(item.id)
+            });
+            totalFind.category = {$in:listChildArray}
+            find.category = {$in:listChildArray}
+        }
+        else if(idsArray.includes(req.query.category)){
+            const listChild = await Category.find({
+                parent: req.query.category
+            })
+
+            const listChildArray = []
+            listChild.forEach(item => {
+                listChildArray.push(item.id)
+            });
+            totalFind.category = {$in:listChildArray}
+            find.category = {$in:listChildArray}
+        }
+        else find.category= req.query.category
+    }
+
     const keyword = req.query.keyword
     if(keyword){
         const slug = slugify(keyword,{
@@ -40,9 +93,7 @@ module.exports.list = async (req,res) =>{
         find.slug= regex
     }
     const limit =3
-    const totalBook = await Book.countDocuments({
-        deleted:false
-    })
+    const totalBook = await Book.countDocuments(totalFind)
     let page =1
     if(req.query.page>0){
         page = req.query.page
@@ -119,12 +170,10 @@ module.exports.create = async (req,res) =>{
     const categoryList = await Category.find({
         deleted:false
     })
-    const cityList = await City.find({})
     const categoryTree = categoryHelper.categoryTree(categoryList)
     res.render("admin/pages/book-create",{
         pageTitle:"Tạo book",
         categoryList: categoryTree,
-        cityList : cityList
     })
 }
 
@@ -136,11 +185,29 @@ module.exports.createPost = async (req,res) =>{
         const position = await Book.countDocuments({})
         req.body.position = position +1
     }
-    req.body.avatar =  req.file? req.file.path : " "
+    if(req.files&&req.files.avatar1){
+        req.body.avatar1 =  req.files.avatar1[0].path
+    }
+    else{
+        delete req.body.avatar1
+    }
+    if(req.files&&req.files.avatar2){
+        req.body.avatar2 =  req.files.avatar2[0].path
+    }
+    else{
+        delete req.body.avatar2
+    }
+    if(req.files&&req.files.avatar3){
+        req.body.avatar3 =  req.files.avatar3[0].path
+    }
+    else{
+        delete req.body.avatar3
+    }
     req.body.priceBook = req.body.priceBook? parseInt(req.body.priceBook): 0
     req.body.numberBook = req.body.numberBook? parseInt(req.body.numberBook): 0
     req.body.createdBy = req.account.id
     req.body.updatedBy = req.account.id
+    console.log(req.body)
     const dataFinal = new Book(req.body)
     await dataFinal.save()
     req.flash("success", "Tạo book thành công!");
@@ -177,19 +244,17 @@ module.exports.edit = async (req,res) =>{
         const categoryList = await Category.find({
             deleted:false
         })
-        const cityList = await City.find({})
         const id= req.params.id
-        const currentbook = await Book.findOne({
+        const currentBook = await Book.findOne({
             _id:id,
             deleted:false
         })
-        currentBook.departureDateFormat = moment(currentBook.departureDate).format("YYYY-MM-DD")
+
         const categoryTree = categoryHelper.categoryTree(categoryList)
         res.render("admin/pages/book-edit",{
-            pageTitle:"Chỉnh sửa book",
+            pageTitle:"Chỉnh sửa sách",
             categoryList:categoryTree,
-            cityList:cityList,
-            currentbook:currentbook
+            currentBook:currentBook
         })
     } catch (error) {
         res.redirect(`/${pathAdmin}/book/list`)     
@@ -206,29 +271,32 @@ module.exports.editPatch = async (req,res) =>{
             const totalCount= await Book.countDocuments({})
             req.body.position = totalCount +1
         }
-        if(req.file){
-            req.body.avatar=req.file.path
+
+        if(req.files&&req.files.avatar1){
+            req.body.avatar1 =  req.files.avatar1[0].path
         }
         else{
-            delete req.body.avatar
+            delete req.body.avatar1
         }
-        req.body.priceAdult = req.body.priceAdult? parseInt(req.body.priceAdult): 0
-        req.body.priceChildren = req.body.priceChildren? parseInt(req.body.priceChildren): 0
-        req.body.priceBaby =  req.body.priceBaby? parseInt(req.body.priceBaby):0
-        req.body.priceNewAdult = req.body.priceNewAdult? parseInt(req.body.priceNewAdult):0
-        req.body.priceNewChildren = req.body.priceNewChildren? parseInt(req.body.priceNewChildren):0
-        req.body.priceNewBaby =  req.body.priceNewBaby ? parseInt(req.body.priceNewBaby) :0
-        req.body.stockAdult =req.body.stockAdult? parseInt(req.body.stockAdult):0
-        req.body.stockChildren =  req.body.stockChildren? parseInt(req.body.stockChildren):0
-        req.body.stockBaby =  req.body.stockBaby? parseInt(req.body.stockBaby):0
-        req.body.locations = req.body.locations ? JSON.parse(req.body.locations):[]
-        req.body.departureDate = req.body.departureDate? new Date(req.body.departureDate):null
+        if(req.files&&req.files.avatar2){
+            req.body.avatar2 =  req.files.avatar2[0].path
+        }
+        else{
+            delete req.body.avatar2
+        }
+        if(req.files&&req.files.avatar3){
+            req.body.avatar3 =  req.files.avatar3[0].path
+        }
+        else{
+            delete req.body.avatar3
+        }
+        req.body.priceBook = req.body.priceBook? parseInt(req.body.priceBook): 0
+        req.body.numberBook = req.body.numberBook? parseInt(req.body.numberBook): 0
         req.body.updatedBy = req.account.id
-        req.body.schedules =  req.body.schedules ? JSON.parse(req.body.schedules) : []
         console.log(req.body)
         await Book.updateOne({
-        _id:id,
-        deleted:false
+            _id:id,
+            deleted:false
         },req.body)
         req.flash("success","Cập nhật thành công!")
         res.json({
@@ -253,14 +321,14 @@ module.exports.deletePatch= async(req,res)=>{
             deletedAt:Date.now(),
             deletedBy:req.account.id
         })
-        req.flash("success","Xóa book thành công!")
+        req.flash("success","Xóa sách thành công!")
         res.json({
             code:"success"
         })
     } catch (error) {
         res.json({
             code:"error",
-            message:"Xóa thất bại!"
+            message:"Xóa sách thất bại!"
         })
     }
     

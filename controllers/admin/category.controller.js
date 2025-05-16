@@ -116,6 +116,28 @@ module.exports.list = async (req,res) =>{
         pagination:pagination
     })
 }
+module.exports.listPatch = async (req,res) =>{
+    try {
+        const ids = req.body.ids
+        await Category.updateMany({
+            _id :{$in:ids}
+        },{
+            deleted:true,
+            deletedAt:Date.now(),
+            deletedBy:req.account.id
+        })
+        req.flash("success","Xóa danh mục thành công!")
+        res.json({
+            code:"success"
+        })
+    } catch (error) {
+        res.json({
+            code:"error",
+            message:"Xóa danh mục thất bại!"
+        })
+    }
+}
+
 
 module.exports.edit = async (req,res) =>{
     try{
@@ -180,10 +202,10 @@ module.exports.deletePatch = async (req,res) =>{
             deletedBy: req.account.id,
             deletedAt: Date.now()
         })
+        req.flash("success","Xóa danh mục thành công!")
         res.json({
             code:"success"
         })
-        req.flash("success","Xóa danh mục thành công!")
     }catch(error){
         res.json({
             code:"error",

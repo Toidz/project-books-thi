@@ -9,7 +9,11 @@ router.get("/list",bookController.list);
 router.get("/create",bookController.create);
 
 router.post("/create",
-    upload.single('avatar'),
+    upload.fields([
+        { name: 'avatar1', maxCount: 1 },
+        { name: 'avatar2', maxCount: 1 },
+        { name: 'avatar3', maxCount: 1 }
+    ]),
     bookValidate.bookPost,
     bookController.createPost)
 
@@ -19,8 +23,11 @@ router.get("/edit/:id",bookController.edit)
 
 router.patch(
     "/edit/:id",
-    upload.single('avatar'),
-    bookValidate.bookPost,
+    upload.fields([
+        { name: 'avatar1', maxCount: 1 },
+        { name: 'avatar2', maxCount: 1 },
+        { name: 'avatar3', maxCount: 1 }
+    ]),
     bookController.editPatch) 
 
 router.patch("/delete/:id",bookController.deletePatch)

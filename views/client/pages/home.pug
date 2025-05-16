@@ -1,7 +1,7 @@
 extends ../layout/default.pug
 include ../mixins/product-item.pug
 block title 
-  title home 
+  title #{pageTitle}
 block main 
   .section-1
     .container
@@ -34,54 +34,6 @@ block main
         data-aos="fade-up"
         )
         // Product Item
-        -
-          var listTourVN = [
-            {
-              sale:'30%',
-              img:'/assets/images/product-1.jpg',
-              travel:'Hà Nội - Lào Cai - SaPa 4N3Đ',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            },
-            {
-              sale:'30%',
-              img:'/assets/images/product-2.jpg',
-              travel:'Tour 2024 Phú Quốc - Thiên Đường Đảo Ngọc (3N2D)',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            },
-            {
-              sale:'30%',
-              img:'/assets/images/product-3.jpg',
-              travel:'Combo Đà Nẵng 2024: ĐÀ NẴNG - HỘI AN - BÀ NÀ HILL',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            },
-              {
-              sale:'30%',
-              img:'/assets/images/product-3.jpg',
-              travel:'Combo Đà Nẵng 2024: ĐÀ NẴNG - HỘI AN - BÀ NÀ HILL',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            }
-          ]
-
         each item in allBook
           +product-item(item)
         // End Product Item
@@ -114,53 +66,6 @@ block main
         data-aos="fade-up"
         )
         // Product Item
-        -
-          var listTourVN = [
-            {
-              sale:'30%',
-              img:'/assets/images/product-1.jpg',
-              travel:'Hà Nội - Lào Cai - SaPa 4N3Đ',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            },
-            {
-              sale:'30%',
-              img:'/assets/images/product-2.jpg',
-              travel:'Tour 2024 Phú Quốc - Thiên Đường Đảo Ngọc (3N2D)',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            },
-            {
-              sale:'30%',
-              img:'/assets/images/product-3.jpg',
-              travel:'Combo Đà Nẵng 2024: ĐÀ NẴNG - HỘI AN - BÀ NÀ HILL',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            },
-              {
-              sale:'30%',
-              img:'/assets/images/product-3.jpg',
-              travel:'Combo Đà Nẵng 2024: ĐÀ NẴNG - HỘI AN - BÀ NÀ HILL',
-              priceOld:13650000,
-              priceNew:2590000,
-              idTour:'123456789',
-              start:'22/07/2024',
-              time:'10 Ngày 9 Đêm',
-              empty:10
-            }
-          ]
         each item in allBook
           +product-item(item)
         // End Product Item

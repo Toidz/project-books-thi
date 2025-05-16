@@ -27,17 +27,16 @@ block main
           tr
             th(class="inner-center")
               input(type="checkbox" class="inner-check" checkAllTrash)
-            th Tên tour
+            th Tên sách
             th Ảnh đại diện
             th Giá
-            th Còn lại
+            th Số lượng
             th(class="inner-center") Vị trí
-            th(class="inner-center") Trạng thái
             th Tạo bởi
             th Cập nhật bởi
             th Hành động
         tbody
-          each item in tourList
+          each item in bookList
             tr
               td(class="inner-center")
                 input(type="checkbox" class="inner-check" checkItemTrash=item.id)
@@ -45,19 +44,10 @@ block main
               td
                 img(src=item.avatar class="inner-avatar")
               td
-                div NL: #{item.priceAdult}
-                div TE: #{item.priceChildren}
-                div EB: #{item.priceBaby}
+                div #{item.priceBook.toLocaleString('vi-VN')}
               td
-                div NL: #{item.stockAdult}
-                div TE: #{item.stockChildren}
-                div EB: #{item.stockBaby}
+                div #{item.numberBook}
               td(class="inner-center") #{item.position}
-              td(class="inner-center")
-                if (item.status=="active")
-                  .badge.badge-green Hoạt động
-                else if (item.status =="inactive")
-                  .badge.badge-red Tạm dừng
               td
                 div #{item.createrName}
                 div.inner-time #{item.formatCreated}
@@ -69,18 +59,18 @@ block main
                   button(
                     button-restore-trash
                     class="inner-undo"
-                    api-restore=`/${pathAdmin}/tour/restore/${item.id}`
+                    api-restore=`/${pathAdmin}/book/restore/${item.id}`
                     ) <i class="fa-solid fa-rotate-left"></i>
                   button(
                     class="inner-delete"
                     button-destroy-trash
-                    api-destroy=`/${pathAdmin}/tour/destroy/${item.id}`
+                    api-destroy=`/${pathAdmin}/book/destroy/${item.id}`
                     ) <i class="fa-regular fa-trash-can"></i>
   //- End Section 6
 
   //- Section 7
   .section-7
-    span(class="inner-label") Hiển thị #{skip+1} - #{skip+tourList.length} của #{totalTour}
+    span(class="inner-label") Hiển thị #{skip+1} - #{skip+bookList.length} của #{totalBook}
     select(class="inner-pagination")
       - for(let i=1;i<=totalPage;i++)
         option(value=i) Trang #{i}

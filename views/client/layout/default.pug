@@ -67,7 +67,7 @@ body
                                 ul
                                     each i in item.children
                                         li
-                                            a(href=`/book/${i.id}`) -- #{i.name}
+                                            a(href=`/book/${i.id}`) - #{i.name}
                                                 each it in i.children
                                                     li
                                                         a(href=`/book/${it.id}` style="margin-left:20px") #{it.name}

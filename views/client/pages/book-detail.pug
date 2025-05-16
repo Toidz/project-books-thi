@@ -7,16 +7,17 @@ block main
     .inner-image
       img(
         alt="" 
-        src="/assets/images/banner-7.jpg"
+        src="/assets/images/background_1.jpg"
         )
     .inner-content
       .container
-        h1.inner-title Tour Hà Nội - Ninh Bình - Hạ Long - Yên Tử - Sapa | 6N5D
+        h1.inner-title #{bookCurrent.name}
         .inner-list
-          a(href="#") Trang Chủ
-          a(href="#") Tour Trong Nước
-          a(href="#") Tour Miền Bắc
-          a(href="#") Tour Hà Nội - Ninh Bình - Hạ Long - Yên Tử - Sapa | 6N5D
+          a(href="/") Trang Chủ
+          a(href=`/book/${parentss.id}`) #{parentss.name}
+          a(href=`/book/${parents.id}`) #{parents.name}
+          a(href=`/book/${parent.id}`) #{parent.name}
+          a(href=`/book/detail/${bookCurrent.id}`) #{bookCurrent.name}
   // End Breadcrumb
   // Section 10
   .section-10

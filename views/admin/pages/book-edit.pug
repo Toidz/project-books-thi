@@ -3,129 +3,42 @@ include ../mixins/options.pug
 block main
   h1.box-title Chỉnh sửa sách
   .section-8
-    form#tour-edit-form
+    form#book-edit-form
       .inner-group(style="display:none")
           label(class="inner-label" for="id") id
-          input(type="text" id="id" name="id" value=currentTour.id)
+          input(type="text" id="id" name="id" value=currentBook.id)
       .inner-group
         label(class="inner-label" for="name") Tên sách
-        input(type="text" id="name" name="name" value=currentTour.name)
+        input(type="text" id="name" name="name" value=currentBook.name)
       .inner-group
         label(class="inner-label" for="category") Danh mục
         select(id="category" name="category")
           option(value="") -- Chọn danh mục --
-          +options(categoryList,0,currentTour.category)
+          +options(categoryList,0,currentBook.category)
       .inner-group
         label(class="inner-label" for="position") Vị trí
-        input(type="number" id="position" name="position" value=currentTour.position)
-      .inner-group
-        label(class="inner-label" for="status") Trạng thái
-        select(id="status" name="status")
-            option(
-              value="active"
-              selected= currentTour.status=="active"? true: false 
-              ) Hoạt động
-            option(
-              value="inactive"
-              selected= currentTour.status=="inactive"? true: false 
-              ) Tạm dừng
+        input(type="number" id="position" name="position" value=currentBook.position)
       .inner-group.inner-two-col
-        label(class="inner-label" for="avatar") Ảnh đại diện
-        div(class="inner-upload-image" image-default=currentTour.avatar)
-          input(type="file" id="avatar" accept="image/*" filepond-image name="avatar")
-      .inner-group
-        label(class="inner-label") Giá cũ
-        .inner-input-list
-          .inner-input-item
-            label Người lớn
-            input(type="number" name="priceAdult" value=currentTour.priceAdult)
-          .inner-input-item
-            label Trẻ em
-            input(type="number" name="priceChildren" value=currentTour.priceChildren)
-          .inner-input-item
-            label Em bé
-            input(type="number" name="priceBaby" value= currentTour.priceNewBaby)
-      .inner-group
-        label(class="inner-label") Giá mới
-        .inner-input-list
-          .inner-input-item
-            label Người lớn
-            input(type="number" name="priceNewAdult" value= currentTour.priceNewAdult)
-          .inner-input-item
-            label Trẻ em
-            input(type="number" name="priceNewChildren" value= currentTour.priceNewChildren)
-          .inner-input-item
-            label Em bé
-            input(type="number" name="priceNewBaby" value= currentTour.priceNewBaby)
-      .inner-group
-        label(class="inner-label") Còn lại
-        .inner-input-list
-          .inner-input-item
-            label Người lớn
-            input(type="number" name="stockAdult" value=currentTour.stockAdult )
-          .inner-input-item
-            label Trẻ em
-            input(type="number" name="stockChildren" value = currentTour.stockChildren)
-          .inner-input-item
-            label Em bé
-            input(type="number" name="stockBaby" value = currentTour.stockBaby)
-      .inner-group
-        label(class="inner-label") Những địa điểm có tour
-        .inner-checkbox-list()
-          each item in cityList
-            .inner-checkbox-item
-              input(
-                type="checkbox" 
-                name="locations" 
-                value=item.id
-                checked= currentTour.locations.includes(item.id))
-              label #{item.name}
-      .inner-group
-        label(class="inner-label" for="time") Thời gian
-        input(type="text" id="time" name="time" value=currentTour.time)
-      .inner-group
-        label(class="inner-label" for="vehicle") Phương tiện
-        input(type="text" id="vehicle" name="vehicle" value=currentTour.vehicle)
-      .inner-group
-        label(class="inner-label" for="departureDate") Ngày khởi hành
-        input(
-          type="date" 
-          id="departureDate" 
-          name="departureDate"
-          value=currentTour.departureDateFormat)
+        label(class="inner-label" for="avatar1") Ảnh 1
+        div(class="inner-upload-image" image-default=currentBook.avatar1)
+          input(type="file" id="avatar1" accept="image/*" filepond-image name="avatar1")
       .inner-group.inner-two-col
-        label(class="inner-label" for="information") Thông tin tour
-        textarea(id="information" textarea-mce name="information") #{currentTour.information}
+        label(class="inner-label" for="avatar2") Ảnh 2
+        div(class="inner-upload-image" image-default=currentBook.avatar2)
+          input(type="file" id="avatar2" accept="image/*" filepond-image name="avatar2")
       .inner-group.inner-two-col
-        label(class="inner-label") Lịch trình tour
-        .inner-schedule
-          .inner-schedule-list
-            if(currentTour.schedules.length >0)
-              each item in currentTour.schedules
-                .inner-schedule-item
-                  .inner-schedule-head
-                    span(class="inner-schedule-button inner-move")
-                      <i class="fa-solid fa-up-down-left-right"></i>
-                    input(type="text" value=item.title)
-                    span(class="inner-schedule-button inner-remove")
-                      <i class="fa-regular fa-trash-can"></i>
-                    span(class="inner-schedule-button inner-more")
-                      <i class="fa-solid fa-angle-down"></i>
-                  .inner-schedule-body
-                    textarea(textarea-mce) #{item.description}
-            else
-              .inner-schedule-item
-                .inner-schedule-head
-                  span(class="inner-schedule-button inner-move")
-                    <i class="fa-solid fa-up-down-left-right"></i>
-                  input(type="text")
-                  span(class="inner-schedule-button inner-remove")
-                    <i class="fa-regular fa-trash-can"></i>
-                  span(class="inner-schedule-button inner-more")
-                    <i class="fa-solid fa-angle-down"></i>
-                .inner-schedule-body
-                  textarea(textarea-mce)
-          .inner-schedule-create + Thêm lich trình
+        label(class="inner-label" for="avatar3") Ảnh 3
+        div(class="inner-upload-image" image-default=currentBook.avatar3)
+          input(type="file" id="avatar3" accept="image/*" filepond-image name="avatar3")
+      .inner-group
+        label(class="inner-label" for="priceBook") Giá bán
+        input(type="number" name="priceBook" value=currentBook.priceBook)
+      .inner-group
+        label(class="inner-label" for="numberBook") Số lượng
+        input(type="number" name="numberBook" value=currentBook.numberBook)
+      .inner-group.inner-two-col
+        label(class="inner-label" for="information") Thông tin sách
+        textarea(id="information" textarea-mce name="information") #{currentBook.information}
       .inner-button.inner-two-col
         button Cập nhật
     .inner-back
