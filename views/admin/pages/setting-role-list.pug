@@ -1,22 +1,24 @@
 extends ../layouts/default.pug
 block main
   h1.box-title Nhóm quyền
-
+  - if(permissions.includes("role-view"))
   //- Section 5
   .section-5
     .inner-wrap
-      .inner-change-status(filter-role)
-        .inner-item
-          select
-            option(value="") -- Hành động --
-            option(value="delete") Xóa
-        .inner-item
-          button Áp dụng
+      - if(permissions.includes("role-delete"))
+        .inner-change-status(filter-role)
+          .inner-item
+            select
+              option(value="") -- Hành động --
+              option(value="delete") Xóa
+          .inner-item
+            button Áp dụng
       .inner-search
         <i class="fa-solid fa-magnifying-glass"></i>
         input(type="text" placeholder="Tìm kiếm" search-role)
-      .inner-button-create
-        a(href=`/${pathAdmin}/setting/role/create`) + Tạo mới
+      - if(permissions.includes("role-create"))
+        .inner-button-create
+          a(href=`/${pathAdmin}/setting/role/create`) + Tạo mới
   //- End Section 5
 
   //- Section 6
@@ -39,8 +41,10 @@ block main
               td #{item.description}
               td
                 .inner-buttons
-                  a(
-                    href =`/${pathAdmin}/setting/role/edit/${item.id}`
-                    class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                  button(class="inner-delete" apiroledelete=`/${pathAdmin}/setting/role/delete/${item.id}`) <i class="fa-regular fa-trash-can"></i>
+                  - if(permissions.includes("role-edit"))
+                    a(
+                      href =`/${pathAdmin}/setting/role/edit/${item.id}`
+                      class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
+                  - if(permissions.includes("role-delete"))
+                    button(class="inner-delete" apiroledelete=`/${pathAdmin}/setting/role/delete/${item.id}`) <i class="fa-regular fa-trash-can"></i>
   //- End Section 6

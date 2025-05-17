@@ -227,7 +227,7 @@ module.exports.changePatch = async (req,res) =>{
             deletedBy:req.account.id,
             deletedAt:Date.now()
         })
-        req.flash("success", "Xóa book thành công!");
+        req.flash("success", "Xóa sách thành công!");
         res.json({
             code:"success"
         })

@@ -502,21 +502,11 @@ if(settingWebsiteInfoForm) {
       let logo = null;
       if(logos.length > 0) {
         logo = logos[0].file;
-        // const elementImageDefault = event.target.avatar.closest("[image-default]");
-        // const imageDefault = elementImageDefault.getAttribute("image-default");
-        // if(imageDefault.includes(logo.name)) {
-        //   logo=null
-        // }
       }
       const favicons = filePond.favicon.getFiles();
       let favicon = null;
       if(favicons.length > 0) {
         favicon = favicons[0].file;
-        // const elementImageDefault = event.target.avatar.closest("[image-default]");
-        // const imageDefault = elementImageDefault.getAttribute("image-default");
-        // if(imageDefault.includes(favicon.name)) {
-        //   favicon=null
-        // }
       }
       const formData = new FormData()
       formData.append("websiteName",websiteName)
@@ -587,6 +577,12 @@ if(settingAccountAdminCreateForm) {
         errorMessage: 'Số điện thoại không đúng định dạng!'
       },
     ])
+    .addField('#role', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn nhóm quyền!'
+      }
+    ])
     .addField('#positionCompany', [
       {
         rule: 'required',
@@ -633,18 +629,335 @@ if(settingAccountAdminCreateForm) {
         avatar = avatars[0].file;
       }
 
-      console.log(fullName);
-      console.log(email);
-      console.log(phone);
-      console.log(role);
-      console.log(positionCompany);
-      console.log(status);
-      console.log(password);
-      console.log(avatar);
+      const formData = new FormData()
+      formData.append("fullName",fullName)
+      formData.append("email",email)
+      formData.append("phone",phone)
+      formData.append("role",role)
+      formData.append("positionCompany",positionCompany)
+      formData.append("status",status)
+      formData.append("password",password)
+      formData.append("avatar",avatar)
+      
+      fetch(`/${pathAdmin}/setting/account-admin/create`,{
+        method:"POST",
+        body:formData
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code =="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href = `/${pathAdmin}/setting/account-admin/list`
+        }
+      })
     })
   ;
 }
-// End Setting Account Admin Create Form
+// End Setting Account Admin create Form
+
+// Setting Account Admin edit Form
+const settingAccountAdminEditForm = document.querySelector("#setting-account-admin-edit-form");
+if(settingAccountAdminEditForm) {
+  const validation = new JustValidate('#setting-account-admin-edit-form');
+
+  validation
+    .addField('#fullName', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập họ tên!'
+      },
+      {
+        rule: 'minLength',
+        value: 5,
+        errorMessage: 'Họ tên phải có ít nhất 5 ký tự!',
+      },
+      {
+        rule: 'maxLength',
+        value: 50,
+        errorMessage: 'Họ tên không được vượt quá 50 ký tự!',
+      },
+    ])
+    .addField('#email', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập email!'
+      },
+      {
+        rule: 'email',
+        errorMessage: 'Email không đúng định dạng!',
+      },
+    ])
+    .addField('#phone', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số điện thoại!'
+      },
+      {
+        rule: 'customRegexp',
+        value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
+        errorMessage: 'Số điện thoại không đúng định dạng!'
+      },
+    ])
+    .addField('#positionCompany', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập chức vụ!'
+      },
+    ])
+    .onSuccess((event) => {
+      const id = event.target.id.value;
+      const fullName = event.target.fullName.value;
+      const email = event.target.email.value;
+      const phone = event.target.phone.value;
+      const role = event.target.role.value;
+      const positionCompany = event.target.positionCompany.value;
+      const status = event.target.status.value;
+      const password = event.target.password.value;
+      const avatars = filePond.avatar.getFiles();
+      let avatar = null;
+      if(avatars.length > 0) {
+        avatar = avatars[0].file;
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        const imageDefault = elementImageDefault.getAttribute("image-default");
+        if(imageDefault.includes(avatar.name)) {
+          avatar=null
+        }
+      }
+
+      const formData = new FormData()
+      formData.append("fullName",fullName)
+      formData.append("email",email)
+      formData.append("phone",phone)
+      formData.append("role",role)
+      formData.append("positionCompany",positionCompany)
+      formData.append("status",status)
+      if(password) formData.append("password",password)
+      formData.append("avatar",avatar)
+      fetch(`/${pathAdmin}/setting/account-admin/edit/${id}`,{
+        method:"PATCH",
+        body:formData
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code =="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
+    })
+  ;
+}
+// End Setting Account Admin edit Form
+
+
+//----------Filter account
+//Filter account status
+const filterAccountStatus = document.querySelector("[filter-account-status]");
+if(filterAccountStatus){
+  const url = new URL(window.location.href)
+  filterAccountStatus.addEventListener("change",()=>{
+    const value = filterAccountStatus.value;
+    if(value){
+      url.searchParams.set("status",value);
+    }
+    else{
+      url.searchParams.delete("status")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("status")
+  if(currentValue) filterAccountStatus.value = currentValue
+}
+//end Filter account status
+
+//Filter startDate
+const filterAccountstartDate = document.querySelector("[filter-account-startDate]");
+if(filterAccountstartDate){
+  const url = new URL(window.location.href)
+  filterAccountstartDate.addEventListener("change",()=>{
+    const value = filterAccountstartDate.value;
+    if(value){
+      url.searchParams.set("startdate",value);
+    }
+    else{
+      url.searchParams.delete("startdate")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("startdate")
+  if(currentValue) filterAccountstartDate.value = currentValue
+}
+//end Filter account startDate
+
+//Filter account EndDate
+const filterAccountEndDate = document.querySelector("[filter-account-EndDate]");
+if(filterAccountEndDate){
+  const url = new URL(window.location.href)
+  filterAccountEndDate.addEventListener("change",()=>{
+    const value = filterAccountEndDate.value;
+    if(value){
+      url.searchParams.set("enddate",value);
+    }
+    else{
+      url.searchParams.delete("enddate")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("enddate")
+  if(currentValue) filterAccountEndDate.value = currentValue
+}
+//end Filter account EndDate
+
+//Filter account role
+const filterAccountRole = document.querySelector("[filter-account-role]");
+if(filterAccountRole){
+  const url = new URL(window.location.href)
+  filterAccountRole.addEventListener("change",()=>{
+    const value = filterAccountRole.value;
+    if(value){
+      url.searchParams.set("role",value);
+    }
+    else{
+      url.searchParams.delete("role")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("role")
+  if(currentValue) filterAccountRole.value = currentValue
+}
+//end Filter account role
+//Filter account delete
+const filerAccountDelete = document.querySelector("[filter-account-delete]")
+if(filerAccountDelete){
+  const url = new URL(window.location.href)
+  filerAccountDelete.addEventListener("click",()=>{
+    url.search= ""
+    window.location.href = url
+  })
+}
+//End Filter delete
+
+//Check All account  
+const checkAllAccount = document.querySelector("[checkALlAccount")
+if(checkAllAccount){
+  checkAllAccount.addEventListener("click",()=>{
+    const checkItem = document.querySelectorAll("[checkItem]")
+    checkItem.forEach(item => {
+      item.checked = checkAllAccount.checked
+    });
+  })
+}
+//End Check All account
+
+//search account
+const searchAccount = document.querySelector("[searchAccount]")
+if(searchAccount){
+  const url = new URL(window.location.href)
+  searchAccount.addEventListener("keyup",(event)=>{
+    console.log(searchAccount.value)
+    if(event.code == "Enter"){
+      const value = searchAccount.value
+      if(value){
+        url.searchParams.set("keyword",value.trim())
+      }
+      else{
+        url.searchParams.delete("keyword")
+      }
+      window.location.href = url.href
+    }  
+  })
+  const currentSearchAccount = url.searchParams.get("keyword")
+  if(currentSearchAccount){
+    searchAccount.value = currentSearchAccount
+  }
+}
+//End search account
+
+//pagination account
+const innerPaginationAccount = document.querySelector("[account-page]")
+if(innerPaginationAccount){
+  const url = new URL(window.location.href)
+  innerPaginationAccount.addEventListener("change",()=>{
+    const value = innerPaginationAccount.value
+    if(value){
+      url.searchParams.set("page",value)
+    }
+    else{
+      url.searchParams.delete("page")
+    }
+    window.location.href = url.href 
+  })
+  const currentPage = url.searchParams.get("page")
+  if(currentPage) innerPaginationAccount.value = currentPage
+}
+//End pagination account
+
+//change-status account
+const changeStatusAccount = document.querySelector("[change-status-account]")
+if(changeStatusAccount){
+  const select = changeStatusAccount.querySelector("select")
+  const button = changeStatusAccount.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const listChecked = document.querySelectorAll("[checkItem]:checked")
+      const ids= []
+      listChecked.forEach(item => {
+        const id = item.getAttribute("checkItem")
+        ids.push(id)
+      });
+      if(select.value && ids.length>0){
+        const dataFinal = {
+          status:select.value,
+          ids:ids
+        }
+        fetch(`/${pathAdmin}/setting/account-admin/changePatch`,{
+          method:"PATCH",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body:JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error"){
+            alert(data.message)
+          }
+          else{
+            window.location.reload()
+          }
+        })
+      }
+    })
+  }
+}
+//End change-status account
+//End----------Filter category
+
+//button Delete category
+const buttonDeleteAccount = document.querySelectorAll("[button-delete-account]")
+if(buttonDeleteAccount.length >0)
+{
+  buttonDeleteAccount.forEach(button => {
+    button.addEventListener("click",()=>{
+      const apiDelete = button.getAttribute("api-delete-account")
+      fetch(apiDelete,{
+        method:"PATCH"
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error")
+          alert(data.message)
+        else
+          window.location.reload();
+      })
+    })
+  });
+}
+//End button Delete category
 
 // Setting Role Create Form
 const settingRoleCreateForm = document.querySelector("#setting-role-create-form");
@@ -887,6 +1200,7 @@ if(profileEditForm) {
       },
     ])
     .onSuccess((event) => {
+      const id = event.target.id.value
       const fullName = event.target.fullName.value;
       const email = event.target.email.value;
       const phone = event.target.phone.value;
@@ -894,12 +1208,33 @@ if(profileEditForm) {
       let avatar = null;
       if(avatars.length > 0) {
         avatar = avatars[0].file;
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        if(elementImageDefault){
+          const imageDefault = elementImageDefault.getAttribute("image-default");
+          if(imageDefault.includes(avatar.name)) {
+            avatar=null
+          }
+        }
       }
+      const formData = new FormData()
+      formData.append("fullName",fullName)
+      formData.append("email",email)
+      formData.append("phone",phone)
+      formData.append("avatar",avatar)
 
-      console.log(fullName);
-      console.log(email);
-      console.log(phone);
-      console.log(avatar);
+      fetch(`/${pathAdmin}/profile/edit/${id}`,{
+        method:"PATCH",
+        body:formData
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
     })
   ;
 }
@@ -952,7 +1287,25 @@ if(profileChangePasswordForm) {
     ])
     .onSuccess((event) => {
       const password = event.target.password.value;
-      console.log(password);
+      const dataFinal = {
+        password:password
+      }
+      fetch(`/${pathAdmin}/profile/change-password`,{
+        method:"PATCH",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
     })
   ;
 }

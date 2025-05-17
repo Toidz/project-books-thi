@@ -2,41 +2,42 @@ extends ../layouts/default.pug
 include ../mixins/options.pug
 block main
   h1.box-title Thêm sách
-  .section-8
-    form#book-create-form
-      .inner-group
-        label(class="inner-label" for="name") Tên sách
-        input(type="text" id="name" name="name")
-      .inner-group
-        label(class="inner-label" for="category") Danh mục
-        select(id="category" name="category")
-          option(value="") -- Chọn danh mục --
-          +options(categoryList,0)
-      .inner-group
-        label(class="inner-label" for="position") Vị trí
-        input(type="number" id="position" name="position")
-      .inner-group.inner-two-col
-        label(class="inner-label" for="avatar1") Ảnh 1
-        div(class="inner-upload-image")
-          input(type="file" id="avatar1" accept="image/*" filepond-image name="avatar1")
-      .inner-group.inner-two-col
-        label(class="inner-label" for="avatar2") Ảnh 2
-        div(class="inner-upload-image")
-          input(type="file" id="avatar2" accept="image/*" filepond-image name="avatar2")
-      .inner-group.inner-two-col
-        label(class="inner-label" for="avatar3") Ảnh 3
-        div(class="inner-upload-image")
-          input(type="file" id="avatar3" accept="image/*" filepond-image name="avatar3")
-      .inner-group
-        label(class="inner-label" for="priceBook") Giá bán
-        input(type="number" name="priceBook")
-      .inner-group
-        label(class="inner-label" for="numberBook") Số lượng
-        input(type="number" name="numberBook")
-      .inner-group.inner-two-col
-        label(class="inner-label" for="information") Thông tin sách
-        textarea(id="information" textarea-mce name="information")
-      .inner-button.inner-two-col
-        button Tạo mới
-    .inner-back
-      a(href=`/${pathAdmin}/book/list`) Quay lại danh sách
+   - if(permissions.includes("book-create"))
+    .section-8
+      form#book-create-form
+        .inner-group
+          label(class="inner-label" for="name") Tên sách
+          input(type="text" id="name" name="name")
+        .inner-group
+          label(class="inner-label" for="category") Danh mục
+          select(id="category" name="category")
+            option(value="") -- Chọn danh mục --
+            +options(categoryList,0)
+        .inner-group
+          label(class="inner-label" for="position") Vị trí
+          input(type="number" id="position" name="position")
+        .inner-group.inner-two-col
+          label(class="inner-label" for="avatar1") Ảnh 1
+          div(class="inner-upload-image")
+            input(type="file" id="avatar1" accept="image/*" filepond-image name="avatar1")
+        .inner-group.inner-two-col
+          label(class="inner-label" for="avatar2") Ảnh 2
+          div(class="inner-upload-image")
+            input(type="file" id="avatar2" accept="image/*" filepond-image name="avatar2")
+        .inner-group.inner-two-col
+          label(class="inner-label" for="avatar3") Ảnh 3
+          div(class="inner-upload-image")
+            input(type="file" id="avatar3" accept="image/*" filepond-image name="avatar3")
+        .inner-group
+          label(class="inner-label" for="priceBook") Giá bán
+          input(type="number" name="priceBook")
+        .inner-group
+          label(class="inner-label" for="numberBook") Số lượng
+          input(type="number" name="numberBook")
+        .inner-group.inner-two-col
+          label(class="inner-label" for="information") Thông tin sách
+          textarea(id="information" textarea-mce name="information")
+        .inner-button.inner-two-col
+          button Tạo mới
+      .inner-back
+        a(href=`/${pathAdmin}/book/list`) Quay lại danh sách

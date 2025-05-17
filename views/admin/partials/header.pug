@@ -1,18 +1,17 @@
 header.header
   .inner-logo
     a(href=`/${pathAdmin}/dashboard`)
-      span TRAVEL
       span
-        img(src="/admin/assets/images/logotravel.png", alt="", style="width:50px")
+        img(src=websiteInfo.logo, alt="", style="width:90px")
   .inner-wrap
     .inner-notify
       img(src="/admin/assets/images/icon-bell.svg", alt="")
       span 6
     .inner-account
       .inner-avatar
-        img(src="/admin/assets/images/avatar.jpg", alt="")
+        img(src=account.avatar, alt="")
       .inner-text
         .inner-name #{account.fullName}
-        .inner-role Admin
+        .inner-role #{role.name}
     button.inner-button-menu
       <i class="fa-solid fa-bars"></i>

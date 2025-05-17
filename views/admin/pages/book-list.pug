@@ -2,103 +2,108 @@ extends ../layouts/default.pug
 include ../mixins/options.pug
 block main
   h1.box-title Quản lý sách
-
-  //- Section 4
-  .section-4
-    .inner-wrap
-      .inner-item.inner-label
-        <i class="fa-solid fa-filter"></i> Bộ lọc
-      .inner-item
-        select(book-creater)
-          option(value="") Người tạo
-          each item in accountList
-            option(value=item.id) #{item.fullName}
-      .inner-item.inner-date
-        input(type="date" start-date)
-        span -
-        input(type="date" end-date)
-      .inner-item
-        select(book-category)
-          option(value="") Danh mục
-          +options(categoryList,0)
-      .inner-item
-        select(filter-price)
-          option(value="") Mức giá
-          option(value=0) Dưới 50k
-          option(value=50) 50k đến 100k
-          option(value=100) 100k đến 200k
-          option(value=200) Trên 200k
-      .inner-item.inner-reset(button-reset)
-        <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
-  //- End Section 4
-
-  //- Section 5
-  .section-5
-    .inner-wrap
-      .inner-change-status(change-status)
+  - if(permissions.includes("book-view"))
+    //- Section 4
+    .section-4
+      .inner-wrap
+        .inner-item.inner-label
+          <i class="fa-solid fa-filter"></i> Bộ lọc
         .inner-item
-          select
-            option(value="") -- Hành động --
-            option(value="delete") Xóa
+          select(book-creater)
+            option(value="") Người tạo
+            each item in accountList
+              option(value=item.id) #{item.fullName}
+        .inner-item.inner-date
+          input(type="date" start-date)
+          span -
+          input(type="date" end-date)
         .inner-item
-          button Áp dụng
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm" book-search)
-      .inner-button-create
-        a(href=`/${pathAdmin}/book/create`) + Tạo mới
-      .inner-button-trash
-        a(href=`/${pathAdmin}/book/trash`) Thùng rác
-  //- End Section 5
+          select(book-category)
+            option(value="") Danh mục
+            +options(categoryList,0)
+        .inner-item
+          select(filter-price)
+            option(value="") Mức giá
+            option(value=0) Dưới 50k
+            option(value=50) 50k đến 100k
+            option(value=100) 100k đến 200k
+            option(value=200) Trên 200k
+        .inner-item.inner-reset(button-reset)
+          <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
+    //- End Section 4
 
-  //- Section 6
-  .section-6
-    .table-2
-      table
-        thead
-          tr
-            th(class="inner-center")
-              input(type="checkbox" class="inner-check" button-all)
-            th Tên sách
-            th Ảnh đại diện
-            th(style="width:130px") Giá
-            th(style="width:130px") Số lượng
-            th(class="inner-center") Vị trí
-            th Tạo bởi
-            th Cập nhật bởi
-            th Hành động
-        tbody
-          each item in bookList
+    //- Section 5
+    .section-5
+      .inner-wrap
+        - if(permissions.includes("book-delete"))
+          .inner-change-status(change-status)
+            .inner-item
+              select
+                option(value="") -- Hành động --
+                option(value="delete") Xóa
+            .inner-item
+              button Áp dụng
+        .inner-search
+          <i class="fa-solid fa-magnifying-glass"></i>
+          input(type="text" placeholder="Tìm kiếm" book-search)
+        - if(permissions.includes("book-create"))
+          .inner-button-create
+            a(href=`/${pathAdmin}/book/create`) + Tạo mới
+        - if(permissions.includes("book-trash"))
+          .inner-button-trash
+            a(href=`/${pathAdmin}/book/trash`) Thùng rác
+    //- End Section 5
+
+    //- Section 6
+    .section-6
+      .table-2
+        table
+          thead
             tr
-              td(class="inner-center")
-                input(type="checkbox" class="inner-check" button-item=item.id)
-              td #{item.name}
-              td
-                img(src=item.avatar1 class="inner-avatar")
-              td
-                div #{item.priceBook.toLocaleString("vi-VN")}đ
-              td
-                div #{item.numberBook}
-              td(class="inner-center") #{item.position}
-              td
-                div #{item.createdBy}
-                div.inner-time #{item.createdAtFormat}
-              td
-                div #{item.updatedBy}
-                div.inner-time #{item.updatedAtFormat}
-              td
-                .inner-buttons
-                  a(
-                    href=`/${pathAdmin}/book/edit/${item.id}` 
-                    class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                  button(
-                    class="inner-delete" button-delete-book=`/${pathAdmin}/book/delete/${item.id}`) <i class="fa-regular fa-trash-can"></i>
-  //- End Section 6
+              th(class="inner-center")
+                input(type="checkbox" class="inner-check" button-all)
+              th Tên sách
+              th Ảnh đại diện
+              th(style="width:130px") Giá
+              th(style="width:130px") Số lượng
+              th(class="inner-center") Vị trí
+              th Tạo bởi
+              th Cập nhật bởi
+              th Hành động
+          tbody
+            each item in bookList
+              tr
+                td(class="inner-center")
+                  input(type="checkbox" class="inner-check" button-item=item.id)
+                td #{item.name}
+                td
+                  img(src=item.avatar1 class="inner-avatar")
+                td
+                  div #{item.priceBook.toLocaleString("vi-VN")}đ
+                td
+                  div #{item.numberBook}
+                td(class="inner-center") #{item.position}
+                td
+                  div #{item.createdBy}
+                  div.inner-time #{item.createdAtFormat}
+                td
+                  div #{item.updatedBy}
+                  div.inner-time #{item.updatedAtFormat}
+                td
+                  .inner-buttons
+                    - if(permissions.includes("book-edit"))
+                      a(
+                        href=`/${pathAdmin}/book/edit/${item.id}` 
+                        class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
+                    - if(permissions.includes("book-delete"))
+                      button(
+                        class="inner-delete" button-delete-book=`/${pathAdmin}/book/delete/${item.id}`) <i class="fa-regular fa-trash-can"></i>
+    //- End Section 6
 
-  //- Section 7
-  .section-7
-    span(class="inner-label") Hiển thị #{skip+1} - #{skip+bookList.length}  của #{totalBook}
-    select(class="inner-pagination" book-page)
-      - for(let i=1;i<=totalPage;i++)
-        option(value=i) Trang #{i}
-  //- End Section 7
+    //- Section 7
+    .section-7
+      span(class="inner-label") Hiển thị #{skip+1} - #{skip+bookList.length}  của #{totalBook}
+      select(class="inner-pagination" book-page)
+        - for(let i=1;i<=totalPage;i++)
+          option(value=i) Trang #{i}
+    //- End Section 7

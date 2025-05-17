@@ -95,13 +95,13 @@ module.exports.list = async (req,res) =>{
             const createdByName = await AccountAdmin.findOne({
                 _id: item.createdBy
             })
-            item.createdBy = createdByName.fullName
+            item.createdByName = createdByName.fullName
         }
         if(item.updatedBy){
             const updatedByName = await AccountAdmin.findOne({
                 _id: item.updatedBy
             })
-            item.updatedBy = updatedByName.fullName
+            item.updatedByName = updatedByName.fullName
         }
         item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY")
         item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY")
