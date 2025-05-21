@@ -32,7 +32,7 @@ module.exports.permission = [
         value:"book-edit"
     },
     {
-        lable:"Xoắ sách",
+        lable:"Xóa sách",
         value:"book-delete"
     },
     {

@@ -1,21 +1,24 @@
 extends ../layout/default.pug
 include ../mixins/product-item.pug
-block title 
-  title Tours 
+include ../mixins/options.pug
 block main 
   // Breadcrumb
   .box-breadcrumb
     .inner-image
       img(
         alt="" 
-        src="/assets/images/banner-6.jpg"
+        src="/assets/images/background_1.jpg"
         )
     .inner-content
       .container
         h1.inner-title #{dataCategory.name}
         .inner-list
           a(href="/") Trang Chủ
-          a(href=`/book/${dataCategory.id}`) #{dataCategory.name}
+          if(breadList.length >0)
+            each item in breadList
+              a(href=`/book/${item.slug}`) #{item.name}
+          a(href=`/book/${dataCategory.slug}`) #{dataCategory.name}
+   
   // End Breadcrumb
   // Section 9
   .section-9
@@ -32,8 +35,7 @@ block main
                 .inner-label Thể loại
                 select(name="" category)
                   option(value="") -- Chọn thể loại --
-                  each item in categoryChildren
-                    option(value=item.id) #{item.name}
+                  +options(filterChild,0)
               .inner-group
                 .inner-label Mức giá
                 select(name="" price)
@@ -56,10 +58,10 @@ block main
             .inner-sort
               .inner-label Sắp xếp:
               .inner-list
-                button
+                button(button-asc value="asc")
                   | Giá tăng dần
                   i.fa-solid.fa-square-caret-up
-                button
+                button(button-desc value="desc")
                   | Giá giảm dần
                   i.fa-solid.fa-square-caret-down
             .inner-count-record
@@ -69,17 +71,19 @@ block main
               span.inner-title Bộ Lọc
               i.fa-solid.fa-filter
           .inner-list-tour
-            each item in allBook 
-              +product-item(item)
+            - if(allBook.length >0 )
+              each item in allBook 
+                +product-item(item)
+            -else
+              p(style ="font-size:21px;color:red") Không tồn tại sản phẩm này!
             // End Product Item
           // Pagination
-          .box-pagination
+          .box-pagination(box-pagination)
             button
               i.fa-solid.fa-angles-left
-            button.active 1
-            button 2
-            button 3
-            button 4
+            button(page=1).active 1
+            - for(let i=2;i<=totalPage;i++)
+              button(page=i) #{i}
             button
               i.fa-solid.fa-angles-right
           // End Pagination

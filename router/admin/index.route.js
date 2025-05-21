@@ -11,7 +11,9 @@ const userRouter = require("./user.route");
 const errorController = require("../../controllers/admin/error.controller");
 
 const authMidderWare = require("../../middlewares/admin/auth.middleware")
+const infoMiddleware = require("../../middlewares/client/infowebsite.middleware")
 
+router.use(infoMiddleware.info)
 router.use("/account",accountRouter);
 router.use("/dashboard",authMidderWare.verifyToken,dashboardRouter);
 router.use("/category",authMidderWare.verifyToken,categoryRouter);

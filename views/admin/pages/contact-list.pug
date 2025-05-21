@@ -1,34 +1,34 @@
 extends ../layouts/default.pug
 block main
   h1.box-title Thông tin liên hệ
-  - if(permissions.includes("contact-view"))
+  - if (permissions.includes("contact-view"))
     //- Section 4
     .section-4
       .inner-wrap
         .inner-item.inner-label
           <i class="fa-solid fa-filter"></i> Bộ lọc
         .inner-item.inner-date
-          input(type="date")
+          input(type="date" filter-startDate-contact)
           span -
-          input(type="date")
-        .inner-item.inner-reset
+          input(type="date" filter-endDate-contact)
+        .inner-item.inner-reset(filter-delete-contact)
           <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
     //- End Section 4
 
     //- Section 5
     .section-5
       .inner-wrap
-        - if(permissions.includes("contact-delete"))
-          .inner-change-status
+        - if (permissions.includes("contact-delete"))
+          .inner-change-status(change-status-contact)
             .inner-item
               select
                 option(value="") -- Hành động --
-                option(value="") Xóa
+                option(value="delete") Xóa
             .inner-item
               button Áp dụng
         .inner-search
           <i class="fa-solid fa-magnifying-glass"></i>
-          input(type="text" placeholder="Tìm kiếm")
+          input(type="text" placeholder="Tìm kiếm" search-contact)
     //- End Section 5
 
     //- Section 6
@@ -38,27 +38,29 @@ block main
           thead
             tr
               th(class="inner-center")
-                input(type="checkbox" class="inner-check")
+                input(type="checkbox" class="inner-check" checkAll)
               th Email
               th Ngày tạo
               th(class="inner-center") Hành động
           tbody
-            tr
-              td(class="inner-center")
-                input(type="checkbox" class="inner-check")
-              td levana@gmail.com
-              td 16:40 - 12/12/2024
-              td(class="inner-center")
-                - if(permissions.includes("contact-delete"))
-                  .inner-buttons
-                    button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+            each item in contactList
+              tr
+                td(class="inner-center")
+                  input(type="checkbox" class="inner-check" checkItem=item.id)
+                td #{item.email}
+                td #{item.formatTime}
+                - if (permissions.includes("contact-delete"))
+                  td(class="inner-center")
+                    .inner-buttons
+                      button(class="inner-delete"
+                        api-delete = `/${pathAdmin}/contact/delete/${item.id}`
+                      ) <i class="fa-regular fa-trash-can"></i>
     //- End Section 6
 
     //- Section 7
     .section-7
-      span(class="inner-label") Hiển thị 1 - 9 của 78
-      select(class="inner-pagination")
-        option Trang 1
-        option Trang 2
-        option Trang 3
+      span(class="inner-label") Hiển thị #{pagination.skip+1} - #{pagination.skip+contactList.length} của #{pagination.totalContact}
+      select(class="inner-pagination" pagination-contact)
+        - for(let i=1;i<=pagination.totalPage;i++)
+          option(value=i) Trang #{i}
     //- End Section 7

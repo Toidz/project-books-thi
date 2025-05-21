@@ -1,14 +1,14 @@
 mixin product-item(item)
   .product-item
     .inner-image
-      a(href=`/book/detail/${item.id}`)
+      a(href=`/book/detail/${item.slug}`)
         img(
           alt="" 
-          src=item.avatar
+          src=item.avatar1
           )
     .inner-content
       h3.inner-title
-        a(href="") #{item.name}
+        a(href=`/book/detail/${item.slug}`) #{item.name}
       .inner-prices
         .inner-price-new
           | Giá: #{item.priceBook.toLocaleString('vi-VN')}

@@ -2,73 +2,114 @@ const Book = require("../../models/book.model");
 const Category = require("../../models/category.model")
 const categoryHelper = require("../../helpers/category.helper")
 module.exports.book = async (req, res) => {
-  const category = await Category.find({
-      deleted:false
-  })
-  const categoryTree = categoryHelper.categoryTree(category)
-
-  const categoryCurrent = req.params.id
+  const slugCurrent = req.params.slug
   const dataCategory = await Category.findOne({
-    _id:categoryCurrent
+    slug:slugCurrent
   })
-
-  const categoryChildren = await Category.find({
-    parent:categoryCurrent
-  })
-
-  const ids = []
-  categoryChildren.forEach(item => {
-    const id =item.id
-    ids.push(id)
-  });
-  const totalBook = await Book.countDocuments({})
-  const find ={
-    category : ids.length? {$in:ids}: categoryCurrent
+  let breadList = []
+  if(dataCategory.parent){
+    const bread = await categoryHelper.categoryParent(dataCategory.parent)
+    if(bread.length >0){
+      breadList = await Category.find({
+      _id:{$in:bread}
+    })
+    }
   }
+  const arrayId = await categoryHelper.categoryChild(dataCategory.id)
+  const find ={
+    category : {$in:arrayId}
+  }
+  
+  const filterChild = await Category.find({
+    _id:{$in:arrayId}
+  })
+  const filterChildTree = categoryHelper.categoryTree(filterChild,dataCategory.parent)
+  const totalBook = await Book.countDocuments({
+    deleted:false,
+    category:{$in:arrayId}
+  })
+ 
+
   const filterCategory = req.query.category
   const filterPrice = req.query.price
-  if(filterPrice&&filterCategory){
-    const priceCurrent = {}
-    switch(parseInt(filterPrice)){
-      case 0:
-        priceCurrent.$lte = 50000
-        break
-      case 50:
-        priceCurrent.$gte = 50000
-        priceCurrent.$lte = 100000
-        break
-      case 100:
-        priceCurrent.$gte = 100000
-        priceCurrent.$lte = 200000
-        break
-      case 200:
-        priceCurrent.$gte = 200000
-        break
+  if(filterPrice||filterCategory){
+    if(filterPrice){
+      const priceCurrent = {}
+      switch(parseInt(filterPrice)){
+        case 0:
+          priceCurrent.$lte = 50000
+          break
+        case 50:
+          priceCurrent.$gte = 50000
+          priceCurrent.$lte = 100000
+          break
+        case 100:
+          priceCurrent.$gte = 100000
+          priceCurrent.$lte = 200000
+          break
+        case 200:
+          priceCurrent.$gte = 200000
+          break
+      }
+      if (Object.keys(priceCurrent).length > 0) {
+        find.priceBook = priceCurrent
+      }       
     }
-      console.log(priceCurrent)
-    if (Object.keys(priceCurrent).length > 0) {
-      find.priceBook = priceCurrent
-    } 
-    find.category = filterCategory
+    else if(filterCategory){
+      const arrayCategory = await categoryHelper.categoryChild(filterCategory)
+      find.category = {$in:arrayCategory}
+    }
+    else{
+       const priceCurrent = {}
+      switch(parseInt(filterPrice)){
+        case 0:
+          priceCurrent.$lte = 50000
+          break
+        case 50:
+          priceCurrent.$gte = 50000
+          priceCurrent.$lte = 100000
+          break
+        case 100:
+          priceCurrent.$gte = 100000
+          priceCurrent.$lte = 200000
+          break
+        case 200:
+          priceCurrent.$gte = 200000
+          break
+      }
+      if (Object.keys(priceCurrent).length > 0) {
+        find.priceBook = priceCurrent
+      }       
+      const arrayCategory = await categoryHelper.categoryChild(filterCategory)
+      find.category = {$in:arrayCategory}      
+    }
+    
   }
-  const allBook = await Book.find(find)
-  console.log(allBook)
+  const sort= {}
+  if(req.query.sort){
+    sort.priceBook = req.query.sort
+  }
+  const limit =10
+  let page =1
+
+  const skip = (page-1)*limit
+  const totalPage = Math.ceil(totalBook/limit)
+
+  const allBook = await Book
+  .find(find)
+  .sort(sort)
   res.render("client/pages/book",{
     pageTitle:"Danh sách sách",
-    categoryList:categoryTree,
     dataCategory:dataCategory,
-    categoryChildren:categoryChildren,
+    filterChild:filterChildTree,
     totalBook:totalBook,
-    allBook:allBook
+    allBook:allBook,
+    breadList:breadList,
+    totalPage:totalPage
   });
 }
 
 module.exports.detail = async (req,res) =>{
-  const category = await Category.find({
-      deleted:false
-  })
-  const categoryTree = categoryHelper.categoryTree(category)
-
   const id = req.params.id
   const bookCurrent = await Book.findOne({
     _id:id
@@ -80,7 +121,6 @@ module.exports.detail = async (req,res) =>{
   parent.id = parentId.id
   parent.name = parentId.name
   parent.parent = parentId.parent
-  console.log(parent)
 
   const parentIds = await Category.findOne({
     _id:parent.parent
@@ -100,7 +140,6 @@ module.exports.detail = async (req,res) =>{
 
   res.render("client/pages/book-detail",{
     pageTitle:"Chi tiết sách",
-    categoryList:categoryTree,
     bookCurrent:bookCurrent,
     parent:parent,
     parents:parents,

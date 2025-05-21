@@ -706,6 +706,12 @@ if(settingAccountAdminEditForm) {
         errorMessage: 'Vui lòng nhập chức vụ!'
       },
     ])
+    .addField('#role', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn nhóm quyền!'
+      },
+    ])
     .onSuccess((event) => {
       const id = event.target.id.value;
       const fullName = event.target.fullName.value;
@@ -1312,6 +1318,8 @@ if(profileChangePasswordForm) {
 // End Profile Change Password Form
 
 
+
+
 //logout
 const buttonLogout = document.querySelector(".sider .inner-logout");
 if(buttonLogout){
@@ -1800,3 +1808,150 @@ if(buttondestroyTrash){
 }
 //End button-destroy-trash
 //End book trash
+
+//------------Filter Contact
+//Filter startDate Contact
+const filterstartDateContact = document.querySelector("[filter-startDate-contact]");
+if(filterstartDateContact){
+  const url = new URL(window.location.href)
+  filterstartDateContact.addEventListener("change",()=>{
+    const value = filterstartDateContact.value;
+    if(value){
+      url.searchParams.set("startdate",value);
+    }
+    else{
+      url.searchParams.delete("startdate")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("startdate")
+  if(currentValue) filterstartDateContact.value = currentValue
+}
+//end Filter startDate contact
+
+//Filter EndDate contact
+const filterEndDateContact = document.querySelector("[filter-endDate-contact]");
+if(filterEndDateContact){
+  const url = new URL(window.location.href)
+  filterEndDateContact.addEventListener("change",()=>{
+    const value = filterEndDateContact.value;
+    if(value){
+      url.searchParams.set("enddate",value);
+    }
+    else{
+      url.searchParams.delete("enddate")
+    }
+    window.location.href = url
+  })
+  const currentValue = url.searchParams.get("enddate")
+  if(currentValue) filterEndDateContact.value = currentValue
+}
+//end Filter EndDate contact
+
+//Filter delete contact
+const filerDeleteContact = document.querySelector("[filter-delete-contact]")
+if(filerDeleteContact){
+  const url = new URL(window.location.href)
+  filerDeleteContact.addEventListener("click",()=>{
+    url.search= ""
+    window.location.href = url
+  })
+}
+//End Filter delete contact
+
+//Check All contact
+const checkAllContact = document.querySelector("[checkAll]")
+if(checkAll){
+  checkAll.addEventListener("click",()=>{
+    const checkItem = document.querySelectorAll("[checkItem]")
+    checkItem.forEach(item => {
+      item.checked = checkAll.checked
+    });
+  })
+} 
+//End Check All contact 
+
+//Change status contact
+const changeStatusContact = document.querySelector("[change-status-contact]")
+if(changeStatusContact){
+  const select = changeStatusContact.querySelector("select")
+  const button = changeStatusContact.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const ids= []
+      const itemChecked = document.querySelectorAll("[checkItem]:checked")
+      itemChecked.forEach(item=> {
+        const id = item.getAttribute("checkItem")
+        ids.push(id)
+      })
+      const status = select.value
+      if(status && ids.length>0){
+        const dataFinal = {
+          status:status,
+          ids: ids
+        }
+        
+        fetch(`/${pathAdmin}/contact/changePatch`,{
+          method:"PATCH",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error")
+            alert(data.message)
+          else
+            window.location.reload()
+        })
+      }
+
+    })
+  }
+}
+//End change status contact
+
+//search contact
+const searchContact = document.querySelector("[search-contact]")
+if(searchContact){
+  const url = new URL(window.location.href)
+  searchContact.addEventListener("keyup",(event)=>{
+    if(event.code == "Enter"){
+      const value = searchContact.value
+      if(value){
+        url.searchParams.set("keyword",value.trim())
+      }
+      else{
+        url.searchParams.delete("keyword")
+      }
+      window.location.href = url.href
+    }  
+  })
+  const currentSearch = url.searchParams.get("keyword")
+  if(currentSearch){
+    searchContact.value = currentSearch
+  }
+}
+//End search tour
+
+//pagination
+const innerPaginationContact = document.querySelector("[pagination-contact]")
+if(innerPaginationContact){
+  const url = new URL(window.location.href)
+  innerPaginationContact.addEventListener("change",()=>{
+    const value = innerPaginationContact.value
+    if(value){
+      url.searchParams.set("page",value)
+    }
+    else{
+      url.searchParams.delete("page")
+    }
+    window.location.href = url.href 
+  })
+  const currentPage = url.searchParams.get("page")
+  if(currentPage) innerPaginationContact.value = currentPage
+}
+//End pagination contact
+
+//End----------Filter contact

@@ -273,7 +273,6 @@ if(boxTourSchedule) {
   new Viewer(boxTourSchedule);
 }
 // End Box Tour Schedule
-
 // Email Form
 const emailForm = document.querySelector("#email-form");
 if(emailForm) {
@@ -292,7 +291,26 @@ if(emailForm) {
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
-      console.log(email);
+      const dataFinal = {
+        email:email
+      }
+
+      fetch(`/contact`,{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
     })
   ;
 }
@@ -376,6 +394,29 @@ if(orderForm) {
 // End Order Form
 
 ///-----------book----------
+
+//asc button
+const buttonAsc = document.querySelector("[button-asc]")
+if(buttonAsc){
+  const url = new URL(window.location.href)
+  buttonAsc.addEventListener("click",()=>{
+    url.searchParams.delete("sort")
+    url.searchParams.set("sort",buttonAsc.value)
+    window.location.href = url.href
+  })
+
+}
+//desc button
+const buttonDesc = document.querySelector("[button-desc]")
+if(buttonAsc){
+  const url = new URL(window.location.href)
+  buttonDesc.addEventListener("click",()=>{
+    url.searchParams.delete("sort")
+    url.searchParams.set("sort",buttonDesc.value)
+    window.location.href = url.href
+  })
+
+}
 //filter-price
 const filterPrice = document.querySelector("[filter-price]")
 if(filterPrice){
@@ -386,9 +427,15 @@ if(filterPrice){
   const buttonClear = filterPrice.querySelector("[clear]")
   if(button){
     button.addEventListener("click",()=>{
-      if(selectCategory.value && selectPrice.value){
+      if(selectCategory.value || selectPrice.value){
         url.searchParams.set("category",selectCategory.value)
         url.searchParams.set("price",selectPrice.value)
+        if(selectCategory.value){
+          url.searchParams.delete("price")
+        }
+        else if(selectPrice.value){
+          url.searchParams.delete("category")
+        }
       }
       else{
         url.searchParams.delete("category")
@@ -409,4 +456,38 @@ if(filterPrice){
   }
 }
 //end filter-price
+
+//box-pagination
+const boxPagination = document.querySelector("box-pagination")
+if(boxPagination){
+  const url = new URL(window.location.href)
+  const buttons = boxPagination.querySelectorAll("button")
+  buttons.forEach(button => {
+    button.addEventListener("click",()=>{
+      const page = button.getAttribute("page")
+      buttons.forEach(btn => btn.classList.remove("active"));
+      button.classList.toggle("active")
+      url.searchParams.set("page",page)
+      window.location.href = url.href
+    })
+    const current = url.searchParams.get("page")
+    if(current){
+      buttons.forEach(btn =>{
+        if(btn.getAttribute("page")==current) button.classList.toggle("active")
+      })
+    }
+  });
+}
+//End box-pagination
 ///End -----------book----------
+
+// Alert
+const alertTime = document.querySelector("[alert-time]");
+if(alertTime) {
+  let time = alertTime.getAttribute("alert-time");
+  time = time ? parseInt(time) : 4000;
+  setTimeout(() => {
+    alertTime.remove(); // Xóa phần tử khỏi giao diện
+  }, time);
+}
+// End Alert

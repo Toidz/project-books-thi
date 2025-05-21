@@ -1,356 +1,158 @@
-doctype html
-html(lang="vi")
-  head
-    meta(charset="UTF-8")
-    meta(
-      content="width=device-width, initial-scale=1.0" 
-      name="viewport"
-      )
-    title #{pageTitle}
-    link(
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
-      rel="stylesheet"
-      )
-    link(
-      rel="stylesheet" 
-      href="https://unpkg.com/aos@2.3.1/dist/aos.css"
-      )
-    link(
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" 
-      rel="stylesheet"
-      )
-    link(
-      href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.min.css" 
-      rel="stylesheet"
-      )
-    link(
-      href="/assets/css/style.css" 
-      rel="stylesheet"
-      )
-  body
-    // Top Header
-    .top-header
-      .container
-        .inner-wrap
-          .inner-item
-            i.fa-solid.fa-phone
-            | 0123.456.789
-          .inner-item
-            i.fa-solid.fa-envelope
-            | contact@28travel.com
-          .inner-item
-            i.fa-solid.fa-building
-            | Số 123, đường ABC, thành phố XYZ
-    // End Top Header
-    // Header
-    header.header
-      .container
-        .inner-wrap
-          // Menu Mobile
-          button.inner-menu-mobile
-            i.fa-solid.fa-bars
-          // Logo
-          .inner-logo
-            a(href="index.html")
-              img(
-                alt="28.TRAVEL" 
-                src="assets/images/logo.png"
-                )
-          // Menu
-          nav.inner-menu
-            ul
-              li
-                a.active(href="index.html") Trang chủ
-              li
-                a(href="#") Tour trong nước
-                i.fa-solid.fa-caret-down
-                ul
-                  li
-                    a(href="#") Tour Miền Bắc
-                  li
-                    a(href="#") Tour Miền Trung
-                  li
-                    a(href="#") Tour Miền Nam
-                  li
-                    a(href="#") Tour Xuyên Việt
-              li
-                a(href="#") Tour nước ngoài
-                i.fa-solid.fa-caret-down
-                ul
-                  li
-                    a(href="#") Tour Châu Á
-                  li
-                    a(href="#") Tour Châu Âu
-                  li
-                    a(href="#") Tour Châu Mỹ
-                  li
-                    a(href="#") Tour Châu Úc
-              li
-                a(href="#") Tin tức
-              li
-                a(href="#") Liên hệ
-          // Cart
-          .inner-cart
-            a(href="#")
-              img(
-                alt="Cart" 
-                src="assets/images/icon-cart.svg"
-                )
-              span 1
-    // End Header
-    // Section 11
-    .section-11
-      .container
-        .inner-wrap
-          .inner-head
-            .inner-title Giỏ Hàng
-            a.inner-back(href="#")
-              | Quay lại mua hàng
-              i.fa-solid.fa-angle-right
-          .inner-tour-list
-            // Tour Item
-            .inner-tour-item
-              .inner-actions
-                button.inner-delete
-                  i.fa-solid.fa-xmark
-                input.inner-check(type="checkbox")
-              .inner-product
-                .inner-image
-                  a(href="#")
-                    img(
-                      alt="" 
-                      src="assets/images/banner-16.png"
-                      )
-                .inner-content
-                  .inner-title
-                    a(href="#") Tour Châu Âu Đón Noel | 11N10D | Pháp – Thụy Sĩ – Ý
-                  .inner-meta
-                    .inner-meta-item
-                      | Mã Tour:
-                      b 123456789
-                    .inner-meta-item
-                      | Ngày Khởi Hành:
-                      b 20/10/2024
-                    .inner-meta-item
-                      | Khởi Hành Tại:
-                      b Hà Nội
-              .inner-quantity
-                label.inner-label Số Lượng Hành Khách
-                .inner-list
-                  .inner-item
-                    .inner-item-label Người lớn:
-                    .inner-item-input
-                      input(
-                        value="1" 
-                        min="0" 
-                        type="number"
-                        )
-                    .inner-item-price
-                      span 1
-                      span x
-                      span.inner-highlight 10.000.000
-                  .inner-item
-                    .inner-item-label Trẻ em:
-                    .inner-item-input
-                      input(
-                        value="0" 
-                        min="0" 
-                        type="number"
-                        )
-                    .inner-item-price
-                      span 0
-                      span x
-                      span.inner-highlight 7.990.000
-                  .inner-item
-                    .inner-item-label Em bé:
-                    .inner-item-input
-                      input(
-                        value="0" 
-                        min="0" 
-                        type="number"
-                        )
-                    .inner-item-price
-                      span 0
-                      span x
-                      span.inner-highlight 5.990.000
-            // End Tour Item
-            // Tour Item
-            // Nhân bản Tour Item
-            // End Tour Item
-          .inner-coupon
-            form#coupon-form(action="")
-              input#coupon-input(
-                name="coupon" 
-                placeholder="Nhập mã giảm giá" 
-                type="text"
-                )
-              button(type="submit") Dùng Mã
-          .inner-list-price
-            .inner-item
-              .inner-label Tổng tiền:
-              .inner-price 15.070.000 đ
-            .inner-item
-              .inner-label Giảm:
-              .inner-price -5.070.000 đ
-            .inner-item
-              .inner-label Thanh toán:
-              .inner-price-highlight 17.070.000 đ
-    // End Section 11
-    // Section 12
-    .section-12
-      .container
-        .inner-wrap
-          form#order-form(action="")
-            .inner-info
-              .inner-title-main Thông Tin Khách Hàng
-              .inner-inputs
-                .inner-input
-                  input#full-name-input(
-                    placeholder="Họ và tên" 
-                    name="fullName" 
-                    type="text"
+extends ../layout/default.pug
+block main 
+  // Section 11
+  .section-11
+    .container
+      .inner-wrap
+        .inner-head
+          .inner-title Giỏ Hàng
+          a.inner-back(href="#")
+            | Quay lại mua hàng
+            i.fa-solid.fa-angle-right
+        .inner-tour-list
+          // Tour Item
+          .inner-tour-item
+            .inner-actions
+              button.inner-delete
+                i.fa-solid.fa-xmark
+              input.inner-check(type="checkbox")
+            .inner-product
+              .inner-image
+                a(href="#")
+                  img(
+                    alt="" 
+                    src="assets/images/banner-16.png"
                     )
-                .inner-input
-                  input#phone-input(
-                    placeholder="Số điện thoại" 
-                    name="phone" 
-                    type="text"
-                    )
-              textarea(
-                placeholder="Ghi chú" 
-                name="note"
-                )
-            .inner-method
-              .inner-title-main Chọn phương thức thanh toán
+              .inner-content
+                .inner-title
+                  a(href="#") Tour Châu Âu Đón Noel | 11N10D | Pháp – Thụy Sĩ – Ý
+                .inner-meta
+                  .inner-meta-item
+                    | Mã Tour:
+                    b 123456789
+                  .inner-meta-item
+                    | Ngày Khởi Hành:
+                    b 20/10/2024
+                  .inner-meta-item
+                    | Khởi Hành Tại:
+                    b Hà Nội
+            .inner-quantity
+              label.inner-label Số Lượng Hành Khách
               .inner-list
                 .inner-item
-                  input#methodMoney(
-                    checked="" 
-                    value="money" 
-                    name="method" 
-                    type="radio"
-                    )
-                  label(for="methodMoney") Thanh toán tiền mặt khi đi tour
+                  .inner-item-label Người lớn:
+                  .inner-item-input
+                    input(
+                      value="1" 
+                      min="0" 
+                      type="number"
+                      )
+                  .inner-item-price
+                    span 1
+                    span x
+                    span.inner-highlight 10.000.000
                 .inner-item
-                  input#methodMomo(
-                    value="momo" 
-                    name="method" 
-                    type="radio"
-                    )
-                  label(for="methodMomo") Ví MoMo
+                  .inner-item-label Trẻ em:
+                  .inner-item-input
+                    input(
+                      value="0" 
+                      min="0" 
+                      type="number"
+                      )
+                  .inner-item-price
+                    span 0
+                    span x
+                    span.inner-highlight 7.990.000
                 .inner-item
-                  input#methodBank(
-                    value="bank" 
-                    name="method" 
-                    type="radio"
-                    )
-                  label(for="methodBank") Chuyển khoản ngân hàng
-              .inner-info-bank
-                .inner-title Thông tin chuyển khoản
-                .inner-text Ngân hàng : Vietcombank
-                .inner-text Tên tài khoản: Le Van A
-                .inner-text STK: 0123456789
-            .inner-button
-              button(type="submit") ĐẶT TOUR
-    // End Section 12
-    // Footer
-    footer.footer
-      .container
-        .inner-top
-          h2.inner-title Đăng ký ngay để không bỏ lỡ các chương trình của chúng tôi
-          form#email-form.inner-form(action="#")
-            input#email-input(
-              name="email" 
-              placeholder="Nhập email của bạn..." 
-              type="email"
+                  .inner-item-label Em bé:
+                  .inner-item-input
+                    input(
+                      value="0" 
+                      min="0" 
+                      type="number"
+                      )
+                  .inner-item-price
+                    span 0
+                    span x
+                    span.inner-highlight 5.990.000
+          // End Tour Item
+          // Tour Item
+          // Nhân bản Tour Item
+          // End Tour Item
+        .inner-coupon
+          form#coupon-form(action="")
+            input#coupon-input(
+              name="coupon" 
+              placeholder="Nhập mã giảm giá" 
+              type="text"
               )
-            button(type="submit") Đăng Ký Ngay
-        .inner-middle
-          nav.inner-links
-            ul
-              li
-                a(href="#") Trang Chủ
-              li
-                a(href="#") Tour Trong Nước
-              li
-                a(href="#") Tour Nước Ngoài
-              li
-                a(href="#") Tin Tức
-              li
-                a(href="#") Liên Hệ
-          nav.inner-socials
-            ul
-              li
-                a(
-                  target="_blank" 
-                  href="#"
+            button(type="submit") Dùng Mã
+        .inner-list-price
+          .inner-item
+            .inner-label Tổng tiền:
+            .inner-price 15.070.000 đ
+          .inner-item
+            .inner-label Giảm:
+            .inner-price -5.070.000 đ
+          .inner-item
+            .inner-label Thanh toán:
+            .inner-price-highlight 17.070.000 đ
+  // End Section 11
+  // Section 12
+  .section-12
+    .container
+      .inner-wrap
+        form#order-form(action="")
+          .inner-info
+            .inner-title-main Thông Tin Khách Hàng
+            .inner-inputs
+              .inner-input
+                input#full-name-input(
+                  placeholder="Họ và tên" 
+                  name="fullName" 
+                  type="text"
                   )
-                  i.fa-brands.fa-facebook
-              li
-                a(
-                  target="_blank" 
-                  href="#"
+              .inner-input
+                input#phone-input(
+                  placeholder="Số điện thoại" 
+                  name="phone" 
+                  type="text"
                   )
-                  i.fa-brands.fa-x-twitter
-              li
-                a(
-                  target="_blank" 
-                  href="#"
+            textarea(
+              placeholder="Ghi chú" 
+              name="note"
+              )
+          .inner-method
+            .inner-title-main Chọn phương thức thanh toán
+            .inner-list
+              .inner-item
+                input#methodMoney(
+                  checked="" 
+                  value="money" 
+                  name="method" 
+                  type="radio"
                   )
-                  i.fa-brands.fa-instagram
-              li
-                a(
-                  target="_blank" 
-                  href="#"
+                label(for="methodMoney") Thanh toán tiền mặt khi đi tour
+              .inner-item
+                input#methodMomo(
+                  value="momo" 
+                  name="method" 
+                  type="radio"
                   )
-                  i.fa-brands.fa-youtube
-        .inner-bottom
-          .inner-copyright © 2024 28Tech. All rights reserved.
-          .inner-logo
-            a(href="index.html")
-              img(
-                alt="" 
-                src="assets/images/logo.png"
-                )
-          nav.inner-links
-            ul
-              li
-                a(href="#") Điều khoản dịch vụ
-              li
-                a(href="#") Chính sách bảo mật
-    // End Footer
-    // Box Contact
-    .box-contact
-      ul
-        li
-          a(
-            target="_blank" 
-            href="#"
-            )
-            i.fa-brands.fa-facebook-f
-        li
-          a(
-            target="_blank" 
-            href="#"
-            )
-            i.fa-brands.fa-instagram
-        li
-          a(
-            target="_blank" 
-            href="#"
-            )
-            i.fa-brands.fa-viber
-        li
-          a(
-            target="_blank" 
-            href="#"
-            )
-            i.fa-brands.fa-youtube
-    // End Box Contact
-    script(src="https://unpkg.com/aos@2.3.1/dist/aos.js")
-    script(src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.min.js")
-    script(
-      src="https://cdn.jsdelivr.net/npm/just-validate@4.3.0/dist/just-validate.production.min.js"
-      )
-    script(src="/assets/js/script.js")
+                label(for="methodMomo") Ví MoMo
+              .inner-item
+                input#methodBank(
+                  value="bank" 
+                  name="method" 
+                  type="radio"
+                  )
+                label(for="methodBank") Chuyển khoản ngân hàng
+            .inner-info-bank
+              .inner-title Thông tin chuyển khoản
+              .inner-text Ngân hàng : Vietcombank
+              .inner-text Tên tài khoản: Le Van A
+              .inner-text STK: 0123456789
+          .inner-button
+            button(type="submit") ĐẶT TOUR
+  // End Section 12
+  

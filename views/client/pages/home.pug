@@ -1,7 +1,5 @@
 extends ../layout/default.pug
 include ../mixins/product-item.pug
-block title 
-  title #{pageTitle}
 block main 
   .section-1
     .container
@@ -27,18 +25,18 @@ block main
       h2.box-title(
         data-aos-duration="800" 
         data-aos="fade-up"
-        ) Tour Trong Nước
+        ) Sách Trong Nước
       .inner-wrap(
         data-aos-delay="150" 
         data-aos-duration="800" 
         data-aos="fade-up"
         )
         // Product Item
-        each item in allBook
+        each item in bookVn
           +product-item(item)
         // End Product Item
       .inner-button
-        a.button-outline(href="#") Xem tất cả
+        a.button-outline(href=`/book/sach-trong-nuoc`) Xem tất cả
   // End Section 4
   // Section 5
   .section-5(
@@ -59,18 +57,18 @@ block main
       h2.box-title(
         data-aos-duration="800" 
         data-aos="fade-up"
-        ) Tour Nước Ngoài
+        ) Sách Nước Ngoài
       .inner-wrap(
         data-aos-delay="150" 
         data-aos-duration="800" 
         data-aos="fade-up"
         )
         // Product Item
-        each item in allBook
+        each item in bookNn
           +product-item(item)
         // End Product Item
       .inner-button
-        a.button-outline(href="#") Xem tất cả
+        a.button-outline(href=`/book/sach-nuoc-ngoai`) Xem tất cả
   // End Section 6
   // Section 7
   .section-5(
