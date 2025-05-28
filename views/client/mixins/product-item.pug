@@ -7,6 +7,9 @@ mixin product-item(item)
           src=item.avatar1
           )
     .inner-content
+      .inner-desc-item
+        | Mã sách:
+        b #{item.bookCode}
       h3.inner-title
         a(href=`/book/detail/${item.slug}`) #{item.name}
       .inner-prices

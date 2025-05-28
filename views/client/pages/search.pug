@@ -1,0 +1,25 @@
+extends ../layout/default.pug
+include ../mixins/product-item.pug
+block main
+  .section-9
+    .container
+      .inner-wrap
+        .inner-right
+          .inner-info
+            h2.inner-title Kết quả tìm kiếm
+          .inner-info-2
+            .inner-count-record
+              h3 #{totalBook>0?"Có: "+ totalBook +" kết quả tìm kiếm": "Không tìm thấy tour thỏa mãn!"} 
+          .inner-list-tour
+            // Product Item
+            each item in listBook
+              +product-item(item)
+            // End Product Item
+          // Pagination
+          .box-pagination(box-pagination)
+            button(page=1).active 1
+            - for(let i=2;i<=totalPage;i++)
+              button(page=i) #{i}
+          // End Pagination
+  // End Section 9
+    

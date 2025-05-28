@@ -15,7 +15,6 @@ module.exports.home = async (req,res) => {
 
   const idNn = "6825e6ad9800453576be8465"
   const arrayNn = await categoryHelper.categoryChild(idNn)
-   console.log(arrayNn)
   const bookNn = await Book.find({
     category: {$in:arrayNn},
     deleted:false

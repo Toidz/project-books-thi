@@ -1,0 +1,15 @@
+mixin breadcrumb(bread,category,tour)
+  // Breadcrumb
+  .box-breadcrumb
+    .inner-image
+      img(
+        alt=bread.title 
+        src="/assets/images/background_1.jpg"
+        )
+    .inner-content
+      .container
+        h1.inner-title #{bread.title}
+        .inner-list
+          each item in bread.list
+            a(href=item.link) #{item.name}
+  // End Breadcrumb

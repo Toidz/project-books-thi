@@ -9,7 +9,6 @@ const settingRouter = require("./setting.route");
 const bookRouter = require("./book.route");
 const userRouter = require("./user.route");
 const errorController = require("../../controllers/admin/error.controller");
-
 const authMidderWare = require("../../middlewares/admin/auth.middleware")
 const infoMiddleware = require("../../middlewares/client/infowebsite.middleware")
 

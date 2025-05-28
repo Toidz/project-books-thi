@@ -368,11 +368,7 @@ if(orderForm) {
       const phone = event.target.phone.value;
       const note = event.target.note.value;
       const method = event.target.method.value;
-
-      console.log(fullName);
-      console.log(phone);
-      console.log(note);
-      console.log(method);
+    
     })
   ;
 
@@ -458,23 +454,24 @@ if(filterPrice){
 //end filter-price
 
 //box-pagination
-const boxPagination = document.querySelector("box-pagination")
+const boxPagination = document.querySelector("[box-pagination]")
 if(boxPagination){
   const url = new URL(window.location.href)
   const buttons = boxPagination.querySelectorAll("button")
   buttons.forEach(button => {
     button.addEventListener("click",()=>{
       const page = button.getAttribute("page")
-      buttons.forEach(btn => btn.classList.remove("active"));
-      button.classList.toggle("active")
       url.searchParams.set("page",page)
       window.location.href = url.href
     })
     const current = url.searchParams.get("page")
     if(current){
+      buttons.forEach(btn =>btn.classList.remove("active"));
       buttons.forEach(btn =>{
-        if(btn.getAttribute("page")==current) button.classList.toggle("active")
-      })
+        if(btn.getAttribute("page")==current){
+          btn.classList.add("active")
+        }
+      });
     }
   });
 }
@@ -491,3 +488,195 @@ if(alertTime) {
   }, time);
 }
 // End Alert
+
+//find Book
+const findBook = document.querySelector("[find-book]")
+if(findBook){
+  const url = new URL(`${window.location.href}search`)
+  findBook.addEventListener("keyup",(event)=>{
+    if(event.code=="Enter"){
+      if(findBook.value){
+        url.searchParams.set("keyword",findBook.value)
+      }
+      else{
+        url.searchParams.delete("keyword")
+      }
+      window.location.href = url.href
+    }
+  })
+}
+//End find Book
+
+//detail - book
+const numberDetail = document.querySelector("[number-detail]");
+if (numberDetail) {
+  numberDetail.addEventListener("input", (event) => {
+    let value = event.target.value.replace(/[^0-9]/g, "");
+
+    if (value !== "") {
+      const stock = document.querySelector("[stock]")
+      const valueStock = parseInt(stock.getAttribute("stock"))
+      let number = parseInt(value, 10);
+      if (number >= valueStock) {
+        number = valueStock;
+      }
+      value = number.toString();
+    }
+    event.target.value = value;
+  });
+
+  numberDetail.addEventListener("change", () => {
+    const number = document.querySelector("[number]");
+    number.innerHTML = numberDetail.value;
+    const priceBook = document.querySelector("[priceBook]")
+    const totalPrice = document.querySelector("[totalPrice]")
+    totalPrice.innerHTML = (parseInt(numberDetail.value) * parseInt(priceBook.getAttribute("priceBook"))).toLocaleString("vi-VN")
+  });
+}
+
+const bookDetail = document.querySelector("[book-detail]")
+if(bookDetail){
+  const btn = bookDetail.querySelector("[idBook]")
+  btn.addEventListener("click",()=>{
+    const idBook = btn.getAttribute("idBook")
+    const input = bookDetail.querySelector("[number-detail]")
+    const numberBook = input.value
+    const dataFinal ={
+      id:idBook,
+      numberBook,
+      checkItem:true                                                                   
+    }
+    const cart = JSON.parse(localStorage.getItem("cart"))
+    console.log(cart)
+    const findIndex = cart.findIndex(book => book.id == dataFinal.id)
+    if(findIndex!=-1){
+      cart[findIndex] = dataFinal
+    }
+    else{
+      cart.push(dataFinal)
+    }
+    localStorage.setItem("cart",JSON.stringify(cart))
+    window.location.href ="/cart"
+  })
+}
+
+//End detail - book
+
+//cart
+const cart = localStorage.getItem("cart")
+if(!cart){
+  localStorage.setItem("cart",JSON.stringify([]))
+}
+//End cart
+
+//const minicart
+const miniCart = document.querySelector("[mini-cart]")
+if(miniCart){
+  const cart = JSON.parse(localStorage.getItem("cart"))
+  miniCart.innerHTML = cart.length
+}
+//const minicart
+
+//draw cart
+const drawCart = ()=>{
+  const cart = localStorage.getItem("cart")
+  console.log(cart)
+  if(cart.length>0){
+    fetch(`/cart/detail`,{
+    method:"POST",
+    headers:{
+      "Content-type":"application/json"
+    },
+    body:cart
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.code=="error"){
+      alert(data.message)
+    }
+    else{
+      const htmlCart = data.cart.map(item=>
+      `
+        <div class="inner-tour-item">
+          <div class="inner-actions">
+            <button class="inner-delete" button-delete=${item.id}>
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <input class="inner-check" 
+              type="checkbox" ${item.checkItem ? "checked" : "" } 
+              checkItem
+              idBook = ${item.id}
+            >
+          </div>
+          <div class="inner-product">
+            <div class="inner-image">
+              <a href="/book/detail/${item.slug}">
+                <img alt=${item.name} src=${item.avatar}>
+              </a>
+            </div>
+            <div class="inner-content">
+              <div class="inner-title">
+                <a href="/book/detail/${item.slug}">${item.name}</a>
+              </div>
+              <div class="inner-meta">
+                <div class="inner-meta-item">Mã sách: <b>${item.bookCode}</b>
+                </div>
+                <div class="inner-meta-item">Tên tác giả: <b>${item.author}</b>
+                </div>
+                <div class="inner-meta-item">Nhà xuất bản: <b>${item.produce}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="inner-quantity">
+            <div class="inner-list">
+              <div class="inner-item">
+                <div class="inner-item-label">Số lượng mua:</div>
+                <div class="inner-item-input">
+                  <input 
+                    value=${item.numberBook} 
+                    min="1" 
+                    type="number"
+                    numberInput 
+                    book-id =${item.id}
+                  >
+                </div>
+                <div class="inner-item-price">
+                  <span stockAdult>${item.numberBook} </span>
+                  <span>x</span>
+                  <span class="inner-highlight">
+                    ${item.priceBook.toLocaleString("vi-VN")} đ
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+      )
+      const cartList = document.querySelector("[cart-list]")
+      cartList.innerHTML = htmlCart.join("")
+
+      const filterCheck = data.cart.filter(item=>
+        item.checkItem == true
+      )
+      if(filterCheck.length>0){
+        const pay = data.cart.reduce((sum,item)=>{
+          if(item.checkItem){
+            return sum + parseInt(item.numberBook) * parseInt(item.priceBook)
+          }
+        },0)
+
+        const payPrice = document.querySelector("[pay-price]")
+        if(payPrice) payPrice.innerHTML = pay.toLocaleString("vi-VN")
+      }
+    }
+  })
+  }
+}
+//end draw cart
+
+const cartList = document.querySelector("[cart-list]")
+if(cartList){
+  drawCart()
+}

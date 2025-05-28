@@ -14,6 +14,12 @@ block main
             option(value="") -- Chọn danh mục --
             +options(categoryList,0)
         .inner-group
+          label(class="inner-label" for="author") Tên tác giả
+          input(type="text" id="author" name="author")
+        .inner-group
+          label(class="inner-label" for="produce") Nhà xuất bản
+          input(type="text" id="produce" name="produce")
+        .inner-group
           label(class="inner-label" for="position") Vị trí
           input(type="number" id="position" name="position")
         .inner-group.inner-two-col
@@ -30,10 +36,10 @@ block main
             input(type="file" id="avatar3" accept="image/*" filepond-image name="avatar3")
         .inner-group
           label(class="inner-label" for="priceBook") Giá bán
-          input(type="number" name="priceBook")
+          input(type="number" name="priceBook" id="priceBook")
         .inner-group
           label(class="inner-label" for="numberBook") Số lượng
-          input(type="number" name="numberBook")
+          input(type="number" name="numberBook" id="numberBook")
         .inner-group.inner-two-col
           label(class="inner-label" for="information") Thông tin sách
           textarea(id="information" textarea-mce name="information")

@@ -89,15 +89,22 @@ module.exports.book = async (req, res) => {
   if(req.query.sort){
     sort.priceBook = req.query.sort
   }
-  const limit =10
-  let page =1
-
-  const skip = (page-1)*limit
+  const limit =6
   const totalPage = Math.ceil(totalBook/limit)
+  let page =1
+  if(req.query.page>0){
+    page = req.query.page
+  }
+  if(req.query.page>totalPage){
+    page=totalPage
+  }
+  const skip = (page-1)*limit
 
   const allBook = await Book
   .find(find)
   .sort(sort)
+  .skip(skip)
+  .limit(limit)
   res.render("client/pages/book",{
     pageTitle:"Danh sách sách",
     dataCategory:dataCategory,
@@ -110,39 +117,51 @@ module.exports.book = async (req, res) => {
 }
 
 module.exports.detail = async (req,res) =>{
-  const id = req.params.id
-  const bookCurrent = await Book.findOne({
-    _id:id
+  const slug = req.params.slug
+  const book = await Book.findOne({
+    slug:slug,
+    deleted:false,
   })
-  const parentId = await Category.findOne({
-    _id:bookCurrent.category
-  })
-  const parent={} 
-  parent.id = parentId.id
-  parent.name = parentId.name
-  parent.parent = parentId.parent
+  if(book){
+    const category = await Category.findOne({
+      _id:book.category
+    })
+    const bread ={
+      title:book.name,
+      image:book.avatar1,
+      desc:book.information,
+      list:[
+        {
+        link:"/",
+        name:"Trang chủ"
+      }]
+    }
 
-  const parentIds = await Category.findOne({
-    _id:parent.parent
-  })
-  const parents = {}
-  parents.id = parentIds.id
-  parents.name = parentIds.name
-  parents.parent = parentIds.parent
-
-  const parentIdss = await Category.findOne({
-    _id:parents.parent
-  })
-  const parentss = {}
-  parentss.id = parentIdss.id
-  parentss.name = parentIdss.name
-  parentss.parent = parentIdss.parent
-
-  res.render("client/pages/book-detail",{
-    pageTitle:"Chi tiết sách",
-    bookCurrent:bookCurrent,
-    parent:parent,
-    parents:parents,
-    parentss:parentss,
-  });
+    if(category.parent){
+      const parent = await Category.findOne({
+        _id:category.parent
+      })
+      bread.list.push({
+        link:`/tour/${parent.slug}`,
+        name:parent.name
+      })
+    }
+    bread.list.push({
+      link:`/tour/${category.slug}`,
+      name:category.name
+    })
+    bread.list.push({
+      link:`/book/detail/${book.slug}`,
+      name:book.name
+    })
+    res.render("client/pages/book-detail",{
+      pageTitle:"Chi tiết sách",
+      category:category,
+      bread:bread,
+      book:book,
+    });
+  }
+  else{
+    res.redirect("/")
+  }
 }

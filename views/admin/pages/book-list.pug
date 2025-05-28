@@ -62,8 +62,10 @@ block main
             tr
               th(class="inner-center")
                 input(type="checkbox" class="inner-check" button-all)
-              th Tên sách
+              th(style="width:100px") Tên sách
               th Ảnh đại diện
+              th Tên tác giả
+              th Nhà xuất bản
               th(style="width:130px") Giá
               th(style="width:130px") Số lượng
               th(class="inner-center") Vị trí
@@ -78,6 +80,8 @@ block main
                 td #{item.name}
                 td
                   img(src=item.avatar1 class="inner-avatar")
+                td #{item.author}
+                td #{item.produce}
                 td
                   div #{item.priceBook.toLocaleString("vi-VN")}đ
                 td

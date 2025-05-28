@@ -148,7 +148,7 @@ if(categoryCreateForm) {
       formData.append("position",position);
       formData.append("avatar",avatar);
       formData.append("description",description);
-
+      
       fetch(`/${pathAdmin}/category/create`,{
         method:"POST",
         body: formData
@@ -286,8 +286,40 @@ if(bookCreateForm) {
         errorMessage: 'Vui lòng nhập tên sách!'
       }
     ])
+    .addField('#produce', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập nhà xuất bản!'
+      }
+    ])
+    .addField('#category', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn thể loại!'
+      }
+    ])
+    .addField('#priceBook', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập giá tiền!'
+      }
+    ])
+    .addField('#numberBook', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số lượng!'
+      }
+    ])
+    .addField('#author', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên tác giả!'
+      }
+    ])
     .onSuccess((event) => {
       const name = event.target.name.value;
+      const produce = event.target.produce.value;
+      const author = event.target.author.value;
       const category = event.target.category.value;
       const position = event.target.position.value;
       const avatars1 = filePond.avatar1.getFiles();
@@ -312,6 +344,8 @@ if(bookCreateForm) {
 
       const formData = new FormData()
       formData.append("name",name)
+      formData.append("produce",produce)
+      formData.append("author",author)
       formData.append("category",category)
       formData.append("position",position)
       formData.append("avatar1",avatar1)
@@ -350,9 +384,12 @@ if(bookeditForm) {
         errorMessage: 'Vui lòng nhập tên book!'
       }
     ])
+    
     .onSuccess((event) => {
       const id = event.target.id.value
       const name = event.target.name.value;
+      const produce = event.target.produce.value;
+      const author = event.target.author.value;
       const category = event.target.category.value;
       const position = event.target.position.value;
       const avatars1 = filePond.avatar1.getFiles();
@@ -398,6 +435,8 @@ if(bookeditForm) {
       const formData = new FormData()
       formData.append("name",name)
       formData.append("category",category)
+      formData.append("author",author)
+      formData.append("produce",produce)
       formData.append("position",position)
       formData.append("avatar1",avatar1);
       formData.append("avatar2",avatar2);

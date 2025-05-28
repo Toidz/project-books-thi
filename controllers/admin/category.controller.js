@@ -14,6 +14,7 @@ module.exports.create = async (req,res) =>{
     })
 }
 module.exports.createPost = async (req,res) =>{
+
     if(req.body.position){
         req.body.position = parseInt(req.body.position)
     }

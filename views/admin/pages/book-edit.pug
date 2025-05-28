@@ -17,6 +17,12 @@ block main
             option(value="") -- Chọn danh mục --
             +options(categoryList,0,currentBook.category)
         .inner-group
+          label(class="inner-label" for="author") Tên tác giả
+          input(type="text" id="author" name="author" value=currentBook.author)
+        .inner-group
+          label(class="inner-label" for="produce") Nhà xuất bản
+          input(type="text" id="produce" name="produce" value=currentBook.produce)
+        .inner-group
           label(class="inner-label" for="position") Vị trí
           input(type="number" id="position" name="position" value=currentBook.position)
         .inner-group.inner-two-col

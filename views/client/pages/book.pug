@@ -6,8 +6,8 @@ block main
   .box-breadcrumb
     .inner-image
       img(
-        alt="" 
-        src="/assets/images/background_1.jpg"
+        alt=dataCategory.name
+        src=dataCategory.avatar
         )
     .inner-content
       .container
@@ -79,13 +79,9 @@ block main
             // End Product Item
           // Pagination
           .box-pagination(box-pagination)
-            button
-              i.fa-solid.fa-angles-left
             button(page=1).active 1
             - for(let i=2;i<=totalPage;i++)
               button(page=i) #{i}
-            button
-              i.fa-solid.fa-angles-right
           // End Pagination
   // End Section 9
     

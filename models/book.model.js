@@ -3,8 +3,11 @@ slug = require('mongoose-slug-updater')
 mongoose.plugin(slug)
 const schema = new mongoose.Schema(
     {   
+        bookCode:String,
         name: String,
         category: String,
+        produce: String,
+        author:String,
         position: Number,
         avatar1: String,
         avatar2: String,
