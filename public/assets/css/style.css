@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
 
 :root {
-  --color-primary: #4502C7;
+  --color-primary: #c70223;
 }
 
 * {
@@ -295,7 +295,7 @@ input, button, textarea {
 /* Section 1 */
 .section-1 {
   padding: 106px 0 108px 0;
-  background-image: url(../images/background-1.jpg);
+  background-image: url(../images/background-home1.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -1481,7 +1481,7 @@ input, button, textarea {
 
 /* Box Contact */
 .box-contact {
-  background-color: #4502C7;
+  background-color: #c70223;
   border-radius: 10px;
   box-shadow: 0px 2px 4px 0px #00000026;
   position: fixed;

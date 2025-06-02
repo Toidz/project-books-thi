@@ -93,12 +93,16 @@ module.exports.list = async (req,res) =>{
         find.slug= regex
     }
     const limit =3
-    const totalBook = await Book.countDocuments(totalFind)
+    const totalBook = await Book.countDocuments(find)
+    const totalPage = Math.ceil(totalBook/limit)
     let page =1
     if(req.query.page>0){
         page = req.query.page
     }  
-    const totalPage = Math.ceil(totalBook/limit)
+    if(req.query.page>totalPage && totalPage >0 ){
+        page = totalPage
+    }
+
     const skip = limit*(page-1)
 
     const filterPrice = req.query.price
@@ -392,6 +396,7 @@ module.exports.trash = async (req,res) =>{
 
 module.exports.trashMulti = async (req,res) =>{
     try {
+        console.log(req.body.status,req.body.ids)
         switch(req.body.status){
             case "restore":
                 await Book.updateMany({

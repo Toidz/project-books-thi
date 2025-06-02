@@ -21,12 +21,13 @@ module.exports.list = async (req,res)=>{
     }
     const limit = 3
     let page =1 
-    const totalContact = await Contact.countDocuments({
-        deleted:false
-    })
+    const totalContact = await Contact.countDocuments(find)
     const totalPage = Math.ceil(totalContact/limit)
     if(req.query.page>0){
         page = req.query.page
+    }
+     if(req.query.page>totalContact && totalContact>0){
+        page = totalContact
     }
     const skip = (page-1)*limit
     const pagination ={
@@ -51,13 +52,32 @@ module.exports.list = async (req,res)=>{
 
 module.exports.changPatch = async(req,res)=>{
     try {
-        console.log(1)
         await Contact.updateMany({
             _id:{$in:req.body.ids}
         },{
             deleted:true
         })
-        console.log(2)
+        req.flash("success","Xóa thông tin thành công!")
+        res.json({
+            code:"success"
+        })
+    } catch (error) {
+        res.json({
+            code:"error",
+            message:"Cập nhật thất bại!"
+        })
+    } 
+}
+
+module.exports.deletePatch = async(req,res)=>{
+    console.log(1)
+    try {
+        const id = req.params.id
+        await Contact.updateOne({
+            _id:id
+        },{
+            deleted:true
+        })
         req.flash("success","Xóa thông tin thành công!")
         res.json({
             code:"success"

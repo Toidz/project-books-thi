@@ -7,7 +7,7 @@ const orderRouter = require("./order.route");
 const profileRouter = require("./profile.route");
 const settingRouter = require("./setting.route");
 const bookRouter = require("./book.route");
-const userRouter = require("./user.route");
+// const userRouter = require("./user.route");
 const errorController = require("../../controllers/admin/error.controller");
 const authMidderWare = require("../../middlewares/admin/auth.middleware")
 const infoMiddleware = require("../../middlewares/client/infowebsite.middleware")
@@ -21,7 +21,7 @@ router.use("/order",authMidderWare.verifyToken,orderRouter);
 router.use("/profile",authMidderWare.verifyToken,profileRouter);
 router.use("/setting",authMidderWare.verifyToken,settingRouter);
 router.use("/book",authMidderWare.verifyToken,bookRouter);
-router.use("/user",authMidderWare.verifyToken,userRouter);
+// router.use("/user",authMidderWare.verifyToken,userRouter);
 router.get("*",authMidderWare.verifyToken,errorController.error);
 
 module.exports = router;

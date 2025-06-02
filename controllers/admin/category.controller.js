@@ -73,12 +73,10 @@ module.exports.list = async (req,res) =>{
         page = req.query.page
     }
     const skip = (page -1)*limnit
-    const totalTour = await Category.countDocuments({
-        deleted:false
-    })
+    const totalCategory = await Category.countDocuments(find)
     const pagination ={
-        totalPage:Math.ceil(totalTour/limnit),
-        totalTour:totalTour,
+        totalPage:Math.ceil(totalCategory/limnit),
+        totalCategory:totalCategory,
         skip:skip
     }
     console.log(pagination)

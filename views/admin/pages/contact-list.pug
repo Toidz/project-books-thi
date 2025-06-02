@@ -59,7 +59,7 @@ block main
 
     //- Section 7
     .section-7
-      span(class="inner-label") Hiển thị #{pagination.skip+1} - #{pagination.skip+contactList.length} của #{pagination.totalContact}
+      span(class="inner-label" total=pagination.totalPage ) Hiển thị #{pagination.skip+1} - #{pagination.skip+contactList.length} của #{pagination.totalContact}
       select(class="inner-pagination" pagination-contact)
         - for(let i=1;i<=pagination.totalPage;i++)
           option(value=i) Trang #{i}

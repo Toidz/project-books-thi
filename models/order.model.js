@@ -8,11 +8,6 @@ const schema = new mongoose.Schema(
         method:String,
         cart:Array,
         priceTotal:Number,
-        coupon:{
-            type:Number,
-            default:0
-        },
-        pricePay:Number,
         status:String,
         payStatus:String,
         updatedBy:String,

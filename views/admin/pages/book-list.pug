@@ -106,7 +106,7 @@ block main
 
     //- Section 7
     .section-7
-      span(class="inner-label") Hiển thị #{skip+1} - #{skip+bookList.length}  của #{totalBook}
+      span(class="inner-label" total=totalPage) Hiển thị #{skip+1} - #{skip+bookList.length}  của #{totalBook}
       select(class="inner-pagination" book-page)
         - for(let i=1;i<=totalPage;i++)
           option(value=i) Trang #{i}

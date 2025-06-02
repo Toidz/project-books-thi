@@ -368,7 +368,50 @@ if(orderForm) {
       const phone = event.target.phone.value;
       const note = event.target.note.value;
       const method = event.target.method.value;
-    
+      const cart = JSON.parse(localStorage.getItem("cart"))
+      const itemCart = cart.filter(item => item.checkItem ==true)
+      if(itemCart.length>0){
+        const cartList = []
+        itemCart.forEach(item=>{
+          const dataCart = {
+            id:item.id,
+            numberBook:item.numberBook
+          }
+          cartList.push(dataCart)
+        })
+
+        const dataFinal = {
+          fullName,
+          phone,
+          note,
+          method,
+          cart:cartList
+        }
+        fetch(`/order/create`,{
+          method:"POST",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body:JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error"){
+            alert(data.message)
+          }
+          else{
+            const cart = JSON.parse(localStorage.getItem("cart"))
+            const index = cart.findIndex(item => item.id=data.orderId)
+            cart.splice(index,1)
+            localStorage.setItem("cart",JSON.stringify(cart))
+            window.location.href = `/order/success?orderId=${data.orderId}&&phone=${dataFinal.phone}`
+          }
+        })
+
+      }
+      else{
+        alert("Vui lòng chọn ít nhất 1 sản phẩm!")
+      }
     })
   ;
 
@@ -579,18 +622,17 @@ if(miniCart){
 
 //draw cart
 const drawCart = ()=>{
-  const cart = localStorage.getItem("cart")
-  console.log(cart)
-  if(cart.length>0){
+  const cart = JSON.parse(localStorage.getItem("cart"))
+  if(cart){
     fetch(`/cart/detail`,{
     method:"POST",
     headers:{
       "Content-type":"application/json"
     },
-    body:cart
-  })
-  .then(res=>res.json())
-  .then(data=>{
+    body:JSON.stringify(cart)
+    })
+    .then(res=>res.json())
+    .then(data=>{
     if(data.code=="error"){
       alert(data.message)
     }
@@ -603,7 +645,7 @@ const drawCart = ()=>{
               <i class="fa-solid fa-xmark"></i>
             </button>
             <input class="inner-check" 
-              type="checkbox" ${item.checkItem ? "checked" : "" } 
+              type="checkbox" ${item.checkItem == true ? "checked" : "" } 
               checkItem
               idBook = ${item.id}
             >
@@ -654,22 +696,75 @@ const drawCart = ()=>{
         </div>
       `
       )
+      localStorage.setItem("cart",JSON.stringify(data.cart))
       const cartList = document.querySelector("[cart-list]")
       cartList.innerHTML = htmlCart.join("")
 
       const filterCheck = data.cart.filter(item=>
         item.checkItem == true
       )
-      if(filterCheck.length>0){
-        const pay = data.cart.reduce((sum,item)=>{
-          if(item.checkItem){
-            return sum + parseInt(item.numberBook) * parseInt(item.priceBook)
-          }
-        },0)
+           
+      // gia
+      const pay = filterCheck.reduce((sum,item)=>{
+        if(item.checkItem){
+          return sum + parseInt(item.numberBook) * parseInt(item.priceBook)
+        }
+      },0)
+      const payPrice = document.querySelector("[pay-price]")
+      if(payPrice) payPrice.innerHTML = pay.toLocaleString("vi-VN")
+    
+      
 
-        const payPrice = document.querySelector("[pay-price]")
-        if(payPrice) payPrice.innerHTML = pay.toLocaleString("vi-VN")
+      //chinh so luong
+      const numberInput = document.querySelectorAll("[numberInput]")
+      if(numberInput){  
+        numberInput.forEach(input => {
+          input.addEventListener("change",(event)=>{
+            let value = event.target.value.replace(/[^0-9]/g,"");
+            event.target.value = value;
+            if(input.value){
+              console.log(input.value)
+              cart.map(item=>{
+                if(item.id == input.getAttribute("book-id")){
+                  item.numberBook = input.value
+                  return item
+                }
+              })
+              localStorage.setItem("cart",JSON.stringify(cart))
+              drawCart()
+            }
+          })
+        });
       }
+
+      //check
+      const checkItem = document.querySelectorAll("[checkItem]")
+      if(checkItem){
+        checkItem.forEach(item => {
+          item.addEventListener("click",()=>{
+            const id = item.getAttribute("idBook")
+            const cartFind = cart.find(it=>it.id == id)
+            cartFind.checkItem = item.checked
+            localStorage.setItem("cart",JSON.stringify(cart))
+            drawCart()
+          })
+        });
+      }
+
+      //xoa
+      const buttonDelete = document.querySelectorAll("[button-delete]")
+      if(buttonDelete){
+        buttonDelete.forEach(item => {
+          item.addEventListener("click",()=>{
+            const id = item.getAttribute("button-delete")
+            const index = cart.findIndex(it=>it.id == id)
+            cart.splice(index,1)
+            localStorage.setItem("cart",JSON.stringify(cart))
+            drawCart()
+          })
+        });
+      }
+
     }
   })
   }
