@@ -41,7 +41,6 @@ module.exports.dashboard =  async (req,res)=>{
        order.nameStatusPay =order.valueStatusPay.lable
        order.formatTime = moment(order.createdAt).format("HH:mm")
        order.formatDay = moment(order.createdAt).format("DD/MM/YYYY")
-       console.log(order)
     });
     res.render("admin/pages/dashboard",{
         pageTitle:"Trang tổng quan",

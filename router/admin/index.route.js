@@ -7,6 +7,8 @@ const orderRouter = require("./order.route");
 const profileRouter = require("./profile.route");
 const settingRouter = require("./setting.route");
 const bookRouter = require("./book.route");
+const newRouter = require("./new.route");
+const uploadRouer = require("./upload.route")
 // const userRouter = require("./user.route");
 const errorController = require("../../controllers/admin/error.controller");
 const authMidderWare = require("../../middlewares/admin/auth.middleware")
@@ -21,6 +23,8 @@ router.use("/order",authMidderWare.verifyToken,orderRouter);
 router.use("/profile",authMidderWare.verifyToken,profileRouter);
 router.use("/setting",authMidderWare.verifyToken,settingRouter);
 router.use("/book",authMidderWare.verifyToken,bookRouter);
+router.use("/new",authMidderWare.verifyToken,newRouter);
+router.use("/upload",authMidderWare.verifyToken,uploadRouer);
 // router.use("/user",authMidderWare.verifyToken,userRouter);
 router.get("*",authMidderWare.verifyToken,errorController.error);
 

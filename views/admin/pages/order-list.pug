@@ -95,7 +95,7 @@ block main
 
     //- Section 7
     .section-7
-      span(class="inner-label" total=pagination.totalOrder) Hiển thị #{pagination.skip+1} - #{pagination.skip+orderList.length} của #{pagination.totalOrder}
+      span(class="inner-label" total=pagination.totalPage) Hiển thị #{pagination.totalPage>0? pagination.skip+1 : pagination.skip} - #{pagination.skip+orderList.length} của #{pagination.totalOrder}
       select(class="inner-pagination" order-pagination)
         - for(let i=1;i<=pagination.totalPage;i++)
           option(value=i) Trang #{i}

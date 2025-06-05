@@ -34,7 +34,7 @@ block main
               th Mã
               th Thông tin khách
               th Danh sách sản phẩm
-              th Thanh toán
+              th Thanh toán 
               th Trạng thái
               th.inner-text-right Ngày đặt
           tbody
@@ -43,11 +43,11 @@ block main
                 td
                   .inner-code #{item.orderCode}
                 td
-                  .inner-text #{item.fullName}
-                  .inner-text #{item.phone}
-                  .inner-text #{item.note}
-                each it in item.cart
-                  td
+                  .inner-text Họ tên: #{item.fullName}
+                  .inner-text Số điện thoại: #{item.phone}
+                  .inner-text Lời nhắn: #{item.note}
+                td
+                  each it in item.cart
                     .inner-item
                       .inner-image
                         img(src=it.avatar, alt=it.name)

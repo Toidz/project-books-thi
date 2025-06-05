@@ -7,7 +7,7 @@ module.exports.edit = async (req,res)=>{
         deleted:false,
         orderCode:orderCode
     })
-    orderCurrent.createdAtFormat = moment(orderCurrent.createdAt).format("YYYY-MM-DDTHH:mm")
+    if(orderCurrent.createdAt)orderCurrent.createdAtFormat = moment(orderCurrent.createdAt).format("YYYY-MM-DDTHH:mm")
     res.render("admin/pages/order-edit",{
         pageTitle:`Đơn hàng: ${orderCode}`,
         orderCurrent:orderCurrent

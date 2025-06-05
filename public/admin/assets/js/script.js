@@ -462,6 +462,106 @@ if(bookeditForm) {
   ;
 }
 // End book edit Form
+
+
+// new Create Form
+const newCreateForm = document.querySelector("#new-create-form");
+if(newCreateForm) {
+  const validation = new JustValidate('#new-create-form');
+
+  validation
+    .addField('#name', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên bài viết!'
+      }
+    ])
+    .onSuccess((event) => {
+      const name = event.target.name.value;
+      const position = event.target.position.value;
+      const avatars = filePond.avatar.getFiles();
+      let avatar = null;
+      if(avatars.length > 0) {
+        avatar = avatars[0].file;
+      }
+      const information = tinymce.get("information").getContent();
+
+      const formData = new FormData()
+      formData.append("name",name)
+      formData.append("position",position)
+      formData.append("avatar",avatar)
+      formData.append("content",information)
+      fetch(`/${pathAdmin}/new/create`,{
+        method:"POST",
+        body: formData
+      }).
+      then(res=>res.json()).
+      then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href=`/${pathAdmin}/new/list`
+        }
+      })
+    })
+  ;
+}
+// End new Create Form
+
+// new edit Form
+const neweditForm = document.querySelector("#new-edit-form");
+if(neweditForm) {
+  const validation = new JustValidate('#new-edit-form');
+
+  validation
+    .addField('#name', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên bài viết!'
+      }
+    ])
+    .onSuccess((event) => {
+      const id = event.target.id.value
+      const name = event.target.name.value;
+      const position = event.target.position.value;
+      const avatars = filePond.avatar.getFiles();
+      let avatar = null;
+      if(avatars.length > 0) {
+        avatar= avatars[0].file;
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        if(elementImageDefault){
+          const imageDefault = elementImageDefault.getAttribute("image-default");
+          if(imageDefault.includes(avatar.name)) {
+            avatar=null
+          }
+        }
+      }
+      const information = tinymce.get("information").getContent();
+    
+      const formData = new FormData()
+      formData.append("name",name)
+      formData.append("position",position)
+      formData.append("avatar",avatar);
+      formData.append("content",information)
+      fetch(`/${pathAdmin}/new/edit/${id}`,{
+        method:"PATCH",
+        body: formData
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
+    })
+  ;
+}
+// End new edit Form
+
 // Order Edit Form
 const orderEditForm = document.querySelector("#order-edit-form");
 if(orderEditForm) {
@@ -534,10 +634,12 @@ if(orderEditForm) {
 // End Order Edit Form
 
 //order-delete
-const  orderDelete = document.querySelector("[order-delete]")
-if(orderDelete){
-  orderDelete.addEventListener("click",()=>{
+const orderDeletes = document.querySelectorAll("[order-delete]")
+if(orderDeletes){
+  orderDeletes.forEach(orderDelete => {
+    orderDelete.addEventListener("click",()=>{
     const apiDelete = orderDelete.getAttribute("order-delete")
+    console.log(apiDelete)
     fetch(apiDelete,{
       method:"PATCH"
     })
@@ -551,6 +653,7 @@ if(orderDelete){
       }
     })
   })
+  });
 }
 //End order-delete
 
@@ -1815,28 +1918,206 @@ if(bookPage){
   }
 }
 //End pagination book
-//End----------Filter book
 
 //button delete book
-const buttonDeletebook = document.querySelector("[button-delete-book]")
-if(buttonDeletebook){
-  buttonDeletebook.addEventListener("click",()=>{
-   const api= buttonDeletebook.getAttribute("button-delete-book")
-   fetch(api,{
-    method:"PATCH"
-   })
-   .then(res=>res.json())
-   .then(data=>{
-    if(data.code=="error"){
-      alert(data.message)
-    }
-    else{
-      window.location.reload()
-    }
-   })
-  })
+const buttonDeletebooks = document.querySelector("[button-delete-book]")
+if(buttonDeletebooks){  
+  buttonDeletebooks.forEach(buttonDeletebook => {
+    buttonDeletebook.addEventListener("click",()=>{
+    const api= buttonDeletebook.getAttribute("button-delete-book")
+    fetch(api,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        alert(data.message)
+      }
+      else{
+        window.location.reload()
+      }
+    })
+    })
+  });
 }
 //End button delete book
+//End----------Filter book
+
+
+//----------Filter new
+//filter-creater new
+const newCreater = document.querySelector("[new-creater]")
+if(newCreater){
+  const url = new URL(window.location.href)
+  newCreater.addEventListener("change",()=>{
+    const value = newCreater.value
+    if(value){
+      url.searchParams.set("id",value)
+    }
+    else{
+      url.searchParams.delete("id")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("id")
+  if(currentValue) newCreater.value = currentValue
+}
+//filter-creater new
+
+//filter-date new
+//start date 
+const startDateNew = document.querySelector("[start-date]")
+if(startDateNew){
+  const url = new URL(window.location.href)
+  startDateNew.addEventListener("change",()=>{
+    const value = startDateNew.value
+    if(value){
+      url.searchParams.set("startDate",value)
+    }
+    else{
+      url.searchParams.delete("startDate")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("startDate")
+  if(currentValue) startDateNew.value = currentValue
+}
+//end start date
+
+//end date
+const endDateNew = document.querySelector("[end-date]")
+if(endDateNew){
+  const url = new URL(window.location.href)
+  endDateNew.addEventListener("change",()=>{
+    const value = endDateNew.value
+    if(value){
+      url.searchParams.set("endDate",value)
+    }
+    else{
+      url.searchParams.delete("endDate")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("endDate")
+  if(currentValue) endDateNew.value = currentValue
+}
+//end end date
+//End filter-date new
+
+//change-status new
+const changeStatusNew = document.querySelector("[change-status]")
+if(changeStatusNew){
+  const select = changeStatusNew.querySelector("select")
+  const button = changeStatusNew.querySelector("button")
+  if(button){
+    button.addEventListener("click",()=>{
+      const listChecked = document.querySelectorAll("[button-item]:checked")
+      const ids= []
+      listChecked.forEach(item => {
+        const id = item.getAttribute("button-item")
+        ids.push(id)
+      });
+      if(select.value && ids.length>0){
+        const dataFinal = {
+          ids:ids
+        }
+        fetch(`/${pathAdmin}/new/changePatch`,{
+          method:"PATCH",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body:JSON.stringify(dataFinal)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=="error"){
+            alert(data.message)
+          }
+          else{
+            window.location.reload()
+          }
+        })
+      }
+    })
+  }
+}
+//End change-status new
+
+//new search
+
+const newSearch = document.querySelector("[new-search]")
+if(newSearch){
+  const url = new URL(window.location.href)
+  newSearch.addEventListener("keyup",(event)=>{
+    const value = newSearch.value
+    if(event.code=="Enter"){
+      if(value)
+        url.searchParams.set("keyword",value.trim())
+      else  
+        url.searchParams.delete("keyword")
+      window.location.href = url.href
+    }
+  })
+  const currentValue = url.searchParams.get("keyword")
+  if(currentValue) newSearch.value = currentValue
+}
+//End new search
+
+//pagination new
+const newPage = document.querySelector("[new-page]")
+if(newPage){
+  const url = new URL(window.location.href)
+  newPage.addEventListener("change",()=>{
+    const value = newPage.value
+    if(value){
+      url.searchParams.set("page",value)
+    }
+    else{
+      url.searchParams.delete("page")
+    }
+    window.location.href = url.href
+  })
+  const currentValue = url.searchParams.get("page")
+  const totalHtml = document.querySelector("[total]")
+  const total = totalHtml.getAttribute("total")
+  console.log(total)
+  if(currentValue){
+    if(currentValue>total){
+      newPage.value = total
+    }
+    else if(currentValue<=0){
+      newPage.value = 1
+    }
+    else{
+      newPage.value= currentValue
+    }
+  }
+}
+//End pagination new
+
+//button delete new
+const buttonDeletenews = document.querySelectorAll("[button-delete-new]")
+if(buttonDeletenews){  
+  buttonDeletenews.forEach(buttonDeletenew => {
+    buttonDeletenew.addEventListener("click",()=>{
+    const api= buttonDeletenew.getAttribute("button-delete-new")
+    fetch(api,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        alert(data.message)
+      }
+      else{
+        window.location.reload()
+      }
+    })
+    })
+  });
+}
+//End button delete new
+//End----------Filter new
 
 //--------book trash
 //check-all-trash

@@ -110,5 +110,21 @@ module.exports.permission = [
     {
         lable:"Xóa người dùng",
         value:"user-delete"
+    },
+    {
+        lable:"Xem bài viết",
+        value:"new-view"
+    },
+    {
+        lable:"Thêm bài viết",
+        value:"new-create"
+    },
+    {
+        lable:"Sửa bài viết",
+        value:"new-edit"
+    },
+    {
+        lable:"Xóa bài viết",
+        value:"new-delete"
     }
 ]

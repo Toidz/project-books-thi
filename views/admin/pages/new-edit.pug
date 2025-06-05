@@ -1,0 +1,27 @@
+extends ../layouts/default.pug
+include ../mixins/options.pug
+block main
+  h1.box-title Chỉnh sửa bài viết
+  - if(permissions.includes("new-edit"))
+    .section-8
+      form#new-edit-form
+        .inner-group(style="display:none")
+            label(class="inner-label" for="id") id
+            input(type="text" id="id" name="id" value=currentNew.id)
+        .inner-group
+          label(class="inner-label" for="name") Tên bài viết
+          input(type="text" id="name" name="name" value=currentNew.name)
+        .inner-group
+          label(class="inner-label" for="position") Vị trí
+          input(type="number" id="position" name="position" value=currentNew.position)
+        .inner-group.inner-two-col
+          label(class="inner-label" for="avatar") Ảnh đại diện
+          div(class="inner-upload-image" image-default=currentNew.avatar?currentNew.avatar:"" )
+            input(type="file" id="avatar" accept="image/*" filepond-image name="avatar")
+        .inner-group.inner-two-col
+          label(class="inner-label" for="information") Thông tin bài viết
+          textarea(id="information" textarea-mce name="information") #{currentNew.content}
+        .inner-button.inner-two-col
+          button Cập nhật
+      .inner-back
+        a(href=`/${pathAdmin}/new/list`) Quay lại danh sách

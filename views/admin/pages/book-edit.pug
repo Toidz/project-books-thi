@@ -27,15 +27,15 @@ block main
           input(type="number" id="position" name="position" value=currentBook.position)
         .inner-group.inner-two-col
           label(class="inner-label" for="avatar1") Ảnh 1
-          div(class="inner-upload-image" image-default=currentBook.avatar1)
+          div(class="inner-upload-image" image-default=currentBook.avatar1? currentBook.avatar1: "" )
             input(type="file" id="avatar1" accept="image/*" filepond-image name="avatar1")
         .inner-group.inner-two-col
           label(class="inner-label" for="avatar2") Ảnh 2
-          div(class="inner-upload-image" image-default=currentBook.avatar2)
+          div(class="inner-upload-image" image-default=currentBook.avatar2? currentBook.avatar2 : "")
             input(type="file" id="avatar2" accept="image/*" filepond-image name="avatar2")
         .inner-group.inner-two-col
           label(class="inner-label" for="avatar3") Ảnh 3
-          div(class="inner-upload-image" image-default=currentBook.avatar3)
+          div(class="inner-upload-image" image-default=currentBook.avatar3? currentBook.avatar3 :"")
             input(type="file" id="avatar3" accept="image/*" filepond-image name="avatar3")
         .inner-group
           label(class="inner-label" for="priceBook") Giá bán

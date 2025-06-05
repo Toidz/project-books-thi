@@ -96,7 +96,7 @@ block main
 
     //- Section 7
     .section-7
-      span(class="inner-label") Hiển thị #{skip+1} - #{skip+accountList.length}  của #{totalAccount}
+      span(class="inner-label") Hiển thị #{totalAccount>0? skip+1 : skip} - #{skip+accountList.length}  của #{totalAccount}
       select(class="inner-pagination" account-page)
         - for(let i=1;i<=totalPage;i++)
           option(value=i) Trang #{i}

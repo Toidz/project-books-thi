@@ -214,10 +214,10 @@ module.exports.createPost = async (req,res) =>{
     console.log(req.body)
     const dataFinal = new Book(req.body)
     await dataFinal.save()
-    req.flash("success", "Tạo book thành công!");
+    req.flash("success", "Tạo sách thành công!");
     res.json({
         code:"success",
-        message:"Tạo book thành công!"
+        message:"Tạo sách thành công!"
     })
 }
 
