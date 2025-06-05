@@ -79,6 +79,7 @@ module.exports.list = async (req,res) =>{
     res.render("admin/pages/new-list",{
         pageTitle:"Quản lý bài viết",
         newList:newList,
+        totalNew:totalNew,
         accountList:accountList,
         totalPage:totalPage,
         skip:skip
