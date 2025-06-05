@@ -1,0 +1,27 @@
+extends ../layout/default.pug
+include ../mixins/product-item.pug
+block main 
+  .section-contact
+    .container
+      .inner-wrap
+        h2 CHÍNH SÁCH BẢO MẬT
+
+        h3  Mục đích và phạm vi thu thập
+        P - Sau quá trình giao dịch mua bán trên webiste. #{info.websiteName} sẽ lưu giữ lại các thông tin chi tiết về đơn hàng đã thành toán của khách hàng, không bao gồm các thông tin về số tài khoản ngân hàng.
+        P - Ngoài ra, #{info.websiteName} cũng sẽ sử dụng một số thông tin nhận diện phi cá nhân như: địa chỉ IP, loại trình duyệt, lượt truy cập, cookies,… nhằm mục đích nghiên cứu và cải tiến chất lượng cũng như nâng cấp các tính năng, dịch vụ mới để phù hợp với nhu cầu khách hàng hơn.
+        P - Các Thành viên cũng có trách nhiệm bảo mật và lưu giữ các thông tin và hoạt động sử dụng dịch vụ dưới tên đăng nhập, email và mật khẩu. Nếu có bất kì một hành vi nào vi phạm bảo mật, sử dụng trái phép của bên thứ ba, Thành viên cần báo ngay cho #{info.websiteName} để có biện pháp giải quyết.
+
+        h3 Địa chỉ của đơn vị thu thập và quản lý thông tin
+        p - Công ty TNHH Một Thành Viên Thương Mại Và Dịch Vụ Văn Hoá 
+        p - Địa chỉ: #{info.address}
+        p - Điện thoại: #{info.phone}
+
+        h3 Cam kết bảo mật thông tin cá nhân khách hàng
+        p - Không cung cấp chuyển giao, tiết lộ cho bất kì bên thứ 3 nào về thông tin thành viên (trừ các trường hợp pháp luật quy định) nếu chưa có sự đồng ý của thành viên.
+        p - Trong trường hợp, máy chủ lưu giữ thông tin bị hacker tấn công khiến cho dữ liệu cá nhân của thành viên bị mất mát, #{info.websiteName} có trách nhiệm thông báo cho các cơ quan có thẩm quyền điều tra và báo cho thành viên biết.
+        p - Mọi thông tin của thành viên kể cả thông tin hóa đơn, kế toán chứng từ đều được bảo mật tuyệt đối tại khu vực lưu trữ dữ liệu an toàn cấp 1 của #{info.websiteName}.
+        p - #{info.websiteName} yêu cầu mọi cá nhân khi đăng ký/mua hàng trên website đều phải cung cấp đầy đủ và chính xác các thông tin có liên quan như: họ và tên, địa chỉ, email, điện thoại, số tài khoản,… và chịu trách nhiệm về tính pháp lý của những thông tin này. 
+        p Trong trường hợp các thông tin của thành viên không chính xác, #{info.websiteName} sẽ không chịu trách nhiệm giải quyết các khiếu nại liên quan đến quyền lợi Thành viên đó.
+       
+        p Ban quản trị #{info.websiteName}
+

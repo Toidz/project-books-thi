@@ -1,0 +1,164 @@
+extends ../layout/default.pug
+include ../mixins/product-item.pug
+block main 
+  .section-1
+    .container
+      .inner-wrap
+        h1.inner-title(
+          data-aos-duration="800" 
+          data-aos="fade-up"
+          )
+          | Mỗi cuốn sách là một hành trình 
+          br
+          | Khám phá thế giới qua từng trang sách
+        p.inner-desc(
+          data-aos-delay="150" 
+          data-aos-duration="800" 
+          data-aos="fade-up"
+          )
+          | Giữa thế giới đầy biến động, một cuốn sách hay không chỉ mở ra cánh cửa tri thức mà còn trở thành người bạn đồng hành lặng lẽ, giúp bạn tìm lại sự bình yên, khai phá tư duy và nuôi dưỡng tâm hồn theo cách mà không điều gì khác có thể làm được.
+      .inner-form(
+        data-aos-delay="300" 
+        data-aos-duration="800" 
+        data-aos="fade-up" 
+        action="#"
+        search
+        )
+        .inner-box.inner-address
+          .inner-input-group
+            img.inner-icon(src="/assets/images/icon-find.jpg" style="width:25px;height:25px")
+            input.inner-input(
+              placeholder="Tìm kiếm sách" 
+              type="text"
+              find-book
+              )
+  // End Section 1
+  // Section 4
+  .section-4
+    .container
+      h2.box-title(
+        data-aos-duration="800" 
+        data-aos="fade-up"
+        ) Sách Trong Nước
+      .inner-wrap(
+        data-aos-delay="150" 
+        data-aos-duration="800" 
+        data-aos="fade-up"
+        )
+        // Product Item
+        each item in bookVn
+          +product-item(item)
+        // End Product Item
+      .inner-button
+        a.button-outline(href=`/book/sach-trong-nuoc`) Xem tất cả
+  // End Section 4
+  // Section 5
+  .section-5(
+    data-aos-duration="800" 
+    data-aos="fade-up"
+    )
+    .container
+      .inner-image
+        a(href="#")
+          img(
+            alt="" 
+            src=""
+            )
+  // End Section 5
+  // Section 6
+  .section-4
+    .container
+      h2.box-title(
+        data-aos-duration="800" 
+        data-aos="fade-up"
+        ) Sách Nước Ngoài
+      .inner-wrap(
+        data-aos-delay="150" 
+        data-aos-duration="800" 
+        data-aos="fade-up"
+        )
+        // Product Item
+        each item in bookNn
+          +product-item(item)
+        // End Product Item
+      .inner-button
+        a.button-outline(href=`/book/sach-nuoc-ngoai`) Xem tất cả
+  // End Section 6
+  // Section 7
+  .section-5(
+    data-aos-duration="800" 
+    data-aos="fade-up"
+    )
+    .container
+      .inner-image
+        a(href="#")
+          img(
+            alt="" 
+            src=""
+            )
+  // End Section 7
+  // Section 8
+  .section-8
+    .container
+      h2.box-title(
+        data-aos-duration="800" 
+        data-aos="fade-up"
+        ) Tin Tức Mới
+      .inner-wrap(
+        data-aos-delay="150" 
+        data-aos-duration="800" 
+        data-aos="fade-up"
+        )
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src=""
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Homestay “cổ tích” giữa Đà Lạt mộng mơ
+        .blog-item-2
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src=""
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Top 5 điểm check in độc đáo tại Singapore
+              .inner-desc
+                | Nếu bạn nghĩ du lịch Singapore rất nhàm chán vì chỉ mãi quanh quẩn trong những khối bê tông vô cảm thì bạn “chắc chưa?”. Tuy đảo quốc Sư Tử không phải là một quốc gia rộng lớn nhưng các địa điểm du lịch tại Singapore chưa từng đánh mất sức hút đối với cộng đồng xê dịch quốc tế.
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src=""
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Đặc sản không thể bỏ qua khi đến với Đà Nẵng - Hội An
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src=""
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Đảo Phú Quý Bình Thuận hot trend năm 2024
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src=""
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Trekking cắm trại tại Đà Lạt- Cảm nhận Đà Lạt qua từng bước chân
+  // End Section 8

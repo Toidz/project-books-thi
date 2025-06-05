@@ -19,15 +19,14 @@ module.exports.cartPost = async (req,res)=>{
             item.produce = book.produce
             item.author = book.author
             item.priceBook = book.priceBook
-            req.flash("success","Thêm vào giỏ hàng thành công!")
-            res.json({
-                code:"success",
-                cart:req.body
-            })
         }
         else{
             const indexItem = req.body.findIndex(book => book.id == item.id)
             req.body.splice(indexItem,1)
         }
     }
+    res.json({
+        code:"success",
+        cart:req.body
+    })
 }

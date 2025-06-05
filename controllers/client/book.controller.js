@@ -142,12 +142,12 @@ module.exports.detail = async (req,res) =>{
         _id:category.parent
       })
       bread.list.push({
-        link:`/tour/${parent.slug}`,
+        link:`/book/${parent.slug}`,
         name:parent.name
       })
     }
     bread.list.push({
-      link:`/tour/${category.slug}`,
+      link:`/book/${category.slug}`,
       name:category.name
     })
     bread.list.push({

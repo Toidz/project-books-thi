@@ -8,20 +8,20 @@ block main
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-1.svg")
         .inner-content
-          .inner-title Người dùng
-          .inner-number 1.200
+          .inner-title Quản trị viên
+          .inner-number #{dashboard.account}
       .inner-item
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-2.svg")
         .inner-content
           .inner-title Đơn hàng
-          .inner-number 3.600
+          .inner-number #{dashboard.order}
       .inner-item
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-3.svg")
         .inner-content
           .inner-title Doanh thu
-          .inner-number 300.000.000đ
+          .inner-number #{dashboard.priceTotal.toLocaleString("vi-VN")}đ
     //- End Section 1
     
     //- Section 3
@@ -33,45 +33,34 @@ block main
             tr
               th Mã
               th Thông tin khách
-              th Danh sách tour
+              th Danh sách sản phẩm
               th Thanh toán
               th Trạng thái
               th.inner-text-right Ngày đặt
           tbody
-            tr
-              td
-                .inner-code OD000001
-              td
-                .inner-text Họ tên: Lê Văn A
-                .inner-text SĐT: 0123456789
-                .inner-text Ghi chú: Test...
-              td
-                .inner-item
-                  .inner-image
-                    img(src="/admin/assets/images/tour-1.jpg", alt="Tour Hạ Long")
-                  .inner-content
-                    .inner-name Tour Hạ Long
-                    .inner-quantity Người lớn: 3 x 1.500.000đ
-                    .inner-quantity Trẻ em: 2 x 1.300.000đ
-                    .inner-quantity Em bé: 2 x 1.000.000đ
-                .inner-item
-                  .inner-image
-                    img(src="/admin/assets/images/tour-1.jpg", alt="Tour Hạ Long")
-                  .inner-content
-                    .inner-name Tour Hạ Long
-                    .inner-quantity Người lớn: 3 x 1.500.000đ
-                    .inner-quantity Trẻ em: 2 x 1.300.000đ
-                    .inner-quantity Em bé: 2 x 1.000.000đ
-              td
-                .inner-text Tổng tiền: 10.000.000đ
-                .inner-text Giảm: 400.000đ
-                .inner-text Mã giảm: TOURMUAHE2024
-                .inner-text Thanh toán: 9.600.000đ
-                .inner-text PTTT: Ví Momo
-                .inner-text TTTT: Đã thanh toán
-              td
-                .badge.badge-orange Khởi tạo
-              td.inner-text-right
-                .inner-text 16:20
-                .inner-text 01/01/2024
+            each item in orderNew
+              tr
+                td
+                  .inner-code #{item.orderCode}
+                td
+                  .inner-text #{item.fullName}
+                  .inner-text #{item.phone}
+                  .inner-text #{item.note}
+                each it in item.cart
+                  td
+                    .inner-item
+                      .inner-image
+                        img(src=it.avatar, alt=it.name)
+                      .inner-content
+                        .inner-name #{it.name}
+                        .inner-quantity Số lượng: #{it.numberBook} x #{it.priceBook.toLocaleString("vi-VN")}đ
+                td
+                  .inner-text Tổng tiền: #{item.priceTotal.toLocaleString("vi-VN")}đ
+                  .inner-text PTTT: #{item.nameMethod}
+                  .inner-text TTTT: #{item.nameStatusPay}
+                td
+                  .badge.badge-orange Khởi tạo
+                td.inner-text-right
+                  .inner-text #{item.formatTime}
+                  .inner-text #{item.formatDay}
     //- End Section 3

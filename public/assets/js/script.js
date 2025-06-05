@@ -404,7 +404,19 @@ if(orderForm) {
             const index = cart.findIndex(item => item.id=data.orderId)
             cart.splice(index,1)
             localStorage.setItem("cart",JSON.stringify(cart))
-            window.location.href = `/order/success?orderId=${data.orderId}&&phone=${dataFinal.phone}`
+            switch (method) {
+              case "money": case "bank":
+                window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`
+                break;
+            
+              case "zalopay":
+                window.location.href = `/order/payment-zalopay?orderId=${data.orderId}`
+                break;
+
+              case "vnpay": 
+                window.location.href = `/order/payment-vnpay?orderId=${data.orderId}`
+                break;
+            }
           }
         })
 

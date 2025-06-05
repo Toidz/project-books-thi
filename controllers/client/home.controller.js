@@ -3,7 +3,6 @@ const Book = require("../../models/book.model")
 module.exports.home = async (req,res) => {
   const idVn = "6825e6759800453576be8447"
   const arrayVn = await categoryHelper.categoryChild(idVn)
-  console.log(arrayVn)
   const bookVn = await Book.find({
     category: {$in:arrayVn},
     deleted:false
