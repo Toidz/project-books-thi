@@ -6,16 +6,8 @@ module.exports.method =[
         value:"money"
     },
     {
-        lable:"Ví momo",
-        value:"momo"
-    },
-    {
         lable:"Zalopay",
         value:"zalopay"
-    },
-    {
-        lable:"Vnpay",
-        value:"vnpay"
     },
     {
         lable:"Chuyển khoản ngân hàng",
