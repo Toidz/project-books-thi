@@ -22,7 +22,7 @@ block main
             option(value="money" 
               selected = orderCurrent.method=="money"?true :false) Tiền mặt
             option(value="momo" 
-              selected = orderCurrent.method=="momo"?true :false) Ví momo
+              selected = orderCurrent.method=="zalopay"?true :false) Zalopay
             option(value="bank" 
               selected = orderCurrent.method=="bank"?true :false) Chuyển khoản
         .inner-group
@@ -46,8 +46,6 @@ block main
               selected = orderCurrent.status=="initial"?true :false) Khởi tạo
             option(value="done"
               selected = orderCurrent.status=="done"?true :false) Hoàn thành
-            option(value="cancel"
-              selected = orderCurrent.status=="cancel"?true :false) Hủy
         .inner-group
           label(class="inner-label") Danh sách sản phẩm
           .inner-order-list
