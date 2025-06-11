@@ -72,19 +72,7 @@ block main
       .inner-button
         a.button-outline(href=`/book/sach-nuoc-ngoai`) Xem tất cả
   // End Section 6
-  // Section 7
-  .section-5(
-    data-aos-duration="800" 
-    data-aos="fade-up"
-    )
-    .container
-      .inner-image
-        a(href="#")
-          img(
-            alt="" 
-            src=""
-            )
-  // End Section 7
+
   // Section 8
   .section-8
     .container
@@ -97,8 +85,8 @@ block main
         data-aos-duration="800" 
         data-aos="fade-up"
         )
-        each item in newList
-          - if(item.name!="Lợi ịch của việc đọc sách")  
+        each item,index in newList
+          - if(index!=1)  
             .blog-item
               a(href=`/new/${item.slug}`)
                 .inner-image
@@ -109,7 +97,7 @@ block main
                 .inner-content
                   .inner-date #{item.createdAtFormat}
                   h3.inner-title #{item.name}
-          - if(item.name=="Lợi ịch của việc đọc sách")      
+          - if(index==1)      
             .blog-item-2
               a(href=`/new/${item.slug}`)
                 .inner-image

@@ -89,7 +89,7 @@ module.exports.book = async (req, res) => {
   if(req.query.sort){
     sort.priceBook = req.query.sort
   }
-  const limit =6
+  const limit =9
   const totalPage = Math.ceil(totalBook/limit)
   let page =1
   if(req.query.page>0){

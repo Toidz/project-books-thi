@@ -14,8 +14,8 @@ module.exports.list = async (req,res)=>{
     slug : regex
   })
 
-  let total =0
-  const limit =6
+
+  const limit =9
   const totalPage = Math.ceil(totalBook/limit)
   let page =1
   if(req.query.page>0){
