@@ -20,6 +20,7 @@ module.exports.editPatch = async (req,res)=>{
         await Order.updateOne({
             orderCode:orderCode
         },req.body)
+
         req.flash("success","Cập nhật thành công!")
         res.json({
             code:"success"
