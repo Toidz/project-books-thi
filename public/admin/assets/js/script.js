@@ -1920,7 +1920,7 @@ if(bookPage){
 //End pagination book
 
 //button delete book
-const buttonDeletebooks = document.querySelector("[button-delete-book]")
+const buttonDeletebooks = document.querySelectorAll("[button-delete-book]")
 if(buttonDeletebooks){  
   buttonDeletebooks.forEach(buttonDeletebook => {
     buttonDeletebook.addEventListener("click",()=>{
@@ -2153,9 +2153,10 @@ if(trashSearch){
 //End trash search
 
 //button-restore-trash
-const buttonRestoreTrash = document.querySelector("[button-restore-trash]")
-if(buttonRestoreTrash){
-  buttonRestoreTrash.addEventListener("click",()=>{
+const buttonRestoreTrashs = document.querySelectorAll("[button-restore-trash]")
+if(buttonRestoreTrashs){
+    buttonRestoreTrashs.forEach(buttonRestoreTrash => {
+    buttonRestoreTrash.addEventListener("click",()=>{
     const api = buttonRestoreTrash.getAttribute("api-restore")
     fetch(api,{
       method:"PATCH"
@@ -2170,13 +2171,15 @@ if(buttonRestoreTrash){
       }
     })
   })
+  });
 }
 //End button-restore-trash
 
 //button-destroy-trash
-const buttondestroyTrash = document.querySelector("[button-destroy-trash]")
-if(buttondestroyTrash){
-  buttondestroyTrash.addEventListener("click",()=>{
+const buttondestroyTrashs = document.querySelectorAll("[button-destroy-trash]")
+if(buttondestroyTrashs){
+  buttondestroyTrashs.forEach(buttondestroyTrash => {
+    buttondestroyTrash.addEventListener("click",()=>{
     const api = buttondestroyTrash.getAttribute("api-destroy")
     fetch(api,{
       method:"PATCH"
@@ -2191,6 +2194,7 @@ if(buttondestroyTrash){
       }
     })
   })
+  });
 }
 //End button-destroy-trash
 
