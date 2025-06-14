@@ -35,7 +35,7 @@ module.exports.dashboard =  async (req,res)=>{
         createdAt:"desc"
     })
     orderNew.forEach(order => {
-       order.valueMethod = variable.method.find(item => item.value==order.method)
+       order.valueMethod= variable.method.find(item => item.value==order.method)
        order.valueStatusPay = variable.payStatus.find(item => item.value==order.payStatus)
        order.nameMethod=order.valueMethod.lable
        order.nameStatusPay =order.valueStatusPay.lable

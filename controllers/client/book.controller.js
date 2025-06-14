@@ -17,6 +17,7 @@ module.exports.book = async (req, res) => {
   }
   const arrayId = await categoryHelper.categoryChild(dataCategory.id)
   const find ={
+    deleted:false,
     category : {$in:arrayId}
   }
   
@@ -24,15 +25,10 @@ module.exports.book = async (req, res) => {
     _id:{$in:arrayId}
   })
   const filterChildTree = categoryHelper.categoryTree(filterChild,dataCategory.parent)
-  const totalBook = await Book.countDocuments({
-    deleted:false,
-    category:{$in:arrayId}
-  })
- 
 
-  const filterCategory = req.query.category
+  // const filterCategory = req.query.category
   const filterPrice = req.query.price
-  if(filterPrice||filterCategory){
+  if(filterPrice){
     if(filterPrice){
       const priceCurrent = {}
       switch(parseInt(filterPrice)){
@@ -54,41 +50,13 @@ module.exports.book = async (req, res) => {
       if (Object.keys(priceCurrent).length > 0) {
         find.priceBook = priceCurrent
       }       
-    }
-    else if(filterCategory){
-      const arrayCategory = await categoryHelper.categoryChild(filterCategory)
-      find.category = {$in:arrayCategory}
-    }
-    else{
-       const priceCurrent = {}
-      switch(parseInt(filterPrice)){
-        case 0:
-          priceCurrent.$lte = 50000
-          break
-        case 50:
-          priceCurrent.$gte = 50000
-          priceCurrent.$lte = 100000
-          break
-        case 100:
-          priceCurrent.$gte = 100000
-          priceCurrent.$lte = 200000
-          break
-        case 200:
-          priceCurrent.$gte = 200000
-          break
-      }
-      if (Object.keys(priceCurrent).length > 0) {
-        find.priceBook = priceCurrent
-      }       
-      const arrayCategory = await categoryHelper.categoryChild(filterCategory)
-      find.category = {$in:arrayCategory}      
-    }
-    
+    } 
   }
   const sort= {}
   if(req.query.sort){
     sort.priceBook = req.query.sort
   }
+  const totalBook = await Book.countDocuments(find)
   const limit =9
   const totalPage = Math.ceil(totalBook/limit)
   let page =1

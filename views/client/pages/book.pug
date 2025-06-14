@@ -31,11 +31,11 @@ block main
               .inner-title Bộ Lọc
               i.fa-solid.fa-filter
             .inner-body(filter-price)
-              .inner-group
-                .inner-label Thể loại
-                select(name="" category)
-                  option(value="") -- Chọn thể loại --
-                  +options(filterChild,0)
+              //- .inner-group
+              //-   .inner-label Thể loại
+              //-   select(name="" category)
+              //-     option(value="") -- Chọn thể loại --
+              //-     +options(filterChild,0)
               .inner-group
                 .inner-label Mức giá
                 select(name="" price)
@@ -66,7 +66,7 @@ block main
                   i.fa-solid.fa-square-caret-down
             .inner-count-record
               | Tất cả: 
-              b #{totalBook} cuốn sách trong #{dataCategory.name}
+              b #{totalBook} cuốn sách cần tìm
             button.inner-filter-mobile
               span.inner-title Bộ Lọc
               i.fa-solid.fa-filter
