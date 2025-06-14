@@ -740,33 +740,15 @@ input, button, textarea {
   object-fit: cover;
 }
 
-.product-item .inner-discount {
-  background-color: #DA0808;
-  border-radius: 0px 32px 32px 0;
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 5px;
-  color: #fff;
-  font-weight: 600;
-  font-size: 11px;
-  text-transform: uppercase;
-}
-
-.product-item .inner-discount i {
-  color: #F2C94C;
-  font-size: 10px;
-  margin-right: 6px;
-}
-
 .product-item .inner-content {
   padding: 18px;
 }
 
 .product-item .inner-content .inner-title {
   margin-top: 5px;
-  margin-bottom: -5px;
+  margin-bottom: 30px;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   height: 36px;
   overflow: hidden;
   display: -webkit-box;

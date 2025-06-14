@@ -4,7 +4,7 @@ const Book = require("../../models/book.model")
 const AccountAdmin = require("../../models/account-admin.model")
 const moment = require("moment")
 const slugify = require("slugify")
-
+const generateHelper = require("../../helpers/generate.helper")
 module.exports.list = async (req,res) =>{
     const find = {
         deleted:false
@@ -92,7 +92,7 @@ module.exports.list = async (req,res) =>{
         const regex = new RegExp(slug,"i")
         find.slug= regex
     }
-    const limit =3
+    const limit =6
     const totalBook = await Book.countDocuments(find)
     const totalPage = Math.ceil(totalBook/limit)
     let page =1
@@ -182,6 +182,8 @@ module.exports.create = async (req,res) =>{
 }
 
 module.exports.createPost = async (req,res) =>{
+    const bookCode = "BO" + generateHelper.generateRandomNumber(6)
+    req.body.bookCode = bookCode
     if(req.body.position){
         req.body.position = parseInt(req.body.position)
     }
@@ -223,6 +225,7 @@ module.exports.createPost = async (req,res) =>{
 
 module.exports.changePatch = async (req,res) =>{
     try {
+        
         const {ids} = req.body
         await Book.updateMany({
             _id:{$in:ids}
@@ -241,6 +244,7 @@ module.exports.changePatch = async (req,res) =>{
             message:"Cập nhật thất bại!"
         })
     }
+      
 }
 
 module.exports.edit = async (req,res) =>{

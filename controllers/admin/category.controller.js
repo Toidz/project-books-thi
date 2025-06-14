@@ -67,7 +67,7 @@ module.exports.list = async (req,res) =>{
         const keywordRegex =  new RegExp(slug,"i")
         find.slug = keywordRegex 
     }
-    const limnit = 3
+    const limnit = 4
     let page =1
     if(req.query.page>0){
         page = req.query.page
