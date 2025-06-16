@@ -24,7 +24,6 @@ module.exports.loginPost =(req,res,next)=>{
             .messages({
                 "string.empty":"Vui lòng nhập mật khẩu!",
                 "string.min":"Mật khẩu phải chứa ít nhất 8 ký tự!",
-                "string.min":"Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
                 "password.uppercase":"Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
                 "password.lowercase":"Mật khẩu phải chứa ít nhất một chữ cái thường!",
                 "password.number":"Mật khẩu phải chứa ít nhất một chữ số!",
@@ -80,7 +79,6 @@ module.exports.registerPost = (req,res,next)=>{
             .messages({
                 "string.empty":"Vui lòng nhập mật khẩu!",
                 "string.min":"Mật khẩu phải chứa ít nhất 8 ký tự!",
-                "string.min":"Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
                 "password.uppercase":"Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
                 "password.lowercase":"Mật khẩu phải chứa ít nhất một chữ cái thường!",
                 "password.number":"Mật khẩu phải chứa ít nhất một chữ số!",
@@ -121,7 +119,6 @@ module.exports.resetPasswordPost = (req,res,next)=>{
             .messages({
                 "string.empty":"Vui lòng nhập mật khẩu!",
                 "string.min":"Mật khẩu phải chứa ít nhất 8 ký tự!",
-                "string.min":"Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
                 "password.uppercase":"Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
                 "password.lowercase":"Mật khẩu phải chứa ít nhất một chữ cái thường!",
                 "password.number":"Mật khẩu phải chứa ít nhất một chữ số!",
