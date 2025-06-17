@@ -27,7 +27,29 @@ module.exports.list = async (req,res) =>{
     if(Object.keys(filterDate).length>0){
         find.createdAt = filterDate
     }
-    
+    const filterPrice = req.query.price
+    if(filterPrice){
+        const priceCurrent = {}
+        switch(parseInt(filterPrice)){
+        case 0:
+            priceCurrent.$lte = 50000
+            break
+        case 50:
+            priceCurrent.$gte = 50000
+            priceCurrent.$lte = 100000
+            break
+        case 100:
+            priceCurrent.$gte = 100000
+            priceCurrent.$lte = 200000
+            break
+        case 200:
+            priceCurrent.$gte = 200000
+            break
+        }
+        if (Object.keys(priceCurrent).length > 0) {
+            find.priceBook = priceCurrent
+        } 
+    }
     const totalFind = {
         deleted:false,
     }
@@ -105,29 +127,7 @@ module.exports.list = async (req,res) =>{
 
     const skip = limit*(page-1)
 
-    const filterPrice = req.query.price
-    if(filterPrice){
-        const priceCurrent = {}
-        switch(parseInt(filterPrice)){
-        case 0:
-            priceCurrent.$lte = 50000
-            break
-        case 50:
-            priceCurrent.$gte = 50000
-            priceCurrent.$lte = 100000
-            break
-        case 100:
-            priceCurrent.$gte = 100000
-            priceCurrent.$lte = 200000
-            break
-        case 200:
-            priceCurrent.$gte = 200000
-            break
-        }
-        if (Object.keys(priceCurrent).length > 0) {
-            find.priceBook = priceCurrent
-        } 
-    }
+    
     const bookList = await Book.find(find
     ).sort({
         position:"desc"

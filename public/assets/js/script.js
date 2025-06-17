@@ -794,3 +794,10 @@ const cartList = document.querySelector("[cart-list]")
 if(cartList){
   drawCart()
 }
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('.inner-menu > ul > li > ul').forEach(ul => {
+    if (ul.children.length > 5) {
+      ul.classList.add('multi-column');
+    }
+  });
+});
