@@ -1,4 +1,5 @@
 const Order = require("../../models/order.model")
+const Book = require("../../models/book.model")
 const variable = require("../../config/variable")
 const moment = require("moment")
 module.exports.edit = async (req,res)=>{
@@ -85,8 +86,8 @@ module.exports.list = async (req,res)=>{
     orderList.forEach(order => {
        order.valueMethod = variable.method.find(item => item.value==order.method)
        order.valueStatusPay = variable.payStatus.find(item => item.value==order.payStatus)
-       order.nameMethod=order.valueMethod.lable
-       order.nameStatusPay =order.valueStatusPay.lable
+       order.nameMethod=order.valueMethod? order.valueMethod.lable :""
+       order.nameStatusPay =order.valueStatusPay? order.valueStatusPalable :""
        order.time = moment(order.createdAt).format("HH:mm")
        order.day = moment(order.createdAt).format("DD/MM/YYYY")
     });
@@ -99,8 +100,30 @@ module.exports.list = async (req,res)=>{
 }
 module.exports.deletePatch = async (req,res)=>{
     try {
-        console.log(req.params.code)
         const orderCode = req.params.code
+
+        const orderFind = await Order.findOne({
+            orderCode:orderCode,
+            deleted:false
+        })
+        if(orderFind){
+            for (const item of orderFind.cart) {
+
+                const bookDetail = await Book.findOne({
+                    _id:item.id,
+                    deleted:false
+                })
+
+                await Book.updateOne({
+                    _id:item.id,
+                    deleted:false
+                },{
+                    numberBook:bookDetail.numberBook+parseInt(item.numberBook)
+                })
+                
+            }
+        }
+
         await Order.updateOne({
             orderCode:orderCode
         },{
@@ -108,6 +131,7 @@ module.exports.deletePatch = async (req,res)=>{
             deletedAt:Date.now(),
             deletedBy: req.account.id,
         })
+        
         req.flash("success","Xóa đơn hàng thành công!")
         res.json({
             code:"success"

@@ -19,7 +19,7 @@ module.exports.list = async (req,res)=>{
         const regex = new RegExp(req.query.keyword.trim(),"i")
         find.email = regex
     }
-    const limit = 3
+    const limit = 5
     let page =1 
     const totalContact = await Contact.countDocuments(find)
     const totalPage = Math.ceil(totalContact/limit)

@@ -403,13 +403,18 @@ if(orderForm) {
         .then(res=>res.json())
         .then(data=>{
           if(data.code=="error"){
-            alert(data.message)
+            Swal.fire({
+              icon: 'error',
+              title: 'Đặt sách thất bại!',
+              text: `Số lượng đã vượt quá số lượng sách hiện có!`,
+              timer: 3000,
+              showConfirmButton: false
+            });
           }
           else{
-            const cart = JSON.parse(localStorage.getItem("cart"))
-            const index = cart.findIndex(item => item.id=data.orderId)
-            cart.splice(index,1)
-            localStorage.setItem("cart",JSON.stringify(cart))
+            const cart = JSON.parse(localStorage.getItem("cart"));
+            const newCart = cart.filter(item => item.checkItem !== true);
+            localStorage.setItem("cart", JSON.stringify(newCart));
             switch (method) {
               case "money": case "bank":
                 window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`

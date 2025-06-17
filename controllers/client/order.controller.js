@@ -23,7 +23,7 @@ module.exports.create = async (req,res)=>{
                         code:"error",
                         message:"Số lượng sách đã vượt quá số lượng còn lại!"
                     })
-                    return
+                    return;
                 }
                 
                 await Book.updateOne({

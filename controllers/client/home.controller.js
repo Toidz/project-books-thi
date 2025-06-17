@@ -31,7 +31,7 @@ module.exports.home = async (req,res) => {
   })
   .limit(5)
   .sort({
-    createdAt:"desc"
+    position:"desc"
   })
   newList.forEach(item => {
     item.createdAtFormat = moment(item.createdAt).format("DD/MM/YYYY")

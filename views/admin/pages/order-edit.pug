@@ -21,7 +21,7 @@ block main
           select(id="paymentMethod" name="paymentMethod")
             option(value="money" 
               selected = orderCurrent.method=="money"?true :false) Tiền mặt
-            option(value="momo" 
+            option(value="zalopay" 
               selected = orderCurrent.method=="zalopay"?true :false) Zalopay
             option(value="bank" 
               selected = orderCurrent.method=="bank"?true :false) Chuyển khoản

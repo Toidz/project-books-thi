@@ -9,19 +9,19 @@ block main
           img(src="/admin/assets/images/section-1-icon-1.svg")
         .inner-content
           .inner-title Quản trị viên
-          .inner-number #{dashboard.account}
+          .inner-number #{dashboard.account?dashboard.account:0}
       .inner-item
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-2.svg")
         .inner-content
           .inner-title Đơn hàng
-          .inner-number #{dashboard.order}
+          .inner-number #{dashboard.order?dashboard.order:0}
       .inner-item
         .inner-icon
           img(src="/admin/assets/images/section-1-icon-3.svg")
         .inner-content
           .inner-title Doanh thu
-          .inner-number #{dashboard.priceTotal.toLocaleString("vi-VN")}đ
+          .inner-number #{dashboard.priceTotal?dashboard.priceTotal.toLocaleString("vi-VN"): 0}đ
     //- End Section 1
     
     //- Section 3
@@ -32,10 +32,10 @@ block main
           thead
             tr
               th Mã
-              th Thông tin khách
+              th(style="width:170px") Thông tin khách
               th Danh sách sản phẩm
-              th Thanh toán 
-              th Trạng thái
+              th(style="width:210px") Thanh toán 
+              th(style="width:140px") Trạng thái
               th.inner-text-right Ngày đặt
           tbody
             each item in orderNew
