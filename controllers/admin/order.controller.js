@@ -87,7 +87,7 @@ module.exports.list = async (req,res)=>{
        order.valueMethod = variable.method.find(item => item.value==order.method)
        order.valueStatusPay = variable.payStatus.find(item => item.value==order.payStatus)
        order.nameMethod=order.valueMethod? order.valueMethod.lable :""
-       order.nameStatusPay =order.valueStatusPay? order.valueStatusPalable :""
+       order.nameStatusPay =order.valueStatusPay? order.valueStatusPay.lable :""
        order.time = moment(order.createdAt).format("HH:mm")
        order.day = moment(order.createdAt).format("DD/MM/YYYY")
     });
