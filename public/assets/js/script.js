@@ -305,7 +305,13 @@ if(emailForm) {
       .then(res=>res.json())
       .then(data=>{
         if(data.code=="error"){
-          alert(data.message)
+          Swal.fire({
+            icon: 'error',
+            title: 'Thất bại!',
+            text: 'Email này đã được đăng ký!',
+            timer: 3000,
+            showConfirmButton: false
+          });
         }
         else{
           window.location.reload()
@@ -412,17 +418,19 @@ if(orderForm) {
               case "zalopay":
                 window.location.href = `/order/payment-zalopay?orderId=${data.orderId}`
                 break;
-
-              case "vnpay": 
-                window.location.href = `/order/payment-vnpay?orderId=${data.orderId}`
-                break;
             }
           }
         })
 
       }
       else{
-        alert("Vui lòng chọn ít nhất 1 sản phẩm!")
+        Swal.fire({
+          icon: 'error',
+          title: 'Đặt sách thất bại!',
+          text: 'Vui lòng chọn ít nhất 1 sản phẩm!',
+          timer: 3000,
+          showConfirmButton: false
+        });
       }
     })
   ;

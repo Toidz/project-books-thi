@@ -33,10 +33,17 @@ html(lang="vi")
         href="/assets/css/style.css" 
         rel="stylesheet"
         )
+        script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
     body
-        - if (messages.success)
-            div(class="alert alert-success" alert-time="3000")
-                span #{messages.success}  
+        - if(messages.success)
+            script.
+                Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '#{messages.success}',
+                timer: 3000,
+                showConfirmButton: false
+                });
         .top-header
             .container
                 .inner-wrap
