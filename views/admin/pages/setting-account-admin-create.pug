@@ -19,7 +19,7 @@ block main
           select(id="role" name="role")
             option(value="") -- Chọn nhóm quyền --
               each item in roleList
-              option(value=item.id) #{item.name}
+                option(value=item.id) #{item.name}
         .inner-group
           label(class="inner-label" for="positionCompany") Chức vụ
           input(type="text" id="positionCompany" name="positionCompany")
