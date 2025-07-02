@@ -575,24 +575,36 @@ if (numberDetail) {
   numberDetail.addEventListener("input", (event) => {
     let value = event.target.value.replace(/[^0-9]/g, "");
 
+    // Không cho nhập số 0 đứng đầu hoặc toàn số 0
     if (value !== "") {
-      const stock = document.querySelector("[stock]")
-      const valueStock = parseInt(stock.getAttribute("stock"))
       let number = parseInt(value, 10);
-      if (number >= valueStock) {
+
+      if (number <= 0) {
+        number = 1; // Tối thiểu là 1
+      }
+
+      const stock = document.querySelector("[stock]");
+      const valueStock = parseInt(stock.getAttribute("stock"));
+
+      if (number > valueStock) {
         number = valueStock;
       }
+
       value = number.toString();
     }
+
     event.target.value = value;
   });
 
   numberDetail.addEventListener("change", () => {
     const number = document.querySelector("[number]");
     number.innerHTML = numberDetail.value;
-    const priceBook = document.querySelector("[priceBook]")
-    const totalPrice = document.querySelector("[totalPrice]")
-    totalPrice.innerHTML = (parseInt(numberDetail.value) * parseInt(priceBook.getAttribute("priceBook"))).toLocaleString("vi-VN")
+
+    const priceBook = document.querySelector("[priceBook]");
+    const totalPrice = document.querySelector("[totalPrice]");
+    totalPrice.innerHTML = (
+      parseInt(numberDetail.value) * parseInt(priceBook.getAttribute("priceBook"))
+    ).toLocaleString("vi-VN");
   });
 }
 
