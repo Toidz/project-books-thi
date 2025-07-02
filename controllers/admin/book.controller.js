@@ -109,7 +109,8 @@ module.exports.list = async (req,res) =>{
     const keyword = req.query.keyword
     if(keyword){
         const slug = slugify(keyword,{
-            lower:true
+            lower:true,
+            locale: 'vi'
         })
         const regex = new RegExp(slug,"i")
         find.slug= regex

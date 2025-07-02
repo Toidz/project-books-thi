@@ -159,7 +159,8 @@ module.exports.accountAdminList = async (req,res) =>{
     }
     if(req.query.keyword){
         const slug = slugify(req.query.keyword,{
-            lower:true
+            lower:true,
+            locale: 'vi'
         })
         const regex = new RegExp(slug,"i")
         find.slug = regex

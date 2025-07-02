@@ -4,17 +4,18 @@ module.exports.list = async (req,res)=>{
   const find ={
     deleted:false
   }
-    const slug = slugify(req.query.keyword,{
-      lower:true
+  const keyword = req.query.keyword
+  if(keyword){
+    const slug = slugify(keyword,{
+      lower:true,
+      locale: 'vi'
     })
-    const regex = new RegExp(slug)
+    const regex = new RegExp(slug,"i")
     find.slug = regex
-  
-  const totalBook = await Book.countDocuments({
-    slug : regex
-  })
+    console.log(slug)
+  }
 
-
+  const totalBook = await Book.countDocuments(find)
   const limit =9
   const totalPage = Math.ceil(totalBook/limit)
   let page =1

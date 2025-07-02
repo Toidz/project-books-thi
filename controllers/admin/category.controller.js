@@ -35,17 +35,13 @@ module.exports.createPost = async (req,res) =>{
 }
 
 module.exports.list = async (req,res) =>{
-    const status = req.query.status
     const id = req.query.id
     const startDate = req.query.startdate
     const endDate = req.query.enddate
     const dateFilter = {}
     const keyword = req.query.keyword
     const find = {
-        deleted:false
-    }
-    if(status){
-        find.status = status
+        deleted:false,
     }
     if(id){
         find.createdBy = id
@@ -108,6 +104,7 @@ module.exports.list = async (req,res) =>{
 
     const accountList = await AccountAdmin.find({
     }).select("id fullName")
+    
     res.render("admin/pages/category-list",{
         pageTitle:"Quản lý danh mục",
         categoryList: categoryList,
