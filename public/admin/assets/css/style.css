@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
 :root {
-  --color-primary: #4880FF;
+  --color-primary: #c70223;
   --color-text: #202224;
 }
 
@@ -20,7 +20,7 @@ a {
 
 /* page-account */
 .page-account {
-  background-image: url("../images/bg-account.svg");
+  background-image: url("../../../assets/images/background-home1.jpg");
   min-height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -32,6 +32,7 @@ a {
 
 /* form-account */
 .form-account {
+
   background-color: #fff;
   border-radius: 30px;
   width: 630px;
