@@ -4,7 +4,7 @@ module.exports.bookPost =(req,res,next)=>{
         name: Joi.string()
             .required()
             .messages({
-                "string.empty":"Vui lòng nhập tên tour",
+                "string.empty":"Vui lòng nhập tên sách",
             }),
         produce:  Joi.string().allow(""),
         author:  Joi.string().allow(""),

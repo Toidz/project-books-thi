@@ -4,7 +4,7 @@ module.exports.categoryPost =(req,res,next)=>{
         name: Joi.string()
             .required()
             .messages({
-                "string.empty":"Vui lòng nhập tên tour",
+                "string.empty":"Vui lòng nhập tên danh mục",
             }),
         parent: Joi.string().allow(""),
         position: Joi.string().allow(""),
