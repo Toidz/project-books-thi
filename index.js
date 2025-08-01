@@ -2,7 +2,7 @@ const express = require("express");
 require('dotenv').config()
 const path = require("path");
 const app = express();
-const port = 4979;
+const port = 4988;
 const cookieParser = require("cookie-parser");
 
 const database = require("./config/database");
@@ -26,6 +26,10 @@ app.locals.pathAdmin = variableConfig.pathAdmin;
 global.pathAdmin = variableConfig.pathAdmin;
 
 app.use(express.json());
+
+
+const chatbotRouter = require('./router/client/chat.route');
+app.use('/api/chatbot', chatbotRouter);
 
 const clientRouter= require("./router/client/index.route")
 app.use("/",clientRouter);

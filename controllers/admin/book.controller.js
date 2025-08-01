@@ -136,7 +136,7 @@ module.exports.list = async (req,res) =>{
     .limit(limit)
     .skip(skip)
 
-
+    console.log(bookList)
     const accountList = await AccountAdmin.find({
         status:"active"
     })
@@ -160,6 +160,7 @@ module.exports.list = async (req,res) =>{
         item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY")
         item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY")
     };
+    
     res.render("admin/pages/book-list",{
         pageTitle:"Quản lý sách",
         bookList:bookList,

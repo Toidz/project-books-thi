@@ -1,3 +1,4 @@
+
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-menu-mobile");
 if(buttonMenuMobile) {
@@ -813,3 +814,64 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+
+//chat
+const openChat = document.querySelector("[open-chat]")
+if(openChat){
+  openChat.addEventListener("click",()=>{
+    const boxChat = document.querySelector(".box-chat");
+    boxChat.classList.toggle("inner-flex")
+    
+  })
+}
+
+const closeChat = document.querySelector("[close-chat]")
+if(closeChat){
+  closeChat.addEventListener("click",()=>{
+    const boxChat = document.querySelector(".box-chat");
+    boxChat.classList.toggle("inner-flex")
+    
+  })
+}
+
+const boxChat = document.querySelector(".box-chat");
+if (boxChat) {
+  const info = boxChat.querySelector("[input-chat]");
+  const sendChat = boxChat.querySelector("[send-chat]");
+  const handleSendMessage = () => {
+    const value = info.value.trim();
+    if (value) {
+      const chatUser = document.createElement("div");
+      chatUser.className = "inner-chat-user";
+      chatUser.textContent = value;
+
+      fetch('/api/chatbot/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: value })
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        const chatBot = document.createElement("div");
+        chatBot.className = "inner-chat-bot";
+        chatBot.textContent = data.reply;
+        const innerReply = document.querySelector(".inner-reply");
+        innerReply.appendChild(chatUser);
+        innerReply.appendChild(chatBot);
+        innerReply.scrollTop = innerReply.scrollHeight;
+        info.value = "";
+      })
+    }
+  }
+  sendChat.addEventListener("click", handleSendMessage);
+
+  info.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); 
+      handleSendMessage();
+    }
+  });
+}
+
+//end chat

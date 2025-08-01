@@ -2941,6 +2941,103 @@ input, button, textarea {
 
 /* End contact-client */
 
- .box-contact a:hover{
+.box-contact a:hover{
   color: yellow;
- }
+}
+
+/* box-chat */
+.box-chat{
+  flex-direction: column;
+  gap: 5px;
+  position: fixed;
+  bottom:0;
+  right:70px;
+  width: 320px;
+  height: 370px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid var(--color-primary);
+  display: none;
+}
+.box-chat .inner-top{
+  width: 320px;
+  height: 37px;
+  background-color: var(--color-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.box-chat .inner-top img{
+  width: auto;
+  height: 36px;
+}
+.box-chat .inner-top i{
+  margin-right: 8px;
+  color: white;
+  font-size: 20px;
+}
+.box-chat .inner-reply{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto; 
+  padding: 5px 10px;
+}
+.box-chat .inner-chat{
+  padding: 0 10px 0 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+
+}
+.box-chat .inner-chat input{
+  flex: 1;
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  height: 30px;
+  font-size: 14px;
+  background-color: #e8d3d3;
+  padding: 0px 0px 0px 10px;
+}
+.box-chat .inner-chat button{
+  border: none;
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: 20px;
+
+}
+.box-chat .inner-chat button:hover{
+  color: rgb(255, 179, 0);
+}
+
+.inner-chat-user {
+  align-self: flex-end;
+  background: var(--color-primary);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  max-width: 70%;
+  font-size: 14px;
+}
+.inner-chat-bot {
+  align-self: flex-start; 
+  background: gray;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  max-width: 70%;
+  font-size: 14px;
+}
+.inner-none{
+  display: none;
+}
+.inner-flex{
+  display: flex;
+}
+/* End box-chat */
