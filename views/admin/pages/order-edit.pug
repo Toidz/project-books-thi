@@ -23,8 +23,8 @@ block main
               selected = orderCurrent.method=="money"?true :false) Tiền mặt
             option(value="zalopay" 
               selected = orderCurrent.method=="zalopay"?true :false) Zalopay
-            option(value="bank" 
-              selected = orderCurrent.method=="bank"?true :false) Chuyển khoản
+            //- option(value="bank" 
+            //-   selected = orderCurrent.method=="bank"?true :false) Chuyển khoản
         .inner-group
           label(class="inner-label" for="paymentStatus") Trạng thái thanh toán
           select(id="paymentStatus" name="paymentStatus")

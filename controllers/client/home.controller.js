@@ -8,7 +8,7 @@ module.exports.home = async (req,res) => {
   const arrayVn = await categoryHelper.categoryChild(idVn)
   const bookVn = await Book.find({
     category: {$in:arrayVn},
-    deleted:false
+    deleted:false,
   })
   .limit(4)
   .sort({
