@@ -7,7 +7,8 @@ const CryptoJS = require("crypto-js");
 const generateHelper = require("../../helpers/generate.helper")
 module.exports.create = async (req,res)=>{
     try {
-        const orderCode = "OD" + generateHelper.generateRandomNumber(8)
+        const orderCode = "OD" + generateHelper.generateRandomNumber(8);
+        const transportCode = "LI" + generateHelper.generateRandomNumber(8);
         for (const item of req.body.cart) {
             const book = await Book.findOne({
                 _id:item.id_book,
@@ -32,24 +33,27 @@ module.exports.create = async (req,res)=>{
                     numberBook : book.numberBook - item.quantity
                 })
             }
-
-            await Cart.deleteOne({
+            req.body.id_user =item.id_user;
+            await Cart.updateOne({
                 id_user: item.id_user,
                 id_book:item.id_book,
+            },{
+                deleted:true
             })
         }
-        req.body.priceTotal = req.body.priceTotal
         req.body.payStatus = "unpaid"
         req.body.status = "initial"
         req.body.orderCode = orderCode
-        console.log(req.body)
+        req.body.transportCode = transportCode
+   
         const dataFinal = new Order(req.body)
         await dataFinal.save()
 
         req.flash("success","Đặt sách thành công!")
         res.json({
             code:"success",
-            orderId: dataFinal.id
+            orderId: dataFinal.id,
+            phone: req.body.phone
         })
         
     } catch (error) {
@@ -77,7 +81,7 @@ module.exports.success = async (req,res)=>{
     const status = variable.status.find(item => item.value == order.status);
     order.statusName = status ? status.lable : "";
     let fee = 0;
-    if(order.note.includes("Hà Nội")) fee=30000
+    if(!order.note.includes("Hà Nội")) fee=30000
 
     order.createdAtFormat = moment(order.createdAt).format("HH:MM - DD/MM/YYYY")
 
@@ -135,7 +139,6 @@ module.exports.zalopay = async (req,res)=>{
             callback_url:`${process.env.DOMAIN_WEBSITE}/order/payment-zalopay-result`
         };
 
-        // appid|app_trans_id|appuser|amount|apptime|embeddata|item
         const data = config.app_id + "|" + order.app_trans_id + "|" + order.app_user + "|" + order.amount + "|" + order.app_time + "|" + order.embed_data + "|" + order.item;
         order.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
 
@@ -160,18 +163,17 @@ module.exports.zalopayPost = async (req,res)=>{
     let result = {};
 
     try {
-        console.log(1)
         let dataStr = req.body.data;
         let reqMac = req.body.mac;
         let mac = CryptoJS.HmacSHA256(dataStr, config.key2).toString();
-        // kiểm tra callback hợp lệ (đến từ ZaloPay server)
+
         if (reqMac !== mac) {
-        // callback không hợp lệ
+ 
         result.return_code = -1;
         result.return_message = "mac not equal";
         }
         else {
-        // thanh toán thành công
+
         let dataJson = JSON.parse(dataStr, config.key2);
         const [orderId,phone] = dataJson.app_user.split("-");
  
@@ -187,11 +189,10 @@ module.exports.zalopayPost = async (req,res)=>{
         result.return_message = "success";
         }
   } catch (ex) {
-    result.return_code = 0; // ZaloPay server sẽ callback lại (tối đa 3 lần)
+    result.return_code = 0;
     result.return_message = ex.message;
   }
 
-  // thông báo kết quả cho ZaloPay server
   res.json(result);
 }
 

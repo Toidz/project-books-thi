@@ -1574,7 +1574,11 @@ if(orderForm){
     const listCartFinal = document.querySelector("[listCartFinal]")
     const list = listCartFinal.getAttribute("listCartFinal")
     const totalSaveFinal = document.querySelector("[total-save-final]")
-    const total = totalSaveFinal.getAttribute("total-save-final")
+    const additionFee = document.querySelector("[addition-fee]")
+    let total = additionFee.getAttribute("addition-fee")
+    if(totalSaveFinal){
+      total = totalSaveFinal?.getAttribute("total-save-final")
+    }
     const dataFinal={
       fullName:getName,
       phone:getPhone,
@@ -1602,7 +1606,10 @@ if(orderForm){
         });
       }
       else{
-        window.location.href =`/order/success?orderId=${data.orderId}&phone=${getPhone}`
+        if (selectedMethod === "zalopay") {
+          window.location.href = `/order/payment-zalopay?orderId=${data.orderId}`;
+        } 
+        else window.location.href =`/order/success?orderId=${data.orderId}&phone=${data.phone}`
       }
     })
   })
@@ -1629,3 +1636,17 @@ if(btnPay){
   });
 }
 //End #btn-pay
+
+//inner-find-order 
+const innerFindOrder = document.querySelector(".inner-find-order");
+if (innerFindOrder) {
+  const input = innerFindOrder.querySelector("input");
+  const button = innerFindOrder.querySelector("button");
+
+  button.addEventListener("click", () => {
+    const keyword = input.value.trim();
+    window.location.href = `/order-history?keyword=${encodeURIComponent(keyword)}`;
+  });
+}
+
+//End inner-find-order 

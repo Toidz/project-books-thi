@@ -11,7 +11,8 @@ block main
           select(order-status)
             option(value="") Trạng thái
             option(value="initial") Khởi tạo
-            option(value="done") Hoàn thành
+            option(value="ship") Đang giao 
+            option(value="done") Đã giao 
         .inner-item.inner-date
           input(type="date" order-startDate)
           span -
@@ -21,7 +22,6 @@ block main
             option(value="") Phương thức thanh toán
             option(value="money") Tiền mặt
             option(value="zalopay") Zalopay
-            //- option(value="bank") Chuyển khoản
         .inner-item
           select(order-statusPay)
             option(value="") Trạng thái thanh toán
@@ -75,11 +75,11 @@ block main
                   div TTTT: #{item.nameStatusPay}
                 td
                   - if(item.status == "initial")
-                    .badge.badge-orange Khởi tạo
+                    .badge.badge-red Khởi tạo
+                  - if(item.status == "ship")
+                    .badge.badge-orange Đang giao
                   - if(item.status == "done")
-                    .badge.badge-green Hoàn thành
-                  - if(item.status == "cancel")
-                    .badge.badge-red Hủy
+                    .badge.badge-green Đã giao 
                 td(class="inner-center")
                   div #{item.time}
                   div #{item.day}

@@ -1,0 +1,37 @@
+extends ../layout/default.pug
+include ../mixins/product-item.pug
+block main 
+    .section-order-history
+        .container
+            .inner-wrap
+                h2 Lịch sử đơn hàng
+                .inner-info
+                    .inner-find-order 
+                        .inner-input 
+                            input(type="text" placeholder="Nhập mã đơn hàng hoặc tên sản phẩm bạn đã đặt!")
+                        .inner-button
+                            button Tìm kiếm
+                    .inner-list
+                        each item in listOrder
+                            .inner-item 
+                                .inner-wrap 
+                                    a(href=`/book/detail/${item.cart[0].slug}`).inner-image 
+                                        img(src=item.cart[0].avatar)
+                                    .inner-info 
+                                        a(href=`/book/detail/${item.cart[0].slug}`).inner-name #{item.cart[0].name}
+                                        .inner-quantity 
+                                            .inner-quantity-item Số lượng x #{item.cart[0].quantity}
+                                        .inner-price 
+                                            .inner-price-item Giá tiền: #{item.cart[0].priceBook.toLocaleString("vi-VN")} đ
+                                        .inner-price-total
+                                            .inner-price-sub Tổng số tiền (#{item.cartLength} sản phẩm): 
+                                            .inner-price-main #{item.priceTotal.toLocaleString("vi-VN")} vnđ
+                                        .inner-more 
+                                            a(href=`/order/success?orderId=${item.id}&phone=${item.phone}`) Xem chi tiết
+                                        
+
+                            
+                                
+                    
+
+

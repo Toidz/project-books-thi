@@ -12,14 +12,14 @@ module.exports.cart = async (req,res)=>{
     const book = await Book.findOne({
       _id:item.id_book
     })
-    item.name = book.name;
-    item.bookCode = book.bookCode;
-    item.author = book.author;
-    item.produce = book.produce;
-    item.priceBook = book.priceBook;
-    item.slug = book.slug;
-    item.avatar = book.avatar1;
-    item.stock = book.numberBook;
+    item.name = book?.name;
+    item.bookCode = book?.bookCode;
+    item.author = book?.author;
+    item.produce = book?.produce;
+    item.priceBook = book?.priceBook;
+    item.slug = book?.slug;
+    item.avatar = book?.avatar1;
+    item.stock = book?.numberBook;
   }
   res.render("client/pages/cart",{
     pageTitle:"Trang giỏ hàng",

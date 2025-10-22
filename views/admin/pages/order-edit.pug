@@ -23,8 +23,6 @@ block main
               selected = orderCurrent.method=="money"?true :false) Tiền mặt
             option(value="zalopay" 
               selected = orderCurrent.method=="zalopay"?true :false) Zalopay
-            //- option(value="bank" 
-            //-   selected = orderCurrent.method=="bank"?true :false) Chuyển khoản
         .inner-group
           label(class="inner-label" for="paymentStatus") Trạng thái thanh toán
           select(id="paymentStatus" name="paymentStatus")
@@ -44,8 +42,10 @@ block main
           select(id="status" name="status")
             option(value="initial"
               selected = orderCurrent.status=="initial"?true :false) Khởi tạo
+            option(value="ship"
+              selected = orderCurrent.status=="ship"?true :false) Đang giao
             option(value="done"
-              selected = orderCurrent.status=="done"?true :false) Hoàn thành
+              selected = orderCurrent.status=="done"?true :false) Đã giao
         .inner-group
           label(class="inner-label") Danh sách sản phẩm
           .inner-order-list

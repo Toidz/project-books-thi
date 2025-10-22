@@ -16,6 +16,7 @@ const AccountClient = require("../../models/account-client.model")
 const infoUserRouter = require("./infoUser.route")
 const authMiddleWareClient = require("../../middlewares/client/auth.middleware")
 const payRouter = require(("./pay.route"))
+const orderHistoryRouter = require("./order-history.route")
 router.use(infoMiddleware.info)
 router.use(categoryMiddleware.category)
 
@@ -31,6 +32,7 @@ router.use("/contact-client",contactClientRouter);
 router.use("/policy-service",policyServiceRouter);
 router.use("/account",accountRouter);
 router.use("/info-user",authMiddleWareClient.verifyToken,infoUserRouter);
+router.use("/order-history",authMiddleWareClient.verifyToken,orderHistoryRouter);
 router.post("/api/auth/verify",async (req,res) =>{
     try {
         const token = req.cookies.tokenUser;

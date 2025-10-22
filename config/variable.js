@@ -28,11 +28,11 @@ module.exports.status =[
         value:"initial"
     },
     {
-        lable:"Hoàn thành",
-        value:"done"
+        lable:"Đang giao",
+        value:"ship"
     },
     {
-        lable:"Hủy",
-        value:"cancel"
+        lable:"Đã giao",
+        value:"done"
     },
 ]

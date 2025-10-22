@@ -6,6 +6,7 @@ block main
         h4 Cảm ơn quý khách đã đặt sách! Chúng tôi sẽ liên hệ lại với quý khách trong thời gian sớm nhất.
         .inner-head
           .inner-title Thông tin đơn hàng
+        p Mã vận đơn: #{order.transportCode}
         p Mã đơn hàng: #{order.orderCode}
         p Tên khách hàng: #{order.fullName}
         p Số điện thoại: #{order.phone}
@@ -41,12 +42,12 @@ block main
                       span #{item.quantity}
                       span  x
                       span.inner-highlight  #{item.priceBook.toLocaleString("vi-VN")}đ
-                  .inner-item
-                    .inner-item-labell Phí vận chuyển:
-                    .inner-item-price
-                      span.inner-high  #{fee.toLocaleString("vi-VN")}đ
             // End Tour Item
         .inner-list-price
+          .inner-item
+            .inner-item-labell Phí vận chuyển:
+            .inner-item-price
+              span.inner-high  #{fee.toLocaleString("vi-VN")}đ
           .inner-item
             .inner-label Tổng tiền:
             .inner-price(style= "color:red") #{order.priceTotal.toLocaleString("vi-VN")}đ
