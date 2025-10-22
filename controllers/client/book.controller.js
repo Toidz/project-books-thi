@@ -1,6 +1,8 @@
+const jwt = require("jsonwebtoken")
 const Book = require("../../models/book.model");
 const Category = require("../../models/category.model")
 const categoryHelper = require("../../helpers/category.helper")
+const AccountClient = require("../../models/account-client.model")
 module.exports.book = async (req, res) => {
   const slugCurrent = req.params.slug
   const dataCategory = await Category.findOne({
@@ -122,11 +124,24 @@ module.exports.detail = async (req,res) =>{
       link:`/book/detail/${book.slug}`,
       name:book.name
     })
+    let id_user = "";
+    const token = req.cookies.tokenUser;
+     if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_CLIENT);
+        const existAccount = await AccountClient.findOne({ email: decoded.email });
+        if (existAccount) {
+          id_user = existAccount.id;
+        }
+      } catch (error) {
+      }
+    }
     res.render("client/pages/book-detail",{
       pageTitle:"Chi tiết sách",
       category:category,
       bread:bread,
       book:book,
+      id_user:id_user
     });
   }
   else{

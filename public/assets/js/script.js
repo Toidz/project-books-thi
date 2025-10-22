@@ -1,4 +1,363 @@
 
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof AOS !== "undefined") {
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+  }
+});
+
+//user-client
+const buttonUser = document.querySelector(".inner-user-cart .inner-user")
+if(buttonUser){
+  var checkUser = false;
+  fetch("/api/auth/verify",{
+    method:"POST",
+    headers:{
+      "Content-type":"application/json"
+    },
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.code=="success"){
+      checkUser=true;
+    }else{
+      checkUser = false;
+    }
+  })
+  const itemUser = buttonUser.querySelector(".inner-user-unsuccess")
+  const itemUserSuccess = buttonUser.querySelector(".inner-user-success")
+  buttonUser.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if(checkUser) itemUserSuccess.classList.add("active");
+    else itemUser.classList.add("active");
+  })
+
+  document.addEventListener("click", () => {
+    itemUserSuccess.classList.remove("active");
+    itemUser.classList.remove("active");
+  })
+}
+//end user-client
+// Login Form
+const loginForm = document.querySelector("#login-form");
+if(loginForm) {
+  const validation = new JustValidate('#login-form');
+
+  validation
+    .addField('#email', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập email của bạn!',
+      },
+      {
+        rule: 'email',
+        errorMessage: 'Email không đúng định dạng!',
+      },
+    ])
+    .addField('#password', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập mật khẩu!',
+      },
+      {
+        validator: (value) => value.length >= 8,
+        errorMessage: 'Mật khẩu phải chứa ít nhất 8 ký tự!',
+      },
+      {
+        validator: (value) => /[A-Z]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái in hoa!',
+      },
+      {
+        validator: (value) => /[a-z]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái thường!',
+      },
+      {
+        validator: (value) => /\d/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
+      },
+      {
+        validator: (value) => /[@$!%*?&]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
+      },
+    ])
+    .onSuccess((event) => {
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      const rememberPassword = event.target.rememberPassword.checked;
+      const dataFinal = {
+        email:email,
+        password:password,
+      };
+      fetch(`/account/login`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message);
+        }
+        else{
+          window.location.href=`/`;
+        }
+      })
+    })
+  ;
+}
+// End Login Form
+
+// Register Form
+const registerForm = document.querySelector("#register-form");
+if(registerForm) {
+  const validation = new JustValidate('#register-form');
+
+  validation
+    .addField('#fullName', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập họ tên!'
+      },
+      {
+        rule: 'minLength',
+        value: 5,
+        errorMessage: 'Họ tên phải có ít nhất 5 ký tự!',
+      },
+      {
+        rule: 'maxLength',
+        value: 50,
+        errorMessage: 'Họ tên không được vượt quá 50 ký tự!',
+      },
+    ])
+    .addField('#email', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập email của bạn!',
+      },
+      {
+        rule: 'email',
+        errorMessage: 'Email không đúng định dạng!',
+      },
+    ])
+    .addField('#password', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập mật khẩu!',
+      },
+      {
+        validator: (value) => value.length >= 8,
+        errorMessage: 'Mật khẩu phải chứa ít nhất 8 ký tự!',
+      },
+      {
+        validator: (value) => /[A-Z]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái in hoa!',
+      },
+      {
+        validator: (value) => /[a-z]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái thường!',
+      },
+      {
+        validator: (value) => /\d/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
+      },
+      {
+        validator: (value) => /[@$!%*?&]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
+      },
+    ])
+    .addField('#agree', [
+      {
+        rule: 'required',
+        errorMessage: 'Bạn phải đồng ý với các điều khoản và điều kiện!',
+      },
+    ])
+    .onSuccess((event) => {
+      const fullName = event.target.fullName.value;
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      const dataFinal = {
+        fullName: fullName,
+        email: email,
+        password: password
+      };
+      fetch(`/account/register`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href= `/account/login`
+        }
+      })
+    })
+  ;
+}
+// End Register Form
+
+// Forgot Password Form
+const forgotPasswordForm = document.querySelector("#forgot-password-form");
+if(forgotPasswordForm) {
+  const validation = new JustValidate('#forgot-password-form');
+
+  validation
+    .addField('#email', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập email của bạn!',
+      },
+      {
+        rule: 'email',
+        errorMessage: 'Email không đúng định dạng!',
+      },
+    ])
+    .onSuccess((event) => {
+      const email = event.target.email.value;
+      const dataFinal = {
+        email:email
+      }
+      fetch(`/${pathAdmin}/account/forgot-password`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href=`/${pathAdmin}/account/otp-password?email=${email}`
+        }
+      })
+    })
+  ;
+}
+// End Forgot Password Form
+
+// OTP Password Form
+const otpPasswordForm = document.querySelector("#otp-password-form");
+if(otpPasswordForm) {
+  const validation = new JustValidate('#otp-password-form');
+
+  validation
+    .addField('#otp', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập mã OTP!',
+      },
+    ])
+    .onSuccess((event) => {
+      const otp = event.target.otp.value;
+      const ulrParams = new URLSearchParams(window.location.search)
+      const email = ulrParams.get("email")
+      const dataFinal = {
+        otp:otp,
+        email:email
+      }
+      console.log(dataFinal)
+      fetch(`/${pathAdmin}/account/otp-password`,{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res => res.json())
+      .then(data=>{
+        if(data.code=="error")
+          alert(data.message)
+        else
+          window.location.href=`/${pathAdmin}/account/reset-password`
+      })
+    })
+  ;
+}
+// End OTP Password Form
+
+// Reset Password Form
+const resetPasswordForm = document.querySelector("#reset-password-form");
+if(resetPasswordForm) {
+  const validation = new JustValidate('#reset-password-form');
+
+  validation
+    .addField('#password', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập mật khẩu!',
+      },
+      {
+        validator: (value) => value.length >= 8,
+        errorMessage: 'Mật khẩu phải chứa ít nhất 8 ký tự!',
+      },
+      {
+        validator: (value) => /[A-Z]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái in hoa!',
+      },
+      {
+        validator: (value) => /[a-z]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái thường!',
+      },
+      {
+        validator: (value) => /\d/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
+      },
+      {
+        validator: (value) => /[@$!%*?&]/.test(value),
+        errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
+      },
+    ])
+    .addField('#confirm-password', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng xác nhận mật khẩu!',
+      },
+      {
+        validator: (value, fields) => {
+          const password = fields['#password'].elem.value;
+          return value == password;
+        },
+        errorMessage: 'Mật khẩu xác nhận không khớp!',
+      }
+    ])
+    .onSuccess((event) => {
+      const password = event.target.password.value;
+      const dataFinal = {
+        password:password
+      }
+      fetch(`/${pathAdmin}/account/reset-password`,{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.href= `/${pathAdmin}/dashboard`
+        }
+      })
+    })
+  ;
+}
+// End Reset Password Form
+
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-menu-mobile");
 if(buttonMenuMobile) {
@@ -54,111 +413,6 @@ if(boxAddressSection1) {
 }
 // End Box Address Section 1
 
-// Box User Section 1
-const boxUserSection1 = document.querySelector(".section-1 .inner-form .inner-box.inner-user");
-if(boxUserSection1) {
-  // Hiện box quantity
-  const input = boxUserSection1.querySelector(".inner-input");
-
-  input.addEventListener("focus", () => {
-    boxUserSection1.classList.add("active");
-  })
-
-  // Ẩn box quantity
-  document.addEventListener("click", (event) => {
-    // Kiểm tra nếu click không nằm trong khối `.inner-box.inner-user`
-    if (!boxUserSection1.contains(event.target)) {
-      boxUserSection1.classList.remove("active");
-    }
-  });
-
-  // Thêm số lượng vào ô input
-  const updateQuantityInput = () => {
-    const listBoxNumber = boxUserSection1.querySelectorAll(".inner-count .inner-number");
-    const listNumber = [];
-    listBoxNumber.forEach(boxNumber => {
-      const number = parseInt(boxNumber.innerHTML.trim());
-      listNumber.push(number);
-    })
-    const value = `NL: ${listNumber[0]}, TE: ${listNumber[1]}, EB: ${listNumber[2]}`;
-    input.value = value;
-  }
-
-  // Bắt sự kiện click nút up
-  const listButtonUp = boxUserSection1.querySelectorAll(".inner-count .inner-up");
-  listButtonUp.forEach(button => {
-    button.addEventListener("click", () => {
-      const parent = button.parentNode;
-      const boxNumber = parent.querySelector(".inner-number");
-      const number = parseInt(boxNumber.innerHTML.trim());
-      const numberUpdate = number + 1;
-      boxNumber.innerHTML = numberUpdate;
-      updateQuantityInput();
-    })
-  })
-
-  // Bắt sự kiện click nút down
-  const listButtonDown = boxUserSection1.querySelectorAll(".inner-count .inner-down");
-  listButtonDown.forEach(button => {
-    button.addEventListener("click", () => {
-      const parent = button.parentNode;
-      const boxNumber = parent.querySelector(".inner-number");
-      const number = parseInt(boxNumber.innerHTML.trim());
-      if(number > 0) {
-        const numberUpdate = number - 1;
-        boxNumber.innerHTML = numberUpdate;
-        updateQuantityInput();
-      }
-    })
-  })
-}
-// End Box User Section 1
-
-// Clock Expire
-const clockExpire = document.querySelector("[clock-expire]");
-if(clockExpire) {
-  const expireDateTimeString = clockExpire.getAttribute("clock-expire");
-
-  // Chuyển đổi chuỗi thời gian thành đối tượng Date
-  const expireDateTime = new Date(expireDateTimeString);
-
-  // Hàm cập nhật đồng hồ
-  const updateClock = () => {
-    const now = new Date();
-    const remainingTime = expireDateTime - now; // quy về đơn vị mili giây
-    
-    if (remainingTime > 0) {
-      const days = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
-      // Tính số ngày, 24 * 60 * 60 * 1000 Tích của các số này = số mili giây trong 1 ngày
-
-      const hours = Math.floor((remainingTime / (60 * 60 * 1000)) % 24);
-      // Tính số giờ, 60 * 60 * 1000 Chia remainingTime cho giá trị này để nhận được tổng số giờ.
-      // % 24 Lấy phần dư khi chia tổng số giờ cho 24 để chỉ lấy số giờ còn lại trong ngày.
-
-      const minutes = Math.floor((remainingTime / (60 * 1000)) % 60);
-      // Tính số phút, 60 * 1000 Chia remainingTime cho giá trị này để nhận được tổng số phút.
-      // % 60 Lấy phần dư khi chia tổng số phút cho 60 để chỉ lấy số phút còn lại trong giờ.
-
-      const seconds = Math.floor((remainingTime / 1000) % 60);
-      // Tính số giây, 1000 Chia remainingTime cho giá trị này để nhận được tổng số giây.
-      // % 60 Lấy phần dư khi chia tổng số giây cho 60 để chỉ lấy số giây còn lại trong phút.
-
-      // Cập nhật giá trị vào thẻ span
-      const listBoxNumber = clockExpire.querySelectorAll('.inner-number');
-      listBoxNumber[0].innerHTML = `${days}`.padStart(2, '0');
-      listBoxNumber[1].innerHTML = `${hours}`.padStart(2, '0');
-      listBoxNumber[2].innerHTML = `${minutes}`.padStart(2, '0');
-      listBoxNumber[3].innerHTML = `${seconds}`.padStart(2, '0');
-    } else {
-      // Khi hết thời gian, dừng đồng hồ
-      clearInterval(intervalClock);
-    }
-  }
-
-  // Gọi hàm cập nhật đồng hồ mỗi giây
-  const intervalClock = setInterval(updateClock, 1000);
-}
-// End Clock Expire
 
 // Box Filter
 const buttonFilterMobile = document.querySelector(".section-9 .inner-filter-mobile");
@@ -187,9 +441,6 @@ if(boxTourInfo) {
 }
 // End Box Tour Info
 
-// Khởi tạo AOS
-AOS.init();
-// Hết Khởi tạo AOS
 
 // Swiper Section 2
 const swiperSection2 = document.querySelector(".swiper-section-2");
@@ -335,131 +586,8 @@ if(couponForm) {
     })
   ;
 }
-// End Email Form
-
-// Order Form
-const orderForm = document.querySelector("#order-form");
-if(orderForm) {
-  const validation = new JustValidate('#order-form');
-
-  validation
-    .addField('#full-name-input', [
-      {
-        rule: 'required',
-        errorMessage: 'Vui lòng nhập họ tên!'
-      },
-      {
-        rule: 'minLength',
-        value: 5,
-        errorMessage: 'Họ tên phải có ít nhất 5 ký tự!',
-      },
-      {
-        rule: 'maxLength',
-        value: 50,
-        errorMessage: 'Họ tên không được vượt quá 50 ký tự!',
-      },
-    ])
-    .addField('#phone-input', [
-      {
-        rule: 'required',
-        errorMessage: 'Vui lòng nhập số điện thoại!'
-      },
-      {
-        rule: 'customRegexp',
-        value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
-        errorMessage: 'Số điện thoại không đúng định dạng!'
-      },
-    ])
-    .onSuccess((event) => {
-      const fullName = event.target.fullName.value;
-      const phone = event.target.phone.value;
-      const note = event.target.note.value;
-      const method = event.target.method.value;
-      const cart = JSON.parse(localStorage.getItem("cart"))
-      const itemCart = cart.filter(item => item.checkItem ==true)
-      if(itemCart.length>0){
-        const cartList = []
-        itemCart.forEach(item=>{
-          const dataCart = {
-            id:item.id,
-            numberBook:item.numberBook
-          }
-          cartList.push(dataCart)
-        })
-
-        const dataFinal = {
-          fullName,
-          phone,
-          note,
-          method,
-          cart:cartList
-        }
-        fetch(`/order/create`,{
-          method:"POST",
-          headers:{
-            "Content-type":"application/json"
-          },
-          body:JSON.stringify(dataFinal)
-        })
-        .then(res=>res.json())
-        .then(data=>{
-          if(data.code=="error"){
-            Swal.fire({
-              icon: 'error',
-              title: 'Đặt sách thất bại!',
-              text: `Số lượng đã vượt quá số lượng sách hiện có!`,
-              timer: 3000,
-              showConfirmButton: false
-            });
-          }
-          else{
-            const cart = JSON.parse(localStorage.getItem("cart"));
-            const newCart = cart.filter(item => item.checkItem !== true);
-            localStorage.setItem("cart", JSON.stringify(newCart));
-            switch (method) {
-              case "money": case "bank":
-                window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`
-                break;
-            
-              case "zalopay":
-                window.location.href = `/order/payment-zalopay?orderId=${data.orderId}`
-                break;
-            }
-          }
-        })
-
-      }
-      else{
-        Swal.fire({
-          icon: 'error',
-          title: 'Đặt sách thất bại!',
-          text: 'Vui lòng chọn ít nhất 1 sản phẩm!',
-          timer: 3000,
-          showConfirmButton: false
-        });
-      }
-    })
-  ;
-
-  // List Input Method
-  const listInputMethod = orderForm.querySelectorAll("input[name='method']");
-  const elementInfoBank = orderForm.querySelector(".inner-info-bank");
-
-  listInputMethod.forEach(inputMethod => {
-    inputMethod.addEventListener("change", () => {
-      if (inputMethod.value == "bank") {
-        elementInfoBank.classList.add("active");
-      } else {
-        elementInfoBank.classList.remove("active");
-      }
-    })
-  })
-  // End List Input Method
-}
-// End Order Form
 
 ///-----------book----------
-
 //asc button
 const buttonAsc = document.querySelector("[button-asc]")
 if(buttonAsc){
@@ -575,28 +703,20 @@ const numberDetail = document.querySelector("[number-detail]");
 if (numberDetail) {
   numberDetail.addEventListener("input", (event) => {
     let value = event.target.value.replace(/[^0-9]/g, "");
-
-    // Không cho nhập số 0 đứng đầu hoặc toàn số 0
     if (value !== "") {
       let number = parseInt(value, 10);
-
       if (number <= 0) {
-        number = 1; // Tối thiểu là 1
+        number = 1;
       }
-
       const stock = document.querySelector("[stock]");
       const valueStock = parseInt(stock.getAttribute("stock"));
-
       if (number > valueStock) {
         number = valueStock;
       }
-
       value = number.toString();
     }
-
     event.target.value = value;
   });
-
   numberDetail.addEventListener("change", () => {
     const number = document.querySelector("[number]");
     number.innerHTML = numberDetail.value;
@@ -615,198 +735,49 @@ if(bookDetail){
   btn.addEventListener("click",()=>{
     const idBook = btn.getAttribute("idBook")
     const input = bookDetail.querySelector("[number-detail]")
+    const id_user = document.querySelector("[id_user]")
+    const valueIdUser = id_user.getAttribute("id_user")
     const numberBook = input.value
     const dataFinal ={
-      id:idBook,
+      id_book:idBook,
       numberBook,
-      checkItem:true                                                                   
+      id_user:valueIdUser,
+      checkItem:false                                                               
     }
-    const cart = JSON.parse(localStorage.getItem("cart"))
-    console.log(cart)
-    const findIndex = cart.findIndex(book => book.id == dataFinal.id)
-    if(findIndex!=-1){
-      cart[findIndex] = dataFinal
-    }
-    else{
-      cart.push(dataFinal)
-    }
-    localStorage.setItem("cart",JSON.stringify(cart))
-    window.location.href ="/cart"
+    fetch("/api/auth/verify",{
+      method:"POST",
+      headers:{
+        "Content-type":"application/json"
+      },
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        fetch("/cart/add",{
+          method:"POST",
+          headers:{
+            "Content-type":"application/json"
+          },
+          body:JSON.stringify(dataFinal)
+          })
+          .then(res=>res.json())
+          .then(data=>{
+            if(data.code=="error"){
+              Swal.fire({
+                icon: 'error',
+                title: 'Thất bại!',
+                text: data.message,
+                timer: 3000,
+                showConfirmButton: false
+              });
+            }
+            else window.location.reload()
+          })
+    })
   })
 }
 
 //End detail - book
 
-//cart
-const cart = localStorage.getItem("cart")
-if(!cart){
-  localStorage.setItem("cart",JSON.stringify([]))
-}
-//End cart
-
-//const minicart
-const miniCart = document.querySelector("[mini-cart]")
-if(miniCart){
-  const cart = JSON.parse(localStorage.getItem("cart"))
-  miniCart.innerHTML = cart.length
-}
-//const minicart
-
-//draw cart
-const drawCart = ()=>{
-  const cart = JSON.parse(localStorage.getItem("cart"))
-  if(cart){
-    fetch(`/cart/detail`,{
-    method:"POST",
-    headers:{
-      "Content-type":"application/json"
-    },
-    body:JSON.stringify(cart)
-    })
-    .then(res=>res.json())
-    .then(data=>{
-    if(data.code=="error"){
-      alert(data.message)
-    }
-    else{
-      const htmlCart = data.cart.map(item=>
-      `
-        <div class="inner-tour-item">
-          <div class="inner-actions">
-            <button class="inner-delete" button-delete=${item.id}>
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <input class="inner-check" 
-              type="checkbox" ${item.checkItem == true ? "checked" : "" } 
-              checkItem
-              idBook = ${item.id}
-            >
-          </div>
-          <div class="inner-product">
-            <div class="inner-image">
-              <a href="/book/detail/${item.slug}">
-                <img alt=${item.name} src=${item.avatar}>
-              </a>
-            </div>
-            <div class="inner-content">
-              <div class="inner-title">
-                <a href="/book/detail/${item.slug}">${item.name}</a>
-              </div>
-              <div class="inner-meta">
-                <div class="inner-meta-item">Mã sách: <b>${item.bookCode}</b>
-                </div>
-                <div class="inner-meta-item">Tên tác giả: <b>${item.author}</b>
-                </div>
-                <div class="inner-meta-item">Nhà xuất bản: <b>${item.produce}</b>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="inner-quantity">
-            <div class="inner-list">
-              <div class="inner-item">
-                <div class="inner-item-label">Số lượng mua:</div>
-                <div class="inner-item-input">
-                  <input 
-                    value=${item.numberBook} 
-                    min="1" 
-                    type="number"
-                    numberInput 
-                    book-id =${item.id}
-                  >
-                </div>
-                <div class="inner-item-price">
-                  <span stockAdult>${item.numberBook} </span>
-                  <span>x</span>
-                  <span class="inner-highlight">
-                    ${item.priceBook.toLocaleString("vi-VN")} đ
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-      )
-      localStorage.setItem("cart",JSON.stringify(data.cart))
-      const cartList = document.querySelector("[cart-list]")
-      cartList.innerHTML = htmlCart.join("")
-
-      const filterCheck = data.cart.filter(item=>
-        item.checkItem == true
-      )
-           
-      // gia
-      const pay = filterCheck.reduce((sum,item)=>{
-        if(item.checkItem){
-          return sum + parseInt(item.numberBook) * parseInt(item.priceBook)
-        }
-      },0)
-      const payPrice = document.querySelector("[pay-price]")
-      if(payPrice) payPrice.innerHTML = pay.toLocaleString("vi-VN")
-    
-      
-
-      //chinh so luong
-      const numberInput = document.querySelectorAll("[numberInput]")
-      if(numberInput){  
-        numberInput.forEach(input => {
-          input.addEventListener("change",(event)=>{
-            let value = event.target.value.replace(/[^0-9]/g,"");
-            event.target.value = value;
-            if(input.value){
-              console.log(input.value)
-              cart.map(item=>{
-                if(item.id == input.getAttribute("book-id")){
-                  item.numberBook = input.value
-                  return item
-                }
-              })
-              localStorage.setItem("cart",JSON.stringify(cart))
-              drawCart()
-            }
-          })
-        });
-      }
-
-      //check
-      const checkItem = document.querySelectorAll("[checkItem]")
-      if(checkItem){
-        checkItem.forEach(item => {
-          item.addEventListener("click",()=>{
-            const id = item.getAttribute("idBook")
-            const cartFind = cart.find(it=>it.id == id)
-            cartFind.checkItem = item.checked
-            localStorage.setItem("cart",JSON.stringify(cart))
-            drawCart()
-          })
-        });
-      }
-
-      //xoa
-      const buttonDelete = document.querySelectorAll("[button-delete]")
-      if(buttonDelete){
-        buttonDelete.forEach(item => {
-          item.addEventListener("click",()=>{
-            const id = item.getAttribute("button-delete")
-            const index = cart.findIndex(it=>it.id == id)
-            cart.splice(index,1)
-            localStorage.setItem("cart",JSON.stringify(cart))
-            drawCart()
-          })
-        });
-      }
-
-    }
-  })
-  }
-}
-//end draw cart
-
-const cartList = document.querySelector("[cart-list]")
-if(cartList){
-  drawCart()
-}
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll('.inner-menu > ul > li > ul').forEach(ul => {
     if (ul.children.length > 5) {
@@ -815,6 +786,359 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+//inner-choose-address
+const innerChooseAddress = document.querySelector(".inner-choose-address")
+if(innerChooseAddress){
+  const innerInfoAddressBox = document.querySelector(".inner-info-address-box")
+  const innerInfOverlay = innerInfoAddressBox.querySelector(".inner-info-overlay")
+  innerChooseAddress.addEventListener("click",()=>{
+    innerInfoAddressBox.classList.toggle("active")
+  })
+  innerInfOverlay.addEventListener("click",()=>{
+    innerInfoAddressBox.classList.toggle("active")
+  })
+}
+//ENd inner-choose-address
+
+//inner-add-address
+const innerAddAddress = document.querySelector(".inner-add-address")
+if(innerAddAddress){
+  const innerAddNewAddress = document.querySelector(".inner-add-new-address")
+  const innerAddAddressOverlay = innerAddNewAddress.querySelector(".inner-add-address-overlay")
+  innerAddAddress.addEventListener("click",()=>{
+    innerAddNewAddress.classList.toggle("active")
+  })
+  innerAddAddressOverlay.addEventListener("click",()=>{
+    innerAddNewAddress.classList.toggle("active")
+  })
+}
+//ENd inner-add-address
+
+//inner-update-list
+const innerUpdates = document.querySelectorAll(".inner-update-list")
+if(innerUpdates.length>0){
+  const innerFillAddress = document.querySelector(".inner-fill-address")
+  const innerInfOverlay = innerFillAddress.querySelector(".inner-info-overlay")
+  innerUpdates.forEach(innerUpdate => {
+    innerUpdate.addEventListener("click",()=>{
+    innerFillAddress.classList.toggle("active")
+    const idCurrent = innerUpdate.getAttribute("inner-update-item")
+    const updateCurrentAddress = document.querySelector("[update-current-address]")
+    const deleteCurrentAddress = document.querySelector("[delete-current-address]")
+    updateCurrentAddress.setAttribute("id_current",idCurrent)
+    deleteCurrentAddress.setAttribute("id_current",idCurrent)
+    fetch(`/pay/get-current-address?idCurrent=${idCurrent}`)
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="success"){
+        const fullName = innerFillAddress.querySelector("#fullName");
+        const phone = innerFillAddress.querySelector("#phone");
+        const city = innerFillAddress.querySelector("#city");
+        const street = innerFillAddress.querySelector("#street");
+        fullName.value = data.addressCurrent.name;
+        phone.value = data.addressCurrent.phone;
+        city.value = data.addressCurrent.city;
+        street.value = data.addressCurrent.street; 
+        const district = innerFillAddress.querySelector("#district");
+        const ward = innerFillAddress.querySelector("#ward");
+        const districtValue = data.addressCurrent.district;
+        const wardValue = data.addressCurrent.ward;
+        //get district
+        fetch(`/pay/districts?cityName=${city.value}`)
+          .then(res => res.json())
+          .then(data => {
+            data.districts.forEach(d => {
+              const option = document.createElement("option");
+              option.value = d;
+              option.textContent = d;
+              if(districtValue==d) option.selected=true;
+              district.appendChild(option);
+            });
+          });
+        //get ward
+        if(districtValue){
+          fetch(`/pay/wards?districtName=${districtValue}`)
+          .then(res => res.json())
+          .then(data => {
+            data.wards.forEach(d => {
+              const option = document.createElement("option");
+              option.value = d;
+              option.textContent = d;
+              if(wardValue==d) option.selected=true;
+              ward.appendChild(option);
+            });
+          });
+        }
+        //end get ward
+
+        //change district
+        city.addEventListener("change", (e)=> {
+          district.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+          ward.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+          fetch(`/pay/districts?cityName=${e.target.value}`)
+            .then(res => res.json())
+            .then(data => {
+              data.districts.forEach(d => {
+                const option = document.createElement("option");
+                option.value = d;
+                option.textContent = d;
+                if(districtValue==d) option.selected=true;
+                district.appendChild(option);
+              });  
+            });
+          }) 
+        
+        //End change district
+
+        //change ward
+        district.addEventListener("change", (e)=> {
+          ward.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+          fetch(`/pay/wards?districtName=${e.target.value}`)
+          .then(res => res.json())
+          .then(data => {
+            console.log(data.wards)
+            data.wards.forEach(d => {
+              const option = document.createElement("option");
+              option.value = d;
+              option.textContent = d;
+              if(wardValue==d) option.selected=true;
+              ward.appendChild(option);
+            });
+          });
+        })
+        //End change ward
+      }
+      })
+      
+    })
+    
+  });
+
+  innerInfOverlay.addEventListener("click",()=>{
+    innerFillAddress.classList.toggle("active")
+  })
+}
+//End inner-update-list
+
+//inner-update
+const innerUpdate = document.querySelector(".inner-update")
+if(innerUpdate){
+  const innerFillAddress = document.querySelector(".inner-fill-address2")
+  const innerInfOverlay = innerFillAddress.querySelector(".inner-info-overlay")
+    innerUpdate.addEventListener("click",()=>{
+    innerFillAddress.classList.toggle("active")
+    })
+
+  innerInfOverlay.addEventListener("click",()=>{
+    innerFillAddress.classList.toggle("active")
+  })
+}
+//End inner-update
+
+// update-current-address
+const innerFillAddress1 = document.querySelector("#inner-fill-update")
+if(innerFillAddress1){
+  const updateBtn = innerFillAddress1.querySelector("[update-current-address]");
+  const validation = new JustValidate('#inner-fill-update');
+  validation
+    .addField('#fullName', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên của bạn!',
+      }
+    ])
+    .addField('#phone', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số điện thoại của bạn!',
+      }
+    ])
+    .addField('#city', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Tỉnh/Thành phố của bạn!',
+      }
+    ])
+    .addField('#district', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Quận/Huyện của bạn!',
+      }
+    ])
+    .addField('#ward', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Phường/Xã của bạn!',
+      }
+    ])
+    .addField('#street', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập địa chỉ cụ thể của bạn!',
+      }
+    ])
+    .onSuccess((e) => {
+      const id_current = updateBtn.getAttribute("id_current"); 
+      const fullName = e.target.fullName.value;
+      const phone = e.target.phone.value;
+      const city =  e.target.city.value;
+      const district =  e.target.district.value;
+      const ward =  e.target.ward.value;
+      const street =  e.target.street.value;
+
+      const dataFinal ={
+        id_current:id_current,
+        fullName:fullName,
+        phone:phone,
+        city:city,
+        district:district,
+        ward:ward,
+        street:street
+      }
+      console.log(dataFinal)
+      fetch("/pay/edit-current-address",{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          Swal.fire({
+            icon: 'error',
+            title: 'Thất bại!',
+            text: 'Cập nhật địa chỉ thất bại!',
+            timer: 3000,
+            showConfirmButton: false
+          });
+        }
+        else{
+          window.location.reload()
+        }
+      })
+    })
+}
+// End update-current-address
+
+// delete-current-address
+const deleteCurrentAddress = document.querySelector("[delete-current-address]")
+if(deleteCurrentAddress){
+  deleteCurrentAddress.addEventListener("click",()=>{
+    const id_current = deleteCurrentAddress.getAttribute("id_current")
+    const dataFinal ={
+      id_current:id_current,
+    }
+    fetch("/pay/delete-current-address",{
+      method:"POST",
+      headers:{
+        "Content-type":"application/json"
+      },
+      body:JSON.stringify(dataFinal)
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        Swal.fire({
+          icon: 'error',
+          title: 'Thất bại!',
+          text: data.message,
+          timer: 3000,
+          showConfirmButton: false
+        });
+      }
+      else{
+        window.location.reload()
+      }
+    })
+  })
+}
+// End delete-current-address
+
+
+//get district
+const citySelect = document.getElementById("city");
+const valueCity = citySelect?.getAttribute("saveCity");
+const districtSelect = document.getElementById("district");
+const valueDistrict = districtSelect?.getAttribute("saveDistrict");
+if(valueCity){
+  console.log(1)
+  fetch(`/pay/districts?cityName=${valueCity}`)
+    .then(res => res.json())
+    .then(data => {
+      const districtSelect = document.querySelector("#district");
+      const valueDistrict = districtSelect.getAttribute("saveDistrict");
+      data.districts.forEach(d => {
+        const option = document.createElement("option");
+        option.value = d;
+        option.textContent = d;
+        if(valueDistrict==d) option.selected=true;
+        districtSelect.appendChild(option);
+      });
+    });
+}
+if(citySelect){
+  citySelect.addEventListener("change", (e)=> {
+  // console.log(e.target.value)
+  const wardSelect = document.getElementById("ward");
+  districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+  wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+  fetch(`/pay/districts?cityName=${e.target.value}`)
+    .then(res => res.json())
+    .then(data => {
+      const districtSelect = document.querySelector("#district");
+      const valueDistrict = districtSelect.getAttribute("saveDistrict");
+      data.districts.forEach(d => {
+        const option = document.createElement("option");
+        option.value = d;
+        option.textContent = d;
+        if(valueDistrict==d) option.selected=true;
+        districtSelect.appendChild(option);
+      });
+    });
+  }
+  
+)}
+//end get district  
+
+//get ward
+if(valueDistrict){
+  fetch(`/pay/wards?districtName=${valueDistrict}`)
+  .then(res => res.json())
+  .then(data => {
+    const wardSelect = document.querySelector("#ward");
+    const valueWard =wardSelect.getAttribute("saveWard");
+    data.wards.forEach(d => {
+      const option = document.createElement("option");
+      option.value = d;
+      option.textContent = d;
+      if(valueWard==d) option.selected=true;
+      wardSelect.appendChild(option);
+    });
+  });
+}
+const wardSelect = document.getElementById("ward");
+if(districtSelect){
+  districtSelect.addEventListener("change", (e)=> {
+  // console.log(e.target.value)
+  wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+  fetch(`/pay/wards?districtName=${e.target.value}`)
+    .then(res => res.json())
+    .then(data => {
+      const wardSelect = document.querySelector("#ward");
+      const valueWard =wardSelect.getAttribute("saveWard");
+      data.wards.forEach(d => {
+        const option = document.createElement("option");
+        option.value = d;
+        option.textContent = d;
+        if(valueWard==d) option.selected=true;
+        wardSelect.appendChild(option);
+      });
+    });
+  }
+)}
+//end get ward
 
 //chat
 const openChat = document.querySelector("[open-chat]")
@@ -873,5 +1197,435 @@ if (boxChat) {
     }
   });
 }
-
 //end chat
+
+//inner-fill-address2
+const innerFillAddress = document.querySelector(".inner-fill-address2")
+if(innerFillAddress){
+  const validation = new JustValidate('#inner-fill-user');
+  validation
+    .addField('#fullName', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên của bạn!',
+      }
+    ])
+    .addField('#phone', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số điện thoại của bạn!',
+      }
+    ])
+    .addField('#city', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Tỉnh/Thành phố của bạn!',
+      }
+    ])
+    .addField('#district', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Quận/Huyện của bạn!',
+      }
+    ])
+    .addField('#ward', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Phường/Xã của bạn!',
+      }
+    ])
+    .addField('#street', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập địa chỉ cụ thể của bạn!',
+      }
+    ])
+    .onSuccess((e) => {
+      const dataFinal = {
+        fullName:e.target.fullName.value,
+        phone:e.target.phone.value,
+        id:e.target.id.value,
+        city:e.target.city.value,
+        district:e.target.district.value,
+        ward:e.target.ward.value,
+        street:e.target.street.value
+      }
+      console.log(dataFinal)
+      fetch("/info-user/edit",{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          Swal.fire({
+            icon: 'error',
+            title: 'Thất bại!',
+            text: 'Cập nhật thông tin thất bại!',
+            timer: 3000,
+            showConfirmButton: false
+          });
+        }
+        else{
+          window.location.reload();
+        }
+      })
+    })
+}
+//End inner-fill-address2
+
+//button-add-new-address
+const innerAddNewAddress = document.querySelector(".inner-add-new-address")
+if(innerAddNewAddress){
+  const fullName = innerAddNewAddress.querySelector("#fullName");
+  const phone = innerAddNewAddress.querySelector("#phone");
+  const city = innerAddNewAddress.querySelector("#city");
+  const district = innerAddNewAddress.querySelector("#district");
+  const ward = innerAddNewAddress.querySelector("#ward");
+  const street = innerAddNewAddress.querySelector("#street");
+  const validation = new JustValidate('#inner-add-new-address');
+  validation
+    .addField('#fullName', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên của bạn!',
+      }
+    ])
+    .addField('#phone', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số điện thoại của bạn!',
+      }
+    ])
+    .addField('#city', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Tỉnh/Thành phố của bạn!',
+      }
+    ])
+    .addField('#district', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Quận/Huyện của bạn!',
+      }
+    ])
+    .addField('#ward', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn Phường/Xã của bạn!',
+      }
+    ])
+    .addField('#street', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập địa chỉ cụ thể của bạn!',
+      }
+    ])
+    .onSuccess((event) => {
+      const dataFinal = {
+        fullName:fullName.value,
+        phone:phone.value,
+        city:city.value,
+        district:district.value,
+        ward:ward.value,
+        street:street.value
+      }
+
+      fetch("/pay/address-create",{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          Swal.fire({
+            icon: 'error',
+            title: 'Thất bại!',
+            text: 'Thêm địa chỉ mới thất bại!',
+            timer: 3000,
+            showConfirmButton: false
+          });
+        }
+        else{
+          window.location.reload();
+        }
+      })
+    })
+}
+//end button-add-new-address
+
+
+//choose-address
+const radios = document.querySelectorAll("[choose-address]");
+
+if (radios.length > 0) {
+  radios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      if (radio.checked) {
+        const id_address = radio.getAttribute("choose-address");
+        const innerWrapInfo = document.querySelector(".section-12 .inner-wrap-info");
+        const name = innerWrapInfo.querySelector(".inner-name");
+        const phone = innerWrapInfo.querySelector(".inner-phone");
+        const street = innerWrapInfo.querySelector(".inner-street");
+        const city = innerWrapInfo.querySelector(".inner-city");
+        fetch(`/pay/change-address?id_address=${id_address}`)
+          .then(res => res.json())
+          .then(data => {
+            const add = data.dataFind;
+            city.setAttribute("get-city-final",add.city)
+            name.innerHTML = add.name;
+            phone.innerHTML = add.phone;
+            street.innerHTML = add.street;
+            city.innerHTML = `${add.ward}, ${add.district}, ${add.city}`;
+            const feeTransport = document.querySelector("[fee-transport]")
+            if(!add.city.includes("Hà Nội")){
+              feeTransport.innerHTML=(30000).toLocaleString("vi-VN") 
+              const additionFee = document.querySelector("[addition-fee]")
+              const totalDefault = additionFee.getAttribute("addition-fee")
+              const totalFinal = parseInt(totalDefault) + 30000;
+              additionFee.innerHTML = totalFinal.toLocaleString("vi-VN")
+              const totalSave = document.querySelector("[total-save]")
+              totalSave.setAttribute("total-save-final",totalFinal)
+            }
+            else{
+              feeTransport.innerHTML="0"
+              const additionFee = document.querySelector("[addition-fee]")
+              const totalDefault = additionFee.getAttribute("addition-fee")
+              const totalFinal = parseInt(totalDefault);
+              additionFee.innerHTML = totalFinal.toLocaleString("vi-VN")
+              const totalSave = document.querySelector("[total-save]")
+              totalSave.setAttribute("total-save-final",totalFinal)
+            }
+          })
+      }
+    });
+  });
+}
+
+
+//choose-address
+
+//number-change
+const itemInfoDetails = document.querySelectorAll("[item-info-detail]");
+if (itemInfoDetails ) {
+  let total = 0;  
+  itemInfoDetails .forEach(itemInfoDetail => {
+    //change quantity
+    const numberChange = itemInfoDetail.querySelector("[number-change]")
+    numberChange.addEventListener("input", (event) => {
+      let value = event.target.value.replace(/[^0-9]/g, "");
+      if (value !== "") {
+        let number = parseInt(value, 10);
+        if (number <= 0) {
+          number = 1;
+        }
+        const valueStock = parseInt(numberChange.getAttribute("stock-book-cart"));
+        if (number > valueStock) {
+          number = valueStock;
+        }
+        value = number.toString();
+      }
+      event.target.value = value;
+    });
+    numberChange.addEventListener("change", () => {
+      const numberQuantity = itemInfoDetail.querySelector("[number-quantity]");
+      numberQuantity.innerHTML = numberChange.value;
+      const getIdBook = itemInfoDetail.querySelector("[get_id_book]")
+      const idBook = getIdBook.getAttribute("get_id_book");
+      const getIdUser = itemInfoDetail.querySelector("[get_id_user]")
+      const idUser = getIdUser.getAttribute("get_id_user");
+      fetch("/cart/edit",{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify({
+          quantityNew:numberChange.value,
+          idBook:idBook,
+          idUser:idUser
+        })
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="success"){
+          window.location.reload()
+        }
+      })
+    });
+    //end change quantity
+
+    //check-item-cart
+    const checkItemCarts = itemInfoDetail.querySelectorAll("[check-item-cart]")
+    checkItemCarts.forEach(checkItemCart=>{
+
+    checkItemCart.addEventListener("change", () => {
+      const getIdBook = itemInfoDetail.querySelector("[get_id_book]");
+      const idBook = getIdBook.getAttribute("get_id_book");
+      const getIdUser = itemInfoDetail.querySelector("[get_id_user]");
+      const idUser = getIdUser.getAttribute("get_id_user");
+
+      fetch("/cart/update-check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          idBook: idBook,
+          idUser: idUser,
+          checkItem: checkItemCart.checked 
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === "success") {
+            window.location.reload()
+          }
+        });
+      })
+
+      if(checkItemCart.checked){
+        const quantity = checkItemCart.getAttribute("quantity")
+        const priceBook = checkItemCart.getAttribute("priceBook")
+        total+=parseInt(quantity)*parseInt(priceBook)
+      }
+    })
+    //end check-item-cart
+
+    //fill-total
+    const totalPrice = document.querySelector("[totalPrice]")
+    totalPrice.innerHTML = total.toLocaleString("vi-VN");
+  });
+}
+//End number-change
+
+//aip-delete-item-cart
+const aipDeleteItemCarts = document.querySelectorAll("[aip-delete-item-cart]")
+if(aipDeleteItemCarts){
+  aipDeleteItemCarts.forEach(aipDeleteItemCart=>{
+    aipDeleteItemCart.addEventListener("click",()=>{
+      console.log(11)
+      const api = aipDeleteItemCart.getAttribute("aip-delete-item-cart")
+      fetch(api,{
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          window.location.reload()
+        })
+      })
+  })
+}
+//End aip-delete-item-cart
+
+//transport
+const getCityFinal = document.querySelector("[get-city-final]")
+if(getCityFinal){
+  const valueCity = getCityFinal.getAttribute("get-city-final")
+  const feeTransport = document.querySelector("[fee-transport]")
+  if(valueCity==""){
+     feeTransport.innerHTML="0"
+  }
+  else if(!valueCity.includes("Hà Nội")){
+    feeTransport.innerHTML=(30000).toLocaleString("vi-VN")
+    const additionFee = document.querySelector("[addition-fee]")
+    const totalDefault = additionFee.getAttribute("addition-fee")
+    const totalFinal = parseInt(totalDefault) + 30000;
+    additionFee.innerHTML = totalFinal.toLocaleString("vi-VN")
+    const totalSave = document.querySelector("[total-save]")
+    totalSave.setAttribute("total-save-final",totalFinal)
+  }
+  else{
+    feeTransport.innerHTML="0"
+  }
+}
+//End transport
+
+//#order-form
+const orderForm = document.querySelector(".order-form")
+if(orderForm){
+  const createOrder = orderForm.querySelector("[create-order]")
+  createOrder.addEventListener("click",()=>{
+    const listItems = document.querySelectorAll(".inner-tour-item");
+    if (listItems.length == 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thất bại!',
+        text: 'Vui lòng chọn ít nhất một sản phẩm để thanh toán!',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    }
+    const innerWrapInfo = document.querySelector(".section-12 .inner-wrap-info");
+    const name = innerWrapInfo.querySelector(".inner-name");
+    const phone = innerWrapInfo.querySelector(".inner-phone");
+    const street = innerWrapInfo.querySelector(".inner-street");
+    const city = innerWrapInfo.querySelector(".inner-city");
+    const getName = name.textContent;
+    const getPhone = phone.textContent;
+    const getStreet = street.textContent;
+    const getCity = city.textContent;
+    const address = getStreet+ ", " + getCity;
+    const selectedMethod = document.querySelector('input[name="method"]:checked').value;
+    const listCartFinal = document.querySelector("[listCartFinal]")
+    const list = listCartFinal.getAttribute("listCartFinal")
+    const totalSaveFinal = document.querySelector("[total-save-final]")
+    const total = totalSaveFinal.getAttribute("total-save-final")
+    const dataFinal={
+      fullName:getName,
+      phone:getPhone,
+      note:address,
+      method:selectedMethod,
+      cart:JSON.parse(list),
+      priceTotal:total,
+    }
+    fetch("/order/create",{
+      method:"POST",
+      headers:{
+        "Content-type":"application/json"
+      },
+      body:JSON.stringify(dataFinal)
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=="error"){
+        Swal.fire({
+          icon: 'error',
+          title: 'Thất bại!',
+          text: data.message,
+          timer: 3000,
+          showConfirmButton: false
+        });
+      }
+      else{
+        window.location.href =`/order/success?orderId=${data.orderId}&phone=${getPhone}`
+      }
+    })
+  })
+}
+//End #order-form
+
+//#btn-pay
+const btnPay = document.querySelector("#btn-pay");
+if(btnPay){
+   btnPay.addEventListener("click", () => {
+    const checkedItems = document.querySelectorAll("input[check-item-cart]:checked");
+    if (checkedItems.length > 0) {
+      window.location.href = "/pay";
+    } 
+    else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thất bại!',
+        text: 'Vui lòng chọn ít nhất một sản phẩm!',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    }
+  });
+}
+//End #btn-pay

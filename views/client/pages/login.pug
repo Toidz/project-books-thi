@@ -1,22 +1,10 @@
-extends ../layouts/account.pug
+extends ../layout/account.pug
 block main
   .form-account
-    h2.inner-title Đăng ký
-    p.inner-desc Tạo một tài khoản để tiếp tục
+    h2.inner-title Đăng nhập
+    p.inner-desc Vui lòng nhập email và mật khẩu để tiếp tục
     
-    form.inner-form#register-form
-      .inner-group
-        label(
-          class="inner-label"
-          for="fullName"
-        ) Họ tên
-        input(
-          type="text"
-          name="fullName"
-          id="fullName"
-          placeholder="Nhập họ và tên của bạn vào đây!"
-          class="inner-control"
-        )
+    form.inner-form#login-form
       .inner-group
         label(
           class="inner-label"
@@ -44,16 +32,19 @@ block main
         .inner-confirm
           input(
             type="checkbox"
-            name="agree"
-            id="agree"
+            name="rememberPassword"
+            id="remember-password"
             class="inner-check"
           )
           label(
             class="inner-label"
-            for="agree"
-          ) Tôi chấp nhận các điều khoản và điều kiện
-      button(class="inner-button") Đăng Ký
+            for="remember-password"
+          ) Nhớ mật khẩu
+        a(href=`/account/forgot-password` class="inner-forgot-password") Quên mật khẩu?
+      button(class="inner-button") Đăng Nhập
     
     .inner-more
-      span Bạn đã có tài khoản?
-      a(href=`/${pathAdmin}/account/login`) Đăng nhập
+      span Bạn chưa có tài khoản?
+      a(href=`/account/register`) Tạo tài khoản
+    .inner-more(style="margin-top:20px")
+      a(href=`/`) Quay lại trang chủ

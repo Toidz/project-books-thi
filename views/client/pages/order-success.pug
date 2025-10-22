@@ -38,9 +38,13 @@ block main
                   .inner-item
                     .inner-item-label Số lượng:
                     .inner-item-price
-                      span #{item.numberBook}
-                      span x
-                      span.inner-highlight #{item.priceBook.toLocaleString("vi-VN")}đ
+                      span #{item.quantity}
+                      span  x
+                      span.inner-highlight  #{item.priceBook.toLocaleString("vi-VN")}đ
+                  .inner-item
+                    .inner-item-labell Phí vận chuyển:
+                    .inner-item-price
+                      span.inner-high  #{fee.toLocaleString("vi-VN")}đ
             // End Tour Item
         .inner-list-price
           .inner-item

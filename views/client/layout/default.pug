@@ -95,14 +95,42 @@ html(lang="vi")
                             li
                                 a(href="/contact-client") Liên hệ
                         .inner-overlay
-                    // Cart
-                    .inner-cart
-                        a(href="/cart")
+                    .inner-user-cart
+                        //cart
+                        .inner-cart
+                            a(href="/cart")
+                                img(
+                                    alt="Cart" 
+                                    src="/assets/images/icon-cart.svg"
+                                    )
+                            span() #{lengthCart}
+                        //user
+                        .inner-user                 
                             img(
-                                alt="Cart" 
-                                src="/assets/images/icon-cart.svg"
+                                alt="user" 
+                                src="/assets/images/icon-user.svg"
                                 )
-                        span(mini-cart)
+                            .inner-user-unsuccess
+                                .inner-wrap 
+                                    .inner-item 
+                                        a(href="/account/login") Đăng nhập
+                                    .inner-item-register 
+                                        a(href="/account/register") Đăng ký
+                            .inner-user-success
+                                 .inner-wrap 
+                                    .inner-item 
+                                        a(href="/info-user")
+                                            img(src="/assets/images/item-user.png")
+                                            | Thông tin tài khoản
+                                    .inner-item
+                                        a(href="/") 
+                                            img(src="/assets/images/item-order.png")
+                                            | Lịch sử đơn hàng
+                                    .inner-item-logout 
+                                        a(href="/account/logout") 
+                                            img(src="/assets/images/icon-logout.png")
+                                            | Đăng xuất
+            
                 // End Header
         block main
         // Footer

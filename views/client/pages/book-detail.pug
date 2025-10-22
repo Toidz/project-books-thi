@@ -94,6 +94,7 @@ block main
                     span x
                     span.inner-highlight(priceBook=book.priceBook) #{book.priceBook.toLocaleString("vi-VN")}đ
             .inner-total
+              .inner-id-user(id_user=id_user)
               .inner-total-label Tổng cộng:
               .inner-total-price
                 span(totalPrice) #{book.priceBook.toLocaleString("vi-VN")}

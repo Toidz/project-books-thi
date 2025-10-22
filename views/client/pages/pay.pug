@@ -1,0 +1,180 @@
+extends ../layout/default.pug
+
+block main
+  // Section 11
+  .section-11
+    .container
+      .inner-wrap
+        .inner-head
+          .inner-title Thanh toán
+          a.inner-back(href="/")
+            | Quay lại mua hàng
+            i.fa-solid.fa-angle-right
+        .inner-tour-list(listCartFinal=listItem)
+          each item in listItem
+            .inner-tour-item
+              .inner-product
+                .inner-image
+                  a(href=`/book/detail/${item.slug}`)
+                    img(
+                      src=`${item.avatar}`
+                      alt=`${item.name}`
+                      )
+                .inner-content
+                  .inner-title
+                    a(href=`/book/detail/${item.slug}`) #{item.name}
+                  .inner-meta
+                    .inner-meta-item
+                      | Mã sách:
+                      b #{item.bookCode}
+                    .inner-meta-item
+                      | Tên tác giả:
+                      b #{item.author}
+                    .inner-meta-item
+                      | Nhà xuất bản:
+                      b #{item.produce}
+              .inner-quantity
+                .inner-list
+                  .inner-item
+                    .inner-item-labell Số lượng mua: #{item.quantity}                   
+                    .inner-item-price
+                      span(number-quantity) #{item.quantity}
+                      span x
+                      span.inner-highlight(priceBook=item.priceBook) #{item.priceBook.toLocaleString("vi-VN")} đ
+        .inner-list-price
+          .inner-item
+            .inner-label Phí vận chuyển:
+            .inner-price-high
+              span(fee-transport)
+              span  VNĐ
+          .inner-item
+            .inner-label Thanh toán:
+            .inner-price-highlight(total-save) 
+              span(addition-fee=totalMoney) #{totalMoney.toLocaleString("vi-VN")}
+              span  VNĐ
+  // End Section 11
+  // Section 12
+  .section-12
+    .container
+      .inner-wrap
+        .order-form
+          .inner-info
+            .inner-title-main Thông Tin Khách Hàng
+              .inner-wrap-info 
+                .inner-info-name 
+                  .inner-name #{fullName.fullName}
+                  .inner-phone #{addressDefault? addressDefault.phone : ""}
+                .inner-info-address 
+                  .inner-street #{addressDefault? addressDefault.street: ""}
+                  .inner-city(get-city-final=addressDefault? addressDefault.city : "") #{address}
+                .inner-choose-address 
+                  span(inner-choose-address) Chọn địa chỉ nhận hàng
+          .inner-method
+            .inner-title-main Chọn phương thức thanh toán
+            .inner-list
+              .inner-item
+                input#methodMoney(
+                  checked="" 
+                  value="money" 
+                  name="method" 
+                  type="radio"
+                  )
+                label(for="methodMoney") Thanh toán tiền mặt 
+              .inner-item
+                input#methodZalopay(
+                  value="zalopay" 
+                  name="method" 
+                  type="radio"
+                  )
+                label(for="methodZalopay") Zalopay
+            .inner-button 
+              button(create-order) Thanh toán
+
+  .inner-info-address-box(inner-info-address-box)
+    .inner-box 
+      .inner-title Chọn địa chỉ nhận hàng 
+      .inner-list
+        each item in listAddress
+          .inner-item 
+            .inner-check
+              input(type="radio" name="shippingAddress" choose-address=item.id)
+            .inner-item-info 
+              .inner-item-name
+                .inner-name #{item.name}
+                .inner-phone #{item.phone}
+              .inner-item-address 
+                .inner-street #{item.street}
+                .inner-city #{item.address}
+            .inner-update-list(inner-update-item=item.id) Sửa
+      .inner-add-address 
+        span(inner-add-address) + Thêm địa chỉ mới
+    .inner-info-overlay(inner-info-overlay)
+
+  .inner-add-new-address
+    form#inner-add-new-address
+      .inner-box 
+        .inner-title Thêm địa chỉ mới
+        .inner-fill 
+          .inner-item-info
+            label(for="fullName") Họ và tên
+            input(type="text" id="fullName")
+          .inner-item-info
+            label(for="phone") Số điện thoại
+            input(type="text" id="phone")
+          .inner-item-info
+            label(for="city") Tỉnh/Thành phố
+            select#city(name="")
+              option(value="") Chọn Tỉnh/Thành phố
+              each item in city  
+                option(value=item) #{item}
+          .inner-item-info
+            label(for="district") Quận/Huyện
+            select#district(name="")
+              option(value="") Chọn Quận/Huyện
+          .inner-item-info
+            label(for="ward") Phường/Xã
+            select#ward(name="")
+              option(value="") Chọn Phường/Xã
+          .inner-item-info
+            label(for="street") Tên đường, tòa nhà, số nhà
+            input(type="text" id="street")
+          .inner-button 
+            .inner-address 
+              button(button-add-new-address) Thêm địa chỉ mới
+      .inner-add-address-overlay(inner-add-address-overlay)
+  
+  .inner-fill-address 
+    form#inner-fill-update
+      .inner-box 
+        .inner-title Cập nhật địa chỉ
+        .inner-fill 
+          .inner-item-info
+            label(for="fullName") Họ và tên
+            input(type="text" id="fullName")
+          .inner-item-info
+            label(for="phone") Số điện thoại
+            input(type="text" id="phone")
+          .inner-item-info
+            label(for="city") Tỉnh/Thành phố
+            select#city(name="city")
+              option(value="") Chọn Tỉnh/Thành phố
+              each item in city  
+                option(value=item) #{item}
+          .inner-item-info
+            label(for="district") Quận/Huyện
+            select#district(name="district")
+              option(value="") Chọn Quận/Huyện
+          .inner-item-info
+            label(for="ward") Phường/Xã
+            select#ward(name="ward")
+              option(value="") Chọn Phường/Xã
+          .inner-item-info
+            label(for="street") Tên đường, tòa nhà, số nhà
+            input(type="text" id="street")
+          .inner-button 
+            .inner-address 
+              button(update-current-address) Cập nhật địa chỉ
+            .inner-address
+              span(delete-current-address) Xóa địa chỉ
+      .inner-info-overlay(inner-info-overlay)
+  // End Section 12

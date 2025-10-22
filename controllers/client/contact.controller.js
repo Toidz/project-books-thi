@@ -19,7 +19,7 @@ module.exports.createPost = async (req,res)=>{
     await dataFinal.save()
     req.flash("success","Cảm ơn bạn đã quan tâm!")
     res.json({
-        code:"success"
+        code:"success",
     })
 }
 

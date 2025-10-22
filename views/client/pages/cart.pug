@@ -1,4 +1,5 @@
 extends ../layout/default.pug
+
 block main
   // Section 11
   .section-11
@@ -9,68 +10,64 @@ block main
           a.inner-back(href="/")
             | Quay lại mua hàng
             i.fa-solid.fa-angle-right
-        .inner-tour-list(cart-list)
+        .inner-tour-list
+          each item in listItem
+            .inner-tour-item(item-info-detail)
+              .inner-actions
+                button.inner-delete(aip-delete-item-cart=`/cart/delete?id_book=${item.id_book}&id_cart=${item.id}`)
+                  i.fa-solid.fa-xmark
+                input.inner-check(
+                  check-item-cart
+                  quantity = item.quantity
+                  priceBook = item.priceBook
+                  checked=item.checkItem? true : false
+                  type="checkbox"
+                  )
+              .inner-product
+                .inner-image
+                  a(href=`/book/detail/${item.slug}`)
+                    img(
+                      src=`${item.avatar}`
+                      alt=`${item.name}`
+                      )
+                .inner-content
+                  .inner-title
+                    a(href=`/book/detail/${item.slug}`) #{item.name}
+                  .inner-meta
+                    .inner-meta-item
+                      | Mã sách:
+                      b #{item.bookCode}
+                    .inner-meta-item
+                      | Tên tác giả:
+                      b #{item.author}
+                    .inner-meta-item
+                      | Nhà xuất bản:
+                      b #{item.produce}
+              .inner-quantity
+                .inner-list
+                  .inner-item
+                    .inner-item-label Số lượng mua:
+                    .inner-item-input
+                      input(
+                        type="number" 
+                        min="1" 
+                        value=`${item.quantity}`
+                        number-change
+                        stock-book-cart=item.stock
+                        get_id_book=item.id_book
+                        get_id_user=item.id_user
+                        )
+                    .inner-item-price
+                      span(number-quantity) #{item.quantity}
+                      span x
+                      span.inner-highlight(priceBook=item.priceBook) #{item.priceBook.toLocaleString("vi-VN")} đ
         .inner-list-price
           .inner-item
-            .inner-label Thanh toán:
+            .inner-label Tổng tiền:
             .inner-price-highlight 
-              span(pay-price) 0
+              span(totalPrice) 0
               span đ
+        .inner-button-pay-cart 
+          a#btn-pay Mua hàng
   // End Section 11
-  // Section 12
-  .section-12
-    .container
-      .inner-wrap
-        form#order-form(action="")
-          .inner-info
-            .inner-title-main Thông Tin Khách Hàng
-            .inner-inputs
-              .inner-input
-                input#full-name-input(
-                  placeholder="Họ và tên" 
-                  name="fullName" 
-                  type="text"
-                  )
-              .inner-input
-                input#phone-input(
-                  placeholder="Số điện thoại" 
-                  name="phone" 
-                  type="text"
-                  )
-            textarea(
-              placeholder="Địa chỉ nhận hàng" 
-              name="note"
-              )
-          .inner-method
-            .inner-title-main Chọn phương thức thanh toán
-            .inner-list
-              .inner-item
-                input#methodMoney(
-                  checked="" 
-                  value="money" 
-                  name="method" 
-                  type="radio"
-                  )
-                label(for="methodMoney") Thanh toán tiền mặt 
-              .inner-item
-                input#methodZalopay(
-                  value="zalopay" 
-                  name="method" 
-                  type="radio"
-                  )
-                label(for="methodZalopay") Zalopay
-              //- .inner-item
-              //-   input#methodBank(
-              //-     value="bank" 
-              //-     name="method" 
-              //-     type="radio"
-              //-     )
-            //-     label(for="methodBank") Chuyển khoản ngân hàng
-            //- .inner-info-bank
-            //-   .inner-title Thông tin chuyển khoản
-            //-   .inner-text Ngân hàng : Viettin Bank
-            //-   .inner-text Tên tài khoản: Nguyễn Tiến Đạt
-            //-   .inner-text STK: 0914913491
-          .inner-button
-            button(type="submit") ĐẶT SÁCH
-  // End Section 12
+  

@@ -1,7 +1,7 @@
 const Order = require("../../models/order.model")
 const Book = require("../../models/book.model")
 const moment = require("moment")
-const slugify = require("slugify")
+const Cart = require("../../models/cart.model")
 const variable = require("../../config/variable")
 const CryptoJS = require("crypto-js");
 const generateHelper = require("../../helpers/generate.helper")
@@ -10,7 +10,7 @@ module.exports.create = async (req,res)=>{
         const orderCode = "OD" + generateHelper.generateRandomNumber(8)
         for (const item of req.body.cart) {
             const book = await Book.findOne({
-                _id:item.id,
+                _id:item.id_book,
                 deleted:false,
             })
             if(book){
@@ -18,7 +18,7 @@ module.exports.create = async (req,res)=>{
                 item.avatar = book.avatar1
                 item.priceBook = book.priceBook
                 item.slug = book.slug
-                if(item.numberBook>book.numberBook){
+                if(item.quantity>book.numberBook){
                     res.json({
                         code:"error",
                         message:"Số lượng sách đã vượt quá số lượng còn lại!"
@@ -27,20 +27,25 @@ module.exports.create = async (req,res)=>{
                 }
                 
                 await Book.updateOne({
-                    _id: item.id
+                    _id: item.id_book
                 },{
-                    numberBook : book.numberBook - item.numberBook
+                    numberBook : book.numberBook - item.quantity
                 })
             }
+
+            await Cart.deleteOne({
+                id_user: item.id_user,
+                id_book:item.id_book,
+            })
         }
-        req.body.priceTotal = req.body.cart.reduce((sum,item)=>{
-            return sum + item.numberBook *  item.priceBook
-        },0)
+        req.body.priceTotal = req.body.priceTotal
         req.body.payStatus = "unpaid"
         req.body.status = "initial"
         req.body.orderCode = orderCode
+        console.log(req.body)
         const dataFinal = new Order(req.body)
         await dataFinal.save()
+
         req.flash("success","Đặt sách thành công!")
         res.json({
             code:"success",
@@ -63,20 +68,23 @@ module.exports.success = async (req,res)=>{
         phone:phone,
         deleted:false
     })
-    const method = variable.method.find(item => item.value== order.method)
-    order.methodName = method.lable
+    const method = variable.method.find(item => item.value == order.method);
+    order.methodName = method ? method.lable : "";
 
-    const payStatus = variable.payStatus.find(item => item.value== order.payStatus)
-    order.payStatusName = payStatus.lable
+    const payStatus = variable.payStatus.find(item => item.value == order.payStatus);
+    order.payStatusName = payStatus ? payStatus.lable : "";
 
-    const status = variable.status.find(item => item.value== order.status)
-    order.statusName = status.lable
+    const status = variable.status.find(item => item.value == order.status);
+    order.statusName = status ? status.lable : "";
+    let fee = 0;
+    if(order.note.includes("Hà Nội")) fee=30000
 
     order.createdAtFormat = moment(order.createdAt).format("HH:MM - DD/MM/YYYY")
 
     res.render("client/pages/order-success",{
         pageTitle:"Thông tin đơn hàng",
-        order:order
+        order:order,
+        fee:fee
     })
 }
 

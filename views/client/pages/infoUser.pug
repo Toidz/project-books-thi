@@ -1,0 +1,48 @@
+extends ../layout/default.pug
+block main 
+  .section-contact
+    .container
+      .inner-wrap
+        .inner-content 
+          h2 Thông tin tài khoản
+          p Tên tài khoản: #{existAccount.fullName}
+          p Số điện thoại: #{existAccount.phone}
+          p Email: #{existAccount.email}
+          p Địa chỉ hiện tại: #{address}
+        .inner-update(inner-update)
+          span Cập nhật thông tin
+  .inner-fill-address2
+    form#inner-fill-user
+      .inner-box2 
+        .inner-title Cập nhật địa chỉ
+        .inner-fill 
+          .inner-item-info-email
+            label(for="id") id
+            input(type="text" id="id" value=existAccount.id)
+          .inner-item-info
+            label(for="fullName") Họ và tên
+            input(type="text" id="fullName" value=existAccount.fullName)
+          .inner-item-info
+            label(for="phone") Số điện thoại
+            input(type="text" id="phone" value =existAccount.phone)
+          .inner-item-info
+            label(for="city") Tỉnh/Thành phố
+            select#city(name="city" saveCity=existAccount.city)
+              option(value="") Chọn Tỉnh/Thành phố
+              each item in city  
+                option(value=item selected=(existAccount.city == item ? true : false)) #{item}
+          .inner-item-info
+            label(for="district") Quận/Huyện
+            select#district(name="district" saveDistrict=existAccount.district)
+              option(value="") Chọn Quận/Huyện
+          .inner-item-info
+            label(for="ward") Phường/Xã
+            select#ward(name="ward" saveWard=existAccount.ward)
+              option(value="") Chọn Phường/Xã
+          .inner-item-info
+            label(for="street") Tên đường, tòa nhà, số nhà
+            input(type="text" id="street" value=existAccount.street)
+          .inner-button 
+            .inner-address
+              button Cập nhật địa chỉ
+      .inner-info-overlay(inner-info-overlay)

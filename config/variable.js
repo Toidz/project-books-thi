@@ -9,10 +9,6 @@ module.exports.method =[
         lable:"Zalopay",
         value:"zalopay"
     },
-    // {
-    //     lable:"Chuyển khoản ngân hàng",
-    //     value:"bank"
-    // }
 ]
 
 module.exports.payStatus =[
