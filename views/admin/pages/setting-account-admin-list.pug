@@ -101,3 +101,15 @@ block main
         - for(let i=1;i<=totalPage;i++)
           option(value=i) Trang #{i}
     //- End Section 7
+  - else
+    script.
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi truy cập!',
+        text: 'Bạn không có đủ thẩm quyền vào trang này!',
+        timer: 3000,
+        showConfirmButton: false,
+        willClose: () => {
+          window.location.href = `/${pathAdmin}/dashboard`;
+        }
+      });

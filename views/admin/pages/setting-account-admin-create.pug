@@ -39,3 +39,15 @@ block main
           button Tạo mới
       .inner-back
         a(href=`/${pathAdmin}/setting/account-admin/list`) Quay lại danh sách
+  - else
+    script.
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi truy cập!',
+        text: 'Bạn không có đủ thẩm quyền vào trang này!',
+        timer: 3000,
+        showConfirmButton: false,
+        willClose: () => {
+          window.location.href = `/${pathAdmin}/dashboard`;
+        }
+      });

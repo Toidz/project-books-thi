@@ -18,3 +18,15 @@ block main
         .inner-icon <i class="fa-solid fa-user-gear"></i>
         .inner-text Nhóm quyền
     //- End Section 9
+  - else
+    script.
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi truy cập!',
+        text: 'Bạn không có đủ thẩm quyền vào trang này!',
+        timer: 3000,
+        showConfirmButton: false,
+        willClose: () => {
+          window.location.href = `/${pathAdmin}/dashboard`;
+        }
+      });

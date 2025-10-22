@@ -126,5 +126,13 @@ module.exports.permission = [
     {
         lable:"Xóa bài viết",
         value:"new-delete"
+    },
+    {
+        lable:"Xem thông tin liên hệ",
+        value:"contact-view"
+    },
+    {
+        lable:"Xóa thông tin liên hệ",
+        value:"contact-delete"
     }
 ]
