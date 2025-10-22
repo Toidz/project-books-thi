@@ -100,18 +100,6 @@ module.exports.permission = [
         value:"role-delete"
     },
     {
-        lable:"Xem người dùng",
-        value:"user-view"
-    },
-    {
-        lable:"Sửa người dùng",
-        value:"user-edit"
-    },
-    {
-        lable:"Xóa người dùng",
-        value:"user-delete"
-    },
-    {
         lable:"Xem bài viết",
         value:"new-view"
     },
