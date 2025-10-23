@@ -964,7 +964,12 @@ if(innerFillAddress1){
       {
         rule: 'required',
         errorMessage: 'Vui lòng nhập số điện thoại của bạn!',
-      }
+      },
+      {
+        rule: 'customRegexp',
+        value: /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+        errorMessage: 'Số điện thoại không hợp lệ! Vui lòng nhập đúng định dạng.',
+      },
     ])
     .addField('#city', [
       {
@@ -1227,7 +1232,12 @@ if(innerFillAddress){
       {
         rule: 'required',
         errorMessage: 'Vui lòng nhập số điện thoại của bạn!',
-      }
+      },
+      {
+        rule: 'customRegexp',
+        value: /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+        errorMessage: 'Số điện thoại không hợp lệ! Vui lòng nhập đúng định dạng.',
+      },
     ])
     .addField('#city', [
       {
@@ -1311,7 +1321,12 @@ if(innerAddNewAddress){
       {
         rule: 'required',
         errorMessage: 'Vui lòng nhập số điện thoại của bạn!',
-      }
+      },
+      {
+        rule: 'customRegexp',
+        value: /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+        errorMessage: 'Số điện thoại không hợp lệ! Vui lòng nhập đúng định dạng.',
+      },
     ])
     .addField('#city', [
       {
