@@ -110,15 +110,15 @@ module.exports.deletePatch = async (req,res)=>{
             for (const item of orderFind.cart) {
 
                 const bookDetail = await Book.findOne({
-                    _id:item.id,
+                    _id:item.id_book,
                     deleted:false
                 })
 
                 await Book.updateOne({
-                    _id:item.id,
+                    _id:item.id_book,
                     deleted:false
                 },{
-                    numberBook:bookDetail.numberBook+parseInt(item.numberBook)
+                    numberBook:bookDetail.numberBook+parseInt(item.quantity)
                 })
                 
             }

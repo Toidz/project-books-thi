@@ -639,19 +639,34 @@ if(orderDeletes){
   orderDeletes.forEach(orderDelete => {
     orderDelete.addEventListener("click",()=>{
     const apiDelete = orderDelete.getAttribute("order-delete")
-    console.log(apiDelete)
-    fetch(apiDelete,{
-      method:"PATCH"
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.code=='error'){
-        alert(data.message)
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa đơn hàng này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Đồng ý"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Đã xóa đơn hàng thành công!",
+          icon: "success"
+        });
+        fetch(apiDelete,{
+          method:"PATCH"
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.code=='error'){
+            alert(data.message)
+          }
+          else{
+            window.location.reload()
+          }
+        })
       }
-      else{
-        window.location.reload()
-      }
-    })
+    });
+
   })
   });
 }
