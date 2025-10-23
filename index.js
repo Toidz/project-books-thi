@@ -2,7 +2,7 @@ const express = require("express");
 require('dotenv').config()
 const path = require("path");
 const app = express();
-const port = 3003;
+const port = 3001;
 const cookieParser = require("cookie-parser");
 
 const database = require("./config/database");
@@ -12,10 +12,9 @@ const flash = require('express-flash');
 const session = require('express-session');
 
 
-app.use(cookieParser("SFGWHSDSGSDSD")); 
+app.use(cookieParser("SFGWHSDSGSDSD"));
 // Nhúng Flash
 app.use(session({ cookie: { maxAge: 60000 }}));
-
 app.use(flash());
 
 app.set("views",path.join(__dirname,"views"));
