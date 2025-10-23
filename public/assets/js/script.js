@@ -967,7 +967,7 @@ if(innerFillAddress1){
       },
       {
         rule: 'customRegexp',
-        value: /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+        value: /^0(3|5|7|8|9)[0-9]{9}$/,
         errorMessage: 'Số điện thoại không hợp lệ! Vui lòng nhập đúng định dạng.',
       },
     ])
@@ -1235,7 +1235,7 @@ if(innerFillAddress){
       },
       {
         rule: 'customRegexp',
-        value: /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+         value: /^0(3|5|7|8|9)[0-9]{9}$/,
         errorMessage: 'Số điện thoại không hợp lệ! Vui lòng nhập đúng định dạng.',
       },
     ])
@@ -1324,7 +1324,7 @@ if(innerAddNewAddress){
       },
       {
         rule: 'customRegexp',
-        value: /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+        value: /^0(3|5|7|8|9)[0-9]{9}$/,
         errorMessage: 'Số điện thoại không hợp lệ! Vui lòng nhập đúng định dạng.',
       },
     ])
