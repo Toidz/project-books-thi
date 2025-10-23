@@ -15,7 +15,6 @@ const session = require('express-session');
 app.use(cookieParser(process.env.COOKIE_P));
 // Nhúng Flash
 app.use(session({
-  secret: process.env.USE_SECRET, 
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 60000 }
