@@ -127,6 +127,19 @@ if(registerForm) {
         errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
       },
     ])
+    .addField('#confirm-Password', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng xác nhận mật khẩu!',
+      },
+      {
+        validator: (value, fields) => {
+          const passwordValue = fields['#password'].elem.value;
+          return value === passwordValue;
+        },
+        errorMessage: 'Mật khẩu xác nhận không khớp!',
+      },
+    ])
     .addField('#agree', [
       {
         rule: 'required',
