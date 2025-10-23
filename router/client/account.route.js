@@ -18,5 +18,5 @@ router.post("/otp-password",accountController.otpPasswordPost);
 router.get("/reset-password",accountController.resetPassword);
 router.post("/reset-password",authMidderWare.verifyToken,accountController.resetPasswordPost);
 
-router.get("/logout",accountController.logout);
+router.post("/logout",accountController.logout);
 module.exports = router;

@@ -200,6 +200,10 @@ module.exports.resetPasswordPost = async (req,res)=>{
 
 module.exports.logout = (req,res)=>{
     res.clearCookie("tokenUser");
+    res.json({
+        code:"success",
+        message:"Đăng xuất thành công!"
+    })
     res.redirect(`/account/login`);
 }
 

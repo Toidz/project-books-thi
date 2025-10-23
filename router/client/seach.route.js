@@ -1,4 +1,4 @@
 const router = require("express").Router()
 const seachController = require("../../controllers/client/seach.controller")
-router.get("/",seachController.list);
+router.post("/",seachController.list);
 module.exports= router

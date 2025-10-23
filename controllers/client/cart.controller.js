@@ -3,14 +3,14 @@ const Book = require("../../models/book.model")
 const AccountClient = require("../../models/account-client.model")
 const Cart = require("../../models/cart.model")
 module.exports.cart = async (req,res)=>{
-  
   const listItem = await Cart.find({
     id_user:req.account.id,
     deleted:false
   })
   for (const item of listItem) {
     const book = await Book.findOne({
-      _id:item.id_book
+      _id:item.id_book,
+      deleted:false
     })
     item.name = book?.name;
     item.bookCode = book?.bookCode;

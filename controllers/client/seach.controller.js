@@ -32,7 +32,11 @@ module.exports.list = async (req,res)=>{
   .find(find)
   .skip(skip)
   .limit(limit)
-
+  res.json({
+    code:"success",
+    message:"Tìm kiếm thành công!",
+    listBook:listBook
+  })
   res.render("client/pages/search",{
     pageTitle:"Kết quả tìm kiếm",
     listBook:listBook,
