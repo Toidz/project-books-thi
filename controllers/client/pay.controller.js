@@ -190,11 +190,11 @@ module.exports.editCurrentAddress = async (req, res) => {
 }
 module.exports.deleteCurrentAddress = async (req, res) => {
   const {id_current} = req.body;
-  const listAddress = await AddressClient.find({
+   const list = await AddressClient.find({
     deleted:false,
-    id_user:id_current
+    user_id:req.account.id
   })
-  if(listAddress.length==1)
+  if(list.length>1)
   {
     await AddressClient.deleteOne({
       _id:id_current})
