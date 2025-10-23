@@ -12,9 +12,15 @@ const flash = require('express-flash');
 const session = require('express-session');
 
 
-app.use(cookieParser("SFGWHSDSGSDSD"));
+app.use(cookieParser(process.env.COOKIE_P));
 // Nhúng Flash
-app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(session({
+  secret: process.env.USE_SECRET, 
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}));
+
 app.use(flash());
 
 app.set("views",path.join(__dirname,"views"));

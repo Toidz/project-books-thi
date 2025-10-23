@@ -58,7 +58,7 @@ module.exports.register = (req,res)=>{
 }
 module.exports.registerPost = async (req,res)=>{
     const {fullName,email,password} = req.body;
-    console.log(fullName)
+    console.log(req.body)
     const existAccount= await AccountClient.findOne({
         email:email
     })
