@@ -194,7 +194,7 @@ module.exports.deleteCurrentAddress = async (req, res) => {
     deleted:false,
     id_user:id_current
   })
-  if(listAddress.length>1)
+  if(listAddress.length==1)
   {
     await AddressClient.deleteOne({
       _id:id_current})
