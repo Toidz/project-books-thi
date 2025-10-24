@@ -592,7 +592,7 @@ if(neweditForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href=`/${pathAdmin}/new/list`
         }
       })
     })
@@ -663,7 +663,7 @@ if(orderEditForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href = `/${pathAdmin}/order/list`
         }
       })
     })
@@ -761,7 +761,7 @@ if(settingWebsiteInfoForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href =`/${pathAdmin}/setting/list`
         }
       })
     })
@@ -986,7 +986,7 @@ if(settingAccountAdminEditForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href= `/${pathAdmin}/setting/list`
         }
       })
     })
@@ -1294,7 +1294,7 @@ if(settingRoleeditForm) {
           alert(data.message)
         }
         else{
-          window.location.href = `/${pathAdmin}/setting/role/edit/${id}`
+          window.location.href = `/${pathAdmin}/setting/role/list`
         }
       })
     })
