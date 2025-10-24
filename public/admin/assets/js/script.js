@@ -1473,7 +1473,7 @@ if(profileEditForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href = `/${pathAdmin}/dashboard`
         }
       })
     })
