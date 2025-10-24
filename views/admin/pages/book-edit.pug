@@ -9,7 +9,7 @@ block main
             label(class="inner-label" for="id") id
             input(type="text" id="id" name="id" value=currentBook.id)
         .inner-group
-          label(class="inner-label" for="name") Tên sách
+          label(class="inner-label" for="name" valueName=currentBook.name) Tên sách
           input(type="text" id="name" name="name" value=currentBook.name)
         .inner-group
           label(class="inner-label" for="category") Danh mục
@@ -39,10 +39,10 @@ block main
             input(type="file" id="avatar3" accept="image/*" filepond-image name="avatar3")
         .inner-group
           label(class="inner-label" for="priceBook") Giá bán
-          input(type="number" name="priceBook" value=currentBook.priceBook)
+          input(type="number" id="priceBook" name="priceBook" value=currentBook.priceBook)
         .inner-group
           label(class="inner-label" for="numberBook") Số lượng
-          input(type="number" name="numberBook" value=currentBook.numberBook)
+          input(type="number" id="numberBook" name="numberBook" value=currentBook.numberBook)
         .inner-group.inner-two-col
           label(class="inner-label" for="information") Thông tin sách
           textarea(id="information" textarea-mce name="information") #{currentBook.information}

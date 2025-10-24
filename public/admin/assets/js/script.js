@@ -180,20 +180,24 @@ if(categoryEditForm) {
       }
     ])
     .onSuccess((event) => {
+      const valueName = document.querySelector("[valueName]")
+      const current = valueName.getAttribute("valueName")
+      console.log(current)
       const id = event.target.id.value;
       const name = event.target.name.value;
       const parent = event.target.parent.value;
       const position = event.target.position.value;
       const avatars = filePond.avatar.getFiles();
       let avatar = null;
-      if(avatars.length > 0) {
+      if (avatars.length > 0) {
         avatar = avatars[0].file;
-        const elementImageDefault = event.target.avatar.closest("[image-default]");
-        const imageDefault = elementImageDefault.getAttribute("image-default");
-        if(imageDefault.includes(avatar.name)) {
-          avatar=null
+        const elementImageDefault = event.target.querySelector('#avatar').closest('[image-default]');
+        const imageDefault = elementImageDefault.getAttribute('image-default');
+        if (imageDefault.includes(avatar.name)) {
+          avatar = null;
         }
       }
+
       const description = tinymce.get("description").getContent();
       
       const formData = new FormData();
@@ -202,6 +206,7 @@ if(categoryEditForm) {
       formData.append("position",position);
       formData.append("avatar",avatar);
       formData.append("description",description);
+      formData.append("current",current);
 
       fetch(`/${pathAdmin}/category/edit/${id}`,{
         method:"PATCH",
@@ -213,7 +218,7 @@ if(categoryEditForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href=`/${pathAdmin}/category/list`
         }
       })
     })
@@ -384,8 +389,40 @@ if(bookeditForm) {
         errorMessage: 'Vui lòng nhập tên book!'
       }
     ])
-    
+    .addField('#produce', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập nhà xuất bản!'
+      }
+    ])
+    .addField('#category', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng chọn thể loại!'
+      }
+    ])
+    .addField('#priceBook', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập giá tiền!'
+      }
+    ])
+    .addField('#numberBook', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập số lượng!'
+      }
+    ])
+    .addField('#author', [
+      {
+        rule: 'required',
+        errorMessage: 'Vui lòng nhập tên tác giả!'
+      }
+    ])
     .onSuccess((event) => {
+      const valueName = document.querySelector("[valueName]")
+      const current = valueName.getAttribute("valueName")
+      console.log(current)
       const id = event.target.id.value
       const name = event.target.name.value;
       const produce = event.target.produce.value;
@@ -444,6 +481,7 @@ if(bookeditForm) {
       formData.append("priceBook",priceBook)
       formData.append("numberBook",numberBook)
       formData.append("information",information)
+      formData.append("current",current)
       console.log(avatar1,avatar2,avatar3)
       fetch(`/${pathAdmin}/book/edit/${id}`,{
         method:"PATCH",
@@ -455,7 +493,7 @@ if(bookeditForm) {
           alert(data.message)
         }
         else{
-          window.location.reload()
+          window.location.href=`/${pathAdmin}/book/list`
         }
       })
     })

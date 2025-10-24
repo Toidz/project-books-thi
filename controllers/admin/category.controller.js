@@ -26,8 +26,20 @@ module.exports.createPost = async (req,res) =>{
     req.body.createdBy = req.account.id
     req.body.updatedBy = req.account.id
     req.body.avatar = req.file? req.file.path : " "
+    const exitsCategory = await Category.findOne({
+        name: req.body.name
+    })
+
+    if(exitsCategory){
+        res.json({
+            code:"error",
+            message:"Danh mục này đã có trong hệ thống!"
+        })
+        return
+    }
     const dataFinal = new Category(req.body)
     await dataFinal.save()
+
     req.flash("success", "Tạo danh mục thành công!");
     res.json({
         code:"success",
@@ -157,7 +169,8 @@ module.exports.edit = async (req,res) =>{
 
 module.exports.editPatch = async (req,res) =>{
    try{
-    console.log(req.body)
+    const current = req.body.current
+    console.log(current)
     const id = req.params.id
     if(req.body.position){
         req.body.position = parseInt(req.body.position)
@@ -171,6 +184,17 @@ module.exports.editPatch = async (req,res) =>{
         req.body.avatar = req.file.path
     } else{
         delete req.body.avatar
+    }
+    const exitsCategory = await Category.findOne({
+        name: current
+    })
+    console.log(exitsCategory)
+    if(exitsCategory && exitsCategory.name!=req.body.name){
+        res.json({
+            code:"error",
+            message:"Danh mục này đã có trong hệ thống!"
+        })
+        return
     }
     await Category.updateOne({
         _id:id,

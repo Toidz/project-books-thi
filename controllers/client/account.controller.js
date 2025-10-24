@@ -91,7 +91,7 @@ module.exports.registerPost = async (req,res)=>{
 }
 
 module.exports.forgotPassword = (req,res)=>{
-    res.render("admin/pages/forgot-password",{
+    res.render("client/pages/forgot-password",{
         pageTitle:"Quên mật khẩu"
     })
 }
@@ -137,7 +137,7 @@ module.exports.forgotPasswordPost = async (req,res) =>{
     })
 }
 module.exports.otpPassword = (req,res)=>{
-    res.render("admin/pages/otp-password",{
+    res.render("client/pages/otp-password",{
         pageTitle:"Nhập mã OTP"
     })
 }
@@ -146,6 +146,9 @@ module.exports.otpPasswordPost = async (req,res)=>{
     const existOtp = await ForgotPassword.findOne({
         email:email,
         otp:otp
+    })
+    const existAccount = await AccountClient.findOne({
+        email:email,
     })
     if(!existOtp)
     {
@@ -157,20 +160,19 @@ module.exports.otpPasswordPost = async (req,res)=>{
     }
     const token = jwt.sign(
         {
-            id:existOtp.id,
-            email:existOtp.email
+            id:existAccount.id,
+            email:existAccount.email
         },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET_CLIENT,
         {
             expiresIn:"1d"
         }
     )
-    res.cookie("token",token,{
+    res.cookie("tokenUser",token,{
         maxAge:24*60*60*1000,
         httpOnly:true,
         sameSite:"strict"
     })
-
     res.json({
         code:"success",
         message:"Xác thực otp thành công"
@@ -178,17 +180,22 @@ module.exports.otpPasswordPost = async (req,res)=>{
 }
 
 module.exports.resetPassword = (req,res)=>{
-    res.render("admin/pages/reset-password",{
+    res.render("client/pages/reset-password",{
         pageTitle:"Reset mật khẩu"
     })
 }
 module.exports.resetPasswordPost = async (req,res)=>{
-   const { password } = req.body;
-   const salt = await bcrypt.genSalt(10);
-   const hash = await bcrypt.hash(password,salt);
+    const { password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password,salt);
+    let email= ""
+    const token = req.cookies.tokenUser;
+    if(jwt.verify(token,process.env.JWT_SECRET_CLIENT)) email= jwt.verify(token,process.env.JWT_SECRET_CLIENT).email;
+    const existAccount = await AccountClient.findOne({
+        email:email
+    })
     await AccountClient.updateOne({
-        _id: req.account.id,
-        status: "active"
+        _id: existAccount.id
     },{
         password : hash
     })

@@ -239,7 +239,7 @@ if(forgotPasswordForm) {
       const dataFinal = {
         email:email
       }
-      fetch(`/${pathAdmin}/account/forgot-password`,{
+      fetch(`/account/forgot-password`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"
@@ -252,7 +252,7 @@ if(forgotPasswordForm) {
           alert(data.message)
         }
         else{
-          window.location.href=`/${pathAdmin}/account/otp-password?email=${email}`
+          window.location.href=`/account/otp-password?email=${email}`
         }
       })
     })
@@ -281,7 +281,7 @@ if(otpPasswordForm) {
         email:email
       }
       console.log(dataFinal)
-      fetch(`/${pathAdmin}/account/otp-password`,{
+      fetch(`/account/otp-password`,{
         method:"POST",
         headers:{
           "Content-type":"application/json"
@@ -293,7 +293,7 @@ if(otpPasswordForm) {
         if(data.code=="error")
           alert(data.message)
         else
-          window.location.href=`/${pathAdmin}/account/reset-password`
+          window.location.href=`/account/reset-password`
       })
     })
   ;
@@ -350,7 +350,7 @@ if(resetPasswordForm) {
       const dataFinal = {
         password:password
       }
-      fetch(`/${pathAdmin}/account/reset-password`,{
+      fetch(`/account/reset-password`,{
         method:"POST",
         headers:{
           "Content-type":"application/json"
@@ -363,7 +363,7 @@ if(resetPasswordForm) {
           alert(data.message)
         }
         else{
-          window.location.href= `/${pathAdmin}/dashboard`
+          window.location.href= `/`
         }
       })
     })

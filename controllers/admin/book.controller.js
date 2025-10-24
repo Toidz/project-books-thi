@@ -61,7 +61,6 @@ module.exports.list = async (req,res) =>{
         idss.forEach(item => {
             idssArray.push(item.id)
         });
-        console.log(idssArray)
         const ids = await Category.find({
             parent: {$in:idssArray} 
         })
@@ -69,7 +68,6 @@ module.exports.list = async (req,res) =>{
         ids.forEach(item => {
             idsArray.push(item.id)
         });
-        console.log(idsArray)
 
         if(idssArray.includes(req.query.category)){
             const listParent = await Category.find({
@@ -136,7 +134,6 @@ module.exports.list = async (req,res) =>{
     .limit(limit)
     .skip(skip)
 
-    console.log(bookList)
     const accountList = await AccountAdmin.find({
         status:"active"
     })
@@ -215,7 +212,16 @@ module.exports.createPost = async (req,res) =>{
     req.body.numberBook = req.body.numberBook? parseInt(req.body.numberBook): 0
     req.body.createdBy = req.account.id
     req.body.updatedBy = req.account.id
-    console.log(req.body)
+    const exitsBook = await Book.findOne({
+        name: req.body.name
+    })
+    if(exitsBook){
+        res.json({
+            code:"error",
+            message:"Sách này đã có trong hệ thống!"
+        })
+        return
+    }
     const dataFinal = new Book(req.body)
     await dataFinal.save()
     req.flash("success", "Tạo sách thành công!");
@@ -273,6 +279,7 @@ module.exports.edit = async (req,res) =>{
 
 module.exports.editPatch = async (req,res) =>{
     try {
+        const current = req.body.current
         const id = req.params.id
         if(req.body.position){
             req.body.position= parseInt(req.body.position)
@@ -303,7 +310,17 @@ module.exports.editPatch = async (req,res) =>{
         req.body.priceBook = req.body.priceBook? parseInt(req.body.priceBook): 0
         req.body.numberBook = req.body.numberBook? parseInt(req.body.numberBook): 0
         req.body.updatedBy = req.account.id
-        console.log(req.body)
+        const exitsBook = await Book.findOne({
+        name: current
+        })
+        console.log(exitsBook)
+        if(exitsBook && exitsBook.name!=req.body.name){
+            res.json({
+                code:"error",
+                message:"Sách này đã có trong hệ thống!"
+            })
+            return
+        }
         await Book.updateOne({
             _id:id,
             deleted:false
@@ -402,7 +419,6 @@ module.exports.trash = async (req,res) =>{
 
 module.exports.trashMulti = async (req,res) =>{
     try {
-        console.log(req.body.status,req.body.ids)
         switch(req.body.status){
             case "restore":
                 await Book.updateMany({
